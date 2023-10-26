@@ -15,16 +15,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
-import kotlinx.coroutines.flow.Flow
+import androidx.lifecycle.ViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Filter
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import kotlinx.coroutines.flow.StateFlow
 
-interface ReminderRepo {
-	fun getReminder(): Flow<Reminder>
+abstract class MapViewModel: ViewModel() {
+	abstract val user: StateFlow<User?>
+	abstract val query: StateFlow<String?>
+	abstract val activeFilter: StateFlow<Filter>
 
-	fun getAllReminders(): Flow<List<Reminder>>
-	suspend fun updateReminder(reminder: Reminder)
-	suspend fun deleteReminder(reminder: Reminder)
-	suspend fun createReminder(reminder: Reminder)
+	abstract fun setActiveFilter(filter: Filter)
 }

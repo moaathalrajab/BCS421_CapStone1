@@ -15,16 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
-import kotlinx.coroutines.flow.Flow
+import java.net.URL
 
-interface ReminderRepo {
-	fun getReminder(): Flow<Reminder>
-
-	fun getAllReminders(): Flow<List<Reminder>>
-	suspend fun updateReminder(reminder: Reminder)
-	suspend fun deleteReminder(reminder: Reminder)
-	suspend fun createReminder(reminder: Reminder)
-}
+data class User(
+	val id: Int,
+	val name: String,
+	val image: URL,
+	val accessToken: String
+)

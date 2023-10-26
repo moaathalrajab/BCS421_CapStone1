@@ -33,5 +33,4 @@ data class Event(
 	val hasRsvp: Boolean,
 	val url: URL,
 
-
 )

@@ -15,18 +15,23 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
+import java.net.URL
 
-interface OSMRepository {
-	suspend fun query(token: Token): List<OSMEntity>
+/**
+ * @param locationId this does not correspond to RamCentral ID but to OSM ID
+ */
+data class Event(
+	val id :Int,
+	val name: String,
+	val image: URL,
+	val description: String,
+	val instructions: String?,
+	val locationName: String,
+	val locationId: Int,
+	val hasRsvp: Boolean,
+	val url: URL,
 
-	suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity>
 
-	suspend fun get(id: Long): OSMEntity
-
-	suspend fun update(entites: List<OSMEntity>)
-
-}
+)

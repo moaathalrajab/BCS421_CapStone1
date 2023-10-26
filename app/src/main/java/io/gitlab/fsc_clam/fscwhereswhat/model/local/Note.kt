@@ -15,18 +15,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
-
-interface OSMRepository {
-	suspend fun query(token: Token): List<OSMEntity>
-
-	suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity>
-
-	suspend fun get(id: Long): OSMEntity
-
-	suspend fun update(entites: List<OSMEntity>)
-
+data class Note(
+	val id: Int,
+	val title: String,
+	val comment: String,
+	val reference: Int,
+	val type: Type
+){
+	enum class Type{
+		BUILDING,
+		EVENT
+	}
 }

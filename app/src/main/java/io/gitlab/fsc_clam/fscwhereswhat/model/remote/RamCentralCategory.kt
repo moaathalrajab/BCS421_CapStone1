@@ -15,18 +15,9 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.model.remote
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
-
-interface OSMRepository {
-	suspend fun query(token: Token): List<OSMEntity>
-
-	suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity>
-
-	suspend fun get(id: Long): OSMEntity
-
-	suspend fun update(entites: List<OSMEntity>)
-
-}
+data class RamCentralCategory(
+	val categoryId: Int?,
+	val categoryName: String?
+)

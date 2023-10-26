@@ -17,16 +17,14 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
+import kotlinx.coroutines.flow.Flow
 
-interface OSMRepository {
-	suspend fun query(token: Token): List<OSMEntity>
+interface NoteRepo {
+	fun getNote(): Flow<Note>
 
-	suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity>
-
-	suspend fun get(id: Long): OSMEntity
-
-	suspend fun update(entites: List<OSMEntity>)
-
+	fun getAllNotes(): Flow<List<Note>>
+	suspend fun updateNote(note: Note)
+	suspend fun deleteNote(note: Note)
+	suspend fun createNote(note: Note)
 }

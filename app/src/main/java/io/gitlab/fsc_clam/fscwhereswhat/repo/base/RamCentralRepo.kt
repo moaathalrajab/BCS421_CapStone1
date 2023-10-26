@@ -17,16 +17,14 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 
-interface OSMRepository {
-	suspend fun query(token: Token): List<OSMEntity>
+interface RamCentralRepo {
+	suspend fun getEvent(id: Int): Event
 
-	suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity>
+	suspend fun addEvent(event: Event)
 
-	suspend fun get(id: Long): OSMEntity
+	suspend fun updateEvent(event: Event)
 
-	suspend fun update(entites: List<OSMEntity>)
-
+	suspend fun deleteEvent(event: Event)
 }

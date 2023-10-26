@@ -17,16 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
+import android.graphics.Color
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.PinpointType
+import kotlinx.coroutines.flow.Flow
 
-interface OSMRepository {
-	suspend fun query(token: Token): List<OSMEntity>
+interface PreferencesRepo {
+	fun getColor(type: PinpointType): Flow<Color>
 
-	suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity>
-
-	suspend fun get(id: Long): OSMEntity
-
-	suspend fun update(entites: List<OSMEntity>)
-
+	suspend fun setColor(type: PinpointType, color: Color)
 }

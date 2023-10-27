@@ -15,10 +15,16 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.local
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-data class Note(
-	val comment: String,
-	val reference: Int,
-	val type: EntityType
-)
+import androidx.lifecycle.ViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
+import kotlinx.coroutines.flow.StateFlow
+
+abstract class NotesViewModel: ViewModel() {
+	abstract val notes: StateFlow<List<NoteItem>>
+
+	abstract fun updateNote(note: NoteItem)
+
+	abstract fun deleteNote(note: NoteItem)
+}

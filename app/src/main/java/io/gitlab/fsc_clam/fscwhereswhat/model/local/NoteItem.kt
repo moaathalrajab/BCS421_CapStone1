@@ -17,8 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-data class Note(
+import java.net.URL
+
+data class NoteItem(
 	val comment: String,
 	val reference: Int,
-	val type: EntityType
+	val type: EntityType,
+	val url: URL,
+	val referenceName: String
 )

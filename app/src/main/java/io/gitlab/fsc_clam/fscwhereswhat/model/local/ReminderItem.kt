@@ -17,8 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-data class Reminder(
+import java.net.URL
+
+data class ReminderItem(
 	val id: Int,
-	val eventId: Int,
+	val eventName: String,
+	val imageURL: URL,
 	val remind: ReminderTime,
+	val date: Long
 )

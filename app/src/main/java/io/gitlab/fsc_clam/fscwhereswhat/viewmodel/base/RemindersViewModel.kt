@@ -15,10 +15,20 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.local
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-data class Reminder(
-	val id: Int,
-	val eventId: Int,
-	val remind: ReminderTime,
-)
+import androidx.lifecycle.ViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
+import kotlinx.coroutines.flow.StateFlow
+
+abstract class RemindersViewModel: ViewModel() {
+	abstract val reminders: StateFlow<List<ReminderItem>>
+
+
+	abstract fun deleteReminder(reminderItem: ReminderItem)
+
+	abstract fun updateReminderTime(id: Int, time: ReminderTime)
+
+
+}

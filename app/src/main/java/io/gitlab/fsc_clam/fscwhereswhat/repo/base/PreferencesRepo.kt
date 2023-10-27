@@ -18,11 +18,11 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
 import android.graphics.Color
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.PinpointType
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepo {
-	fun getColor(type: PinpointType): Flow<Color>
+	fun getColor(type: EntityType): Flow<Color>
 
-	suspend fun setColor(type: PinpointType, color: Color)
+	suspend fun setColor(type: EntityType, color: Color)
 }

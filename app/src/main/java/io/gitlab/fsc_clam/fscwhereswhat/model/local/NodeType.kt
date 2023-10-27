@@ -17,13 +17,11 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-data class Note(
-	val comment: String,
-	val reference: Int,
-	val type: Type
-){
-	enum class Type{
-		BUILDING,
-		EVENT
-	}
+enum class NodeType {
+	WATER,
+	VENDING_MACHINE,
+	FOOD,
+	RETAIL,
+	SOS,
+	BICYCLE,
 }

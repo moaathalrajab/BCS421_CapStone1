@@ -29,6 +29,6 @@ data class Pinpoint(
 	val longitude: Float,
 	val color: Color,
 	val id: Int,
-	val type: PinpointType,
+	val type: EntityType,
 	val isFocused: Boolean
 )

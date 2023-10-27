@@ -17,9 +17,16 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-enum class OSMType {
-	BUILDING,
-	UTILITY,
-
-
-}
+data class OpeningHours(
+	val monday: Boolean,
+	val tuesday: Boolean,
+	val wednesday: Boolean,
+	val thursday: Boolean,
+	val friday: Boolean,
+	val saturday: Boolean,
+	val sunday: Boolean,
+	val startHour: Int,
+	val startMinute: Int,
+	val endHour: Int,
+	val endMinute: Int
+)

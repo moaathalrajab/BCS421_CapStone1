@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-enum class PinpointType {
+enum class EntityType {
 	BUILDING,
 	EVENT,
+	NODE,
 }

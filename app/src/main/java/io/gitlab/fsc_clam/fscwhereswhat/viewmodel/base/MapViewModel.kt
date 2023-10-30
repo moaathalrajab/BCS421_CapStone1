@@ -26,12 +26,12 @@ import kotlinx.coroutines.flow.StateFlow
 abstract class MapViewModel: ViewModel() {
 	abstract val user: StateFlow<User?>
 	abstract val query: StateFlow<String?>
-	abstract val activeFilter: StateFlow<Filter>
+	abstract val activeFilter: StateFlow<Filter?>
 	abstract val pinpoints: StateFlow<List<Pinpoint>>
 	abstract val longitude: StateFlow<Float>
 	abstract val latitude: StateFlow<Float>
 
-	abstract fun setActiveFilter(filter: Filter)
+	abstract fun setActiveFilter(filter: Filter?)
 
 	abstract fun setFocus(pinpoint: Pinpoint)
 

@@ -15,16 +15,16 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Filter
-import kotlinx.coroutines.flow.StateFlow
+import java.net.URL
 
-interface QueryRepo {
-	val query: StateFlow<String?>
-	val activeFilter: StateFlow<Filter?>
+sealed interface Image{
+	data class Asset(
+		val path: URL
+	): Image
 
-	fun setQuery(query: String?)
-
-	fun setActiveFilter(filter: Filter?)
+	data class Drawable(
+		val drawable: Int
+	): Image
 }

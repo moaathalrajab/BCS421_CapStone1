@@ -15,16 +15,31 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Filter
-import kotlinx.coroutines.flow.StateFlow
+import java.net.URL
 
-interface QueryRepo {
-	val query: StateFlow<String?>
-	val activeFilter: StateFlow<Filter?>
+sealed interface EntityItem{
+	val id: Long
+	val name: String
+	val image: Image
+	data class Building(
+		override val id: Long,
+		override val name: String,
+		override val image: Image,
+	): EntityItem
 
-	fun setQuery(query: String?)
+	data class Node(
+		override val id: Long,
+		override val name: String,
+		override val image: Image,
+	): EntityItem
 
-	fun setActiveFilter(filter: Filter?)
+	data class Event(
+		override val id: Long,
+		override val name: String,
+		override val image: Image,
+		val clubName: String,
+		val banner: URL,
+	): EntityItem
 }

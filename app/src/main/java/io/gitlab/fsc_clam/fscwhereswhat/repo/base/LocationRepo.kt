@@ -17,14 +17,17 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Filter
 import kotlinx.coroutines.flow.StateFlow
 
-interface QueryRepo {
-	val query: StateFlow<String?>
-	val activeFilter: StateFlow<Filter?>
+/**
+ * By default provides middle of campus
+ */
 
-	fun setQuery(query: String?)
+interface LocationRepo {
+	val longitude: StateFlow<Float>
+	val latitude: StateFlow<Float>
 
-	fun setActiveFilter(filter: Filter?)
+	fun setLongitude(longitude: Float)
+
+	fun setLatitude(latitude: Float)
 }

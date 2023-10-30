@@ -15,16 +15,21 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
+import androidx.lifecycle.ViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Filter
 import kotlinx.coroutines.flow.StateFlow
 
-interface QueryRepo {
-	val query: StateFlow<String?>
-	val activeFilter: StateFlow<Filter?>
+abstract class SearchViewModel: ViewModel() {
+	abstract val query: StateFlow<String>
+	abstract val activeFilter: StateFlow<Filter?>
+	abstract val entities: StateFlow<List<EntityItem>>
 
-	fun setQuery(query: String?)
+	abstract fun setQuery(query: String)
 
-	fun setActiveFilter(filter: Filter?)
+	abstract fun setActiveFilter(filter: Filter?)
+
+
 }

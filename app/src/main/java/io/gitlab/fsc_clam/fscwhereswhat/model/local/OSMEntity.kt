@@ -17,23 +17,41 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-sealed interface OSMEntity{
+/**
+ * OSMEntity represents the two types of OSM Ways and Nodes
+ */
+sealed interface OSMEntity {
 
-	 val id: Long
-	 val lat: Float
-	 val long: Float
-	 val name: String
+	val id: Long
+	val lat: Float
+	val long: Float
+	val name: String
+	val description: String
+	val hours: OpeningHours
 
+	/**
+	 * Represents a Way
+	 */
 	data class Building(
 		override val id: Long,
 		override val lat: Float,
 		override val long: Float,
 		override val name: String,
+		override val description: String,
+		override val hours: OpeningHours,
 		val hasWater: Boolean,
 		val hasFood: Boolean,
-	): OSMEntity{
+	) : OSMEntity
 
-	}
+	data class Node(
+		override val id: Long,
+		override val lat: Float,
+		override val long: Float,
+		override val name: String,
+		override val description: String,
+		override val hours: OpeningHours,
+		val nodeType: NodeType,
+		) : OSMEntity
 }
 
 

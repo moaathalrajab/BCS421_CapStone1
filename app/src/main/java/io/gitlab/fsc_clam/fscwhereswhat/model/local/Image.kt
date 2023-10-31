@@ -19,10 +19,20 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 import java.net.URL
 
+/**
+ * For each image type
+ */
 sealed interface Image{
+	/**
+	 * If Image is an Asset (Ex. png)
+	 */
 	data class Asset(
 		val path: URL
 	): Image
+
+	/**
+	 * If image is in drawable xml
+	 */
 
 	data class Drawable(
 		val drawable: Int

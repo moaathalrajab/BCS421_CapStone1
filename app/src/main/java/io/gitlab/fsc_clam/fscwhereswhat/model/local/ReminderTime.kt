@@ -17,6 +17,9 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
+/**
+ * Each option available for time of reminder
+ */
 enum class ReminderTime {
 	START,
 	HALF_HOUR_BEFORE,

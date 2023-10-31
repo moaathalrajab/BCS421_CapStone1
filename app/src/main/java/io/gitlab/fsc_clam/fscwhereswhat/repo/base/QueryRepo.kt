@@ -17,14 +17,14 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Filter
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import kotlinx.coroutines.flow.StateFlow
 
 interface QueryRepo {
 	val query: StateFlow<String?>
-	val activeFilter: StateFlow<Filter?>
+	val activeFilter: StateFlow<EntityType?>
 
 	fun setQuery(query: String?)
 
-	fun setActiveFilter(filter: Filter?)
+	fun setActiveFilter(filter: EntityType?)
 }

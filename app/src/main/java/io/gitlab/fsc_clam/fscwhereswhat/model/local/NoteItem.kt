@@ -19,10 +19,18 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 import java.net.URL
 
+/**
+ * UI Item for notes
+ * @param comment for the note
+ * @param reference the parent Id
+ * @param type what entity type note is attached to
+ * @param image image to display
+ * @param referenceName the parent's name
+ */
 data class NoteItem(
 	val comment: String,
 	val reference: Int,
 	val type: EntityType,
-	val url: URL,
+	val image: Image,
 	val referenceName: String
 )

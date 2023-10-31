@@ -17,6 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
+/**
+ * Represents a given note for a given entity
+ * @param comment the note
+ * @param reference the parentId
+ * @param type the entity type
+ */
 data class Note(
 	val comment: String,
 	val reference: Int,

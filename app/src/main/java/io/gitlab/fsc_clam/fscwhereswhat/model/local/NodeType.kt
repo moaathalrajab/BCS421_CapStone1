@@ -17,6 +17,9 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
+/**
+ * Specifies which node we are working on in the app
+ */
 enum class NodeType {
 	WATER,
 	VENDING_MACHINE,

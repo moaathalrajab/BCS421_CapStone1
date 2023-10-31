@@ -17,6 +17,14 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
+/**
+ * OSM Opening Hours for a node
+ * Days are if opening hours are applied on those days
+ * @param startHour in what hour is opened
+ * @param startMinute in what minute is opened
+ * @param endHour in what hour is closed
+ * @param endMinute in what minute is closed
+ */
 data class OpeningHours(
 	val monday: Boolean,
 	val tuesday: Boolean,

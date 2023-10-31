@@ -19,17 +19,17 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
 import androidx.lifecycle.ViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityItem
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Filter
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class SearchViewModel: ViewModel() {
 	abstract val query: StateFlow<String>
-	abstract val activeFilter: StateFlow<Filter?>
+	abstract val activeFilter: StateFlow<EntityType?>
 	abstract val entities: StateFlow<List<EntityItem>>
 
 	abstract fun setQuery(query: String)
 
-	abstract fun setActiveFilter(filter: Filter?)
+	abstract fun setActiveFilter(filter: EntityType?)
 
 
 }

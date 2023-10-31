@@ -17,8 +17,23 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
+/**
+ * EntityType are constants for the three fundamental types of data we are working with
+ */
 enum class EntityType {
+	/**
+	 * Represents a building
+	 */
 	BUILDING,
+
+	/**
+	 * Represents an event
+	 */
 	EVENT,
+
+	/**
+	 * Represents utilities/amenities
+	 * Ex. water fountain
+	 */
 	NODE,
 }

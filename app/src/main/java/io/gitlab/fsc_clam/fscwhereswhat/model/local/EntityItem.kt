@@ -19,15 +19,37 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 import java.net.URL
 
+/**
+ * UI Data Holder for Search
+ */
 sealed interface EntityItem{
+	/**
+	 * A unique identifier for the entity
+	 */
 	val id: Long
+	/**
+	 * To display in the listing
+	 * User identifiable for the name
+	 */
 	val name: String
+	/**
+	 * For the event, building, node image
+	 */
 	val image: Image
+
+	/**
+	 * Represents a building
+	 */
 	data class Building(
 		override val id: Long,
 		override val name: String,
 		override val image: Image,
 	): EntityItem
+
+	/**
+	 * Represents any given item
+	 * Ex. water fountain
+	 */
 
 	data class Node(
 		override val id: Long,
@@ -35,6 +57,10 @@ sealed interface EntityItem{
 		override val image: Image,
 	): EntityItem
 
+	/**
+	 * @param clubName name of the club
+	 * @param banner to show event image
+	 */
 	data class Event(
 		override val id: Long,
 		override val name: String,

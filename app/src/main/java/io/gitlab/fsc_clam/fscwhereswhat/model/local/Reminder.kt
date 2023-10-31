@@ -17,8 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
+/**
+ * A given reminder for an event
+ * @param eventId is the id of the RamCentral Event
+ * @param remind is the time of the reminder
+ */
 data class Reminder(
-	val id: Int,
 	val eventId: Int,
 	val remind: ReminderTime,
 )

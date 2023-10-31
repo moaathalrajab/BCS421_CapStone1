@@ -18,7 +18,7 @@
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
 import androidx.lifecycle.ViewModel
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Filter
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import kotlinx.coroutines.flow.StateFlow
@@ -26,12 +26,12 @@ import kotlinx.coroutines.flow.StateFlow
 abstract class MapViewModel: ViewModel() {
 	abstract val user: StateFlow<User?>
 	abstract val query: StateFlow<String?>
-	abstract val activeFilter: StateFlow<Filter?>
+	abstract val activeFilter: StateFlow<EntityType?>
 	abstract val pinpoints: StateFlow<List<Pinpoint>>
 	abstract val longitude: StateFlow<Float>
 	abstract val latitude: StateFlow<Float>
 
-	abstract fun setActiveFilter(filter: Filter?)
+	abstract fun setActiveFilter(filter: EntityType?)
 
 	abstract fun setFocus(pinpoint: Pinpoint)
 

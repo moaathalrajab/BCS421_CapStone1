@@ -16,11 +16,19 @@
  */
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
-
+/**
+ * For each screen on Onboarding Process
+ */
 enum class OnboardScreen {
 	WELCOME,
 	EXPLANATION,
+	/**
+	 * Login is required
+	 */
 	LOGIN,
+	/**
+	 * For setting color choice
+	 */
 	OPTIONS,
 	THANKS
 }

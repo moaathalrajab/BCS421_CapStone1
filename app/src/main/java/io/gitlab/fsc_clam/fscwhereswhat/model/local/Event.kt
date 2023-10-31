@@ -20,7 +20,17 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
 import java.net.URL
 
 /**
+ * Data from RamCentral Event
  * @param locationId this does not correspond to RamCentral ID but to OSM ID
+ * @param id is the ID from RamCentral
+ * @param name for the event
+ * @param image URL for the event
+ * @param description of the event
+ * @param instructions if event has requirements
+ * @param locationName name of where event is located
+ * @param locationId mapping betweeen Event and OSM Building
+ * @param hasRsvp if event has RSVP (yes/no)
+ * @param url link to RamCentral
  */
 data class Event(
 	val id :Int,

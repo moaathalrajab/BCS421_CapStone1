@@ -15,20 +15,18 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
+package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import org.junit.Test
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
 
-import org.junit.Assert.*
+interface OSMRepository {
+	suspend fun query(token: Token): List<OSMEntity>
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
+	suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity>
+
+	suspend fun get(id: Long): OSMEntity
+
+	suspend fun update(entites: List<OSMEntity>)
+
 }

@@ -15,20 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
-
-import org.junit.Test
-
-import org.junit.Assert.*
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * A given reminder for an event
+ * @param eventId is the id of the RamCentral Event
+ * @param remind is the time of the reminder
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
-}
+data class Reminder(
+	val eventId: Int,
+	val remind: ReminderTime,
+)

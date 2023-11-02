@@ -15,20 +15,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
+package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * By default provides middle of campus
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
+
+interface LocationRepo {
+	val longitude: StateFlow<Float>
+	val latitude: StateFlow<Float>
+
+	fun setLongitude(longitude: Float)
+
+	fun setLatitude(latitude: Float)
 }

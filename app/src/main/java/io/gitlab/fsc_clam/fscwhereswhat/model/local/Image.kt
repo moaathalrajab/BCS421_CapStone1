@@ -15,20 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import java.net.URL
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * For each image type
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
+sealed interface Image{
+	/**
+	 * If Image is an Asset (Ex. png)
+	 */
+	data class Asset(
+		val path: URL
+	): Image
+
+	/**
+	 * If image is in drawable xml
+	 */
+
+	data class Drawable(
+		val drawable: Int
+	): Image
 }

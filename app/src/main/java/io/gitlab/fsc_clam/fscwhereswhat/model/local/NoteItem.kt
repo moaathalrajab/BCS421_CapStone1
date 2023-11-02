@@ -15,20 +15,22 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import java.net.URL
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * UI Item for notes
+ * @param comment for the note
+ * @param reference the parent Id
+ * @param type what entity type note is attached to
+ * @param image image to display
+ * @param referenceName the parent's name
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
-}
+data class NoteItem(
+	val comment: String,
+	val reference: Int,
+	val type: EntityType,
+	val image: Image,
+	val referenceName: String
+)

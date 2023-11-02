@@ -15,20 +15,20 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
-
-import org.junit.Test
-
-import org.junit.Assert.*
-
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * For each screen on Onboarding Process
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
+enum class OnboardScreen {
+	WELCOME,
+	EXPLANATION,
+	/**
+	 * Login is required
+	 */
+	LOGIN,
+	/**
+	 * For setting color choice
+	 */
+	OPTIONS,
+	THANKS
 }

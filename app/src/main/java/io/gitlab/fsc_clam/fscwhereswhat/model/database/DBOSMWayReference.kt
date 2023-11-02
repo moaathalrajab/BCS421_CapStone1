@@ -15,20 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
-
-import org.junit.Test
-
-import org.junit.Assert.*
+package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * This is a reference between a OSM Way and its child nodes
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
-}
+data class DBOSMWayReference(
+	val id: Long,
+	val wayId: Long,
+)
+

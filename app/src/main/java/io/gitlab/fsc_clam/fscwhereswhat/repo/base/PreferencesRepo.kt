@@ -15,20 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
+package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import org.junit.Test
+import android.graphics.Color
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import kotlinx.coroutines.flow.Flow
 
-import org.junit.Assert.*
+interface PreferencesRepo {
+	fun getColor(type: EntityType): Flow<Color>
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
+	suspend fun setColor(type: EntityType, color: Color)
 }

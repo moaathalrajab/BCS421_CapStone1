@@ -15,20 +15,25 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
-
-import org.junit.Test
-
-import org.junit.Assert.*
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * EntityType are constants for the three fundamental types of data we are working with
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
+enum class EntityType {
+	/**
+	 * Represents a building
+	 */
+	BUILDING,
+
+	/**
+	 * Represents an event
+	 */
+	EVENT,
+
+	/**
+	 * Represents utilities/amenities
+	 * Ex. water fountain
+	 */
+	NODE,
 }

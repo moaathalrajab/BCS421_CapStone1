@@ -15,20 +15,39 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import android.graphics.Color
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * For the More View
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
+abstract class MoreViewModel : ViewModel() {
+	/**
+	 * Color of Building pinpoints
+	 */
+	abstract val buildingColor: StateFlow<Color>
+
+	/**
+	 * Color of Event pinpoints
+	 */
+	abstract val eventColor: StateFlow<Color>
+
+	/**
+	 * Sets color of Building pinpoints
+	 */
+	abstract fun setBuildingColor(color: Color)
+
+	/**
+	 * Sets color of Event pinpoints
+	 */
+	abstract fun setEventColor(color: Color)
+
+	/**
+	 * Clear cache on app
+	 */
+	abstract fun clearCache()
+
 }

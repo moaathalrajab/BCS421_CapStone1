@@ -15,20 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
-
-import org.junit.Test
-
-import org.junit.Assert.*
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * For Search queries with multiple words
+ * If user searches "water and food", [strings] will contain a list ["water", "food"].
+ * If user searches "water or food", two tokens with the first one being "water", the second being "food"
+ * If user searches "water not in campus center", token will have water, afterwards filtering out anything mentioning "campus center"
+ * If user searches "water in campus center", token will have water, afterwards filtering for "campus center"
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
-}
+data class Token(val strings: List<String>)
+

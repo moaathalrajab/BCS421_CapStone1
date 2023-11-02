@@ -15,20 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
-
-import org.junit.Test
-
-import org.junit.Assert.*
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * OSM Opening Hours for a node
+ * Days are if opening hours are applied on those days
+ * @param startHour in what hour is opened
+ * @param startMinute in what minute is opened
+ * @param endHour in what hour is closed
+ * @param endMinute in what minute is closed
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
-}
+data class OpeningHours(
+	val monday: Boolean,
+	val tuesday: Boolean,
+	val wednesday: Boolean,
+	val thursday: Boolean,
+	val friday: Boolean,
+	val saturday: Boolean,
+	val sunday: Boolean,
+	val startHour: Int,
+	val startMinute: Int,
+	val endHour: Int,
+	val endMinute: Int
+)

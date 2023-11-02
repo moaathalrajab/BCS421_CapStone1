@@ -15,20 +15,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
+package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import android.graphics.Color
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * This is a data class for the UI as a pin on the map
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
-}
+
+data class Pinpoint(
+	val latitude: Float,
+	val longitude: Float,
+	val color: Color,
+	val id: Int,
+	val type: EntityType,
+	val isFocused: Boolean
+)

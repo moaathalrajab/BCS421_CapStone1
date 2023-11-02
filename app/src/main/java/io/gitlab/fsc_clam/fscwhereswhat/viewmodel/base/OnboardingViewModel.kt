@@ -15,20 +15,29 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import org.junit.Test
-
-import org.junit.Assert.*
+import androidx.lifecycle.ViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.OnboardScreen
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import kotlinx.coroutines.flow.StateFlow
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * For Onboarding Process
  */
-class ExampleUnitTest {
-	@Test
-	fun addition_isCorrect() {
-		assertEquals(4, 2 + 2)
-	}
+abstract class OnboardingViewModel: ViewModel() {
+	/**
+	 * Holds current screen in Onboarding Process
+	 */
+	abstract val screen: StateFlow<OnboardScreen>
+
+	/**
+	 * Navigates to next screen
+	 */
+	abstract fun nextScreen()
+
+	/**
+	 * Returns to previous screen
+	 */
+	abstract fun lastScreen()
 }

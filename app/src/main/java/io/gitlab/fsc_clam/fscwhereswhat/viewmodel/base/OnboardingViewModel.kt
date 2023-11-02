@@ -22,9 +22,22 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.OnboardScreen
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * For Onboarding Process
+ */
 abstract class OnboardingViewModel: ViewModel() {
+	/**
+	 * Holds current screen in Onboarding Process
+	 */
 	abstract val screen: StateFlow<OnboardScreen>
+
+	/**
+	 * Navigates to next screen
+	 */
 	abstract fun nextScreen()
 
+	/**
+	 * Returns to previous screen
+	 */
 	abstract fun lastScreen()
 }

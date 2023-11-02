@@ -21,12 +21,28 @@ import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * For Options Screen in Onboarding Process
+ */
 abstract class OptionsViewModel : ViewModel() {
+	/**
+	 * Color of Building pinpoints
+	 */
 	abstract val buildingColor: StateFlow<Color>
+
+	/**
+	 * Color of Event pinpoints
+	 */
 	abstract val eventColor: StateFlow<Color>
 
+	/**
+	 * Sets color of Building pinpoints
+	 */
 	abstract fun setBuildingColor(color: Color)
 
+	/**
+	 * Sets color of Event pinpoints
+	 */
 	abstract fun setEventColor(color: Color)
 
 }

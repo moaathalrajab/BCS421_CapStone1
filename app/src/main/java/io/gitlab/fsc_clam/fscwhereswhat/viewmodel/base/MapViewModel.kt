@@ -23,16 +23,48 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class MapViewModel: ViewModel() {
+/**
+ * For Map View
+ */
+abstract class MapViewModel : ViewModel() {
+	/**
+	 * If user has logged in, stores user data
+	 */
 	abstract val user: StateFlow<User?>
+
+	/**
+	 * When user types in search bar
+	 */
 	abstract val query: StateFlow<String?>
+
+	/**
+	 * The current active filter of map view - shows Building, Event, Node, or All
+	 */
 	abstract val activeFilter: StateFlow<EntityType?>
+
+	/**
+	 * Contains list of markers for entities
+	 */
 	abstract val pinpoints: StateFlow<List<Pinpoint>>
+
+	/**
+	 * The current longitude of user
+	 */
 	abstract val longitude: StateFlow<Float>
+
+	/**
+	 * The current latitude of user
+	 */
 	abstract val latitude: StateFlow<Float>
 
+	/**
+	 * Sets active filter when user clicks filter button
+	 */
 	abstract fun setActiveFilter(filter: EntityType?)
 
+	/**
+	 * When user clicks pinpoint, zoom in to the point
+	 */
 	abstract fun setFocus(pinpoint: Pinpoint)
 
 

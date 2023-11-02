@@ -19,6 +19,9 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 import java.net.URL
 
+/**
+ * Represents a user
+ */
 data class User(
 	val id: Int,
 	val name: String,

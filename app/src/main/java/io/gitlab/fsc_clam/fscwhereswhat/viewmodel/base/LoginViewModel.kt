@@ -21,7 +21,13 @@ import androidx.lifecycle.ViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * For login view in onboarding
+ */
 abstract class LoginViewModel: ViewModel() {
+	/**
+	 * Used to display user information when login successful
+	 */
 	abstract val user: StateFlow<User?>
 
 }

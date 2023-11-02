@@ -22,12 +22,25 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class RemindersViewModel: ViewModel() {
+/**
+ * For Reminders View
+ */
+abstract class RemindersViewModel : ViewModel() {
+	/**
+	 * Holds list of ReminderItems which contain data on reminder for entity
+	 * @see ReminderItem
+	 */
 	abstract val reminders: StateFlow<List<ReminderItem>>
 
-
+	/**
+	 * Deletes reminder from view
+	 */
 	abstract fun deleteReminder(reminderItem: ReminderItem)
 
+	/**
+	 * Updates ReminderTime for Event
+	 * @param id is the event ID
+	 */
 	abstract fun updateReminderTime(id: Int, time: ReminderTime)
 
 

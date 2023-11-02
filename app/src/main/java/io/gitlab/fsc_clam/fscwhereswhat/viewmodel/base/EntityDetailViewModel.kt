@@ -19,36 +19,102 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
 import androidx.lifecycle.ViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import kotlinx.coroutines.flow.StateFlow
 import java.net.URL
 
+/**
+ * EntityDetailViewModel handles EntityDetailView when user clicks entity
+ */
 abstract class EntityDetailViewModel : ViewModel() {
+	/**
+	 * Name is name of the entity
+	 */
 	abstract val name: StateFlow<String>
+
+	/**
+	 * Note is the comment from the user
+	 */
 	abstract val note: StateFlow<String>
+
+	/**
+	 * URL is the link to RamCentral if event or the link to the OSM provided URL
+	 */
 	abstract val url: StateFlow<URL?>
+
+	/**
+	 * Image is the image of the eentity
+	 */
+	abstract val image: StateFlow<Image>
+
+	/**
+	 * ShareURL is the app specific share link to share with others
+	 */
 	abstract val shareURL: StateFlow<URL>
 
+	/**
+	 * @see OpeningHours
+	 */
 	abstract val openingHours: StateFlow<OpeningHours?>
+
+	/**
+	 * Description is the description of the entity
+	 */
 	abstract val description: StateFlow<String?>
+
+	/**
+	 * Type specifies which type is the entity - Node, Entity, Building
+	 */
 	abstract val type: StateFlow<EntityType>
+
+	/**
+	 * If Entity is node, specifies which nodeType it is
+	 * @see NodeType
+	 */
 	abstract val nodeType: StateFlow<NodeType?>
 
 	//Events
-	abstract val image: StateFlow<URL?>
+	/**
+	 * optional instructions for event
+	 */
 	abstract val instructions: StateFlow<String?>
+
+	/**
+	 * if event has option for RSVP
+	 */
 	abstract val hasRsvp: StateFlow<Boolean>
+
+	/**
+	 * if user set reminder
+	 */
 	abstract val hasReminder: StateFlow<Boolean>
+
+	/**
+	 * if user set reminder, how long until reminder notifies
+	 */
 	abstract val reminderTime: StateFlow<ReminderTime?>
 
+	/**
+	 * sets reminder time from entity detail view
+	 */
 	abstract fun setReminderTime(time: ReminderTime)
 
+	/**
+	 * creates note for entity from view
+	 */
 	abstract fun setNote(note: String)
 
+	/**
+	 * deletes reminder
+	 */
 	abstract fun deleteReminder()
 
+	/**
+	 * deletes note
+	 */
 	abstract fun deleteNote()
 
 }

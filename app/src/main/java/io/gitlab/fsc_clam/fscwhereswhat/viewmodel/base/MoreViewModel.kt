@@ -21,14 +21,33 @@ import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class MoreViewModel : ViewModel(){
+/**
+ * For the More View
+ */
+abstract class MoreViewModel : ViewModel() {
+	/**
+	 * Color of Building pinpoints
+	 */
 	abstract val buildingColor: StateFlow<Color>
+
+	/**
+	 * Color of Event pinpoints
+	 */
 	abstract val eventColor: StateFlow<Color>
 
-	abstract fun setBuildingColor(color : Color)
+	/**
+	 * Sets color of Building pinpoints
+	 */
+	abstract fun setBuildingColor(color: Color)
 
+	/**
+	 * Sets color of Event pinpoints
+	 */
 	abstract fun setEventColor(color: Color)
 
+	/**
+	 * Clear cache on app
+	 */
 	abstract fun clearCache()
 
 }

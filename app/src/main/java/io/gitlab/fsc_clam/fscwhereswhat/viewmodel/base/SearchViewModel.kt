@@ -22,13 +22,33 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class SearchViewModel: ViewModel() {
+/**
+ * For the Search View
+ */
+abstract class SearchViewModel : ViewModel() {
+	/**
+	 * Holds user input from search bar
+	 */
 	abstract val query: StateFlow<String>
+
+	/**
+	 * Active filter for EntityType to show results for Building, Event, Node, or All
+	 */
 	abstract val activeFilter: StateFlow<EntityType?>
+
+	/**
+	 * List of entities to populate search results
+	 */
 	abstract val entities: StateFlow<List<EntityItem>>
 
+	/**
+	 * Sets query
+	 */
 	abstract fun setQuery(query: String)
 
+	/**
+	 * Changes active filter
+	 */
 	abstract fun setActiveFilter(filter: EntityType?)
 
 

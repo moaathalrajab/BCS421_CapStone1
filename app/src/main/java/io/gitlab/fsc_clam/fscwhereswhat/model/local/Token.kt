@@ -17,5 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
+/**
+ * For Search queries with multiple words
+ * If user searches "water and food", [strings] will contain a list ["water", "food"].
+ * If user searches "water or food", two tokens with the first one being "water", the second being "food"
+ * If user searches "water not in campus center", token will have water, afterwards filtering out anything mentioning "campus center"
+ * If user searches "water in campus center", token will have water, afterwards filtering for "campus center"
+ */
 data class Token(val strings: List<String>)
 

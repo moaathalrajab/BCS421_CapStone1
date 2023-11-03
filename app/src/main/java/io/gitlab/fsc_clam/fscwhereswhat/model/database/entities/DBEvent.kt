@@ -15,11 +15,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database
+package io.gitlab.fsc_clam.fscwhereswhat.model.database.entities
 
-data class DBOSMTag(
-	val id: Long,
-	val parentId: Long,
-	val key: String,
-	val value: String
+import androidx.room.*
+
+@Entity(tableName = "Events")
+data class DBEvent (
+	@PrimaryKey val id: Int,
+	val name: String,
+	val image: String,
+	val description: String,
+	val instructions: String,
+	val locationName: String,
+	val locationId: Int,
+	val hasRsvp: Boolean,
+	val url: String
 )

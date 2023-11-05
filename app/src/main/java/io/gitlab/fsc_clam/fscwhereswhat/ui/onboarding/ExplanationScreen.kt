@@ -85,11 +85,11 @@ fun ExplanationScreen(){
 		Box(modifier = Modifier
 			.align(Alignment.Center)
 			.fillMaxWidth(.9f)
-			.fillMaxHeight(.9f)
+			.fillMaxHeight(.98f)
 			.background(Color.White)){
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
+					.fillMaxSize()
 					.wrapContentSize(),
 				verticalArrangement = Arrangement.Top,
 				horizontalAlignment = Alignment.CenterHorizontally
@@ -100,7 +100,7 @@ fun ExplanationScreen(){
 					contentScale = ContentScale.Crop,
 					modifier = Modifier
 						.padding(vertical = 15.dp)
-						.size(320.dp)
+						.size(280.dp)
 						.clip(RoundedCornerShape(25))
 				)
 				Column(
@@ -114,7 +114,7 @@ fun ExplanationScreen(){
 						fontFamily = headFont,
 						fontWeight = FontWeight.Bold,
 						fontStyle = FontStyle.Italic,
-						fontSize = 40.sp,
+						fontSize = 36.sp,
 					)
 					Text(
 						text = stringResource(id = R.string.explanation_body),
@@ -129,6 +129,7 @@ fun ExplanationScreen(){
 
 					entityExplanations.forEach {type ->
 						EntityExplanations(type = type)
+						Divider(Modifier.padding(bottom = 15.dp))
 					}
 				}
 			}
@@ -174,7 +175,7 @@ fun EntityExplanations(type: EntityType){
 			fontFamily = explanationFont,
 			fontWeight = FontWeight.Normal,
 			fontStyle = FontStyle.Normal,
-			fontSize = 12.sp,
+			fontSize = 16.sp,
 			modifier = Modifier
 				.fillMaxWidth(.8f)
 				.padding(bottom = 15.dp)
@@ -186,10 +187,10 @@ fun EntityExplanations(type: EntityType){
 			painter = img,
 			contentDescription = imgDescription,
 			modifier = Modifier
-				.align(Alignment.TopEnd)
-				.requiredSize(50.dp)
+				.align(Alignment.CenterEnd)
+				.requiredSize(35.dp)
 			)
-		Spacer(Modifier.padding(vertical = 30.dp))
+
 	}
 }
 

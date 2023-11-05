@@ -15,16 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.ui.theme
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
-import androidx.compose.ui.graphics.Color
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.LoginViewModel
+import kotlinx.coroutines.flow.StateFlow
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+class ImplLoginViewModel(): LoginViewModel(){
+	override val user: StateFlow<User?>
+		get() = TODO("Not yet implemented")
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
-val primaryColor = Color(0xFF7FFFC8)
+}

@@ -15,16 +15,21 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.ui.theme
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
-import androidx.compose.ui.graphics.Color
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.OnboardScreen
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.OnboardingViewModel
+import kotlinx.coroutines.flow.StateFlow
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+class ImplOnboardingViewModel(): OnboardingViewModel() {
+	override val screen: StateFlow<OnboardScreen>
+		get() = TODO("Not yet implemented")
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+	override fun nextScreen() {
+		TODO("Not yet implemented")
+	}
 
-val primaryColor = Color(0xFF7FFFC8)
+	override fun lastScreen() {
+		TODO("Not yet implemented")
+	}
+}

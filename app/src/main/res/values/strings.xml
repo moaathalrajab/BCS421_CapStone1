@@ -17,4 +17,41 @@
 
 <resources>
     <string name="app_name">FSCWheresWhat</string>
+    <string name="developers">Team CLAM</string>
+
+    //Welcome Screen Strings
+    <string name="welcome_label">Welcome to</string>
+    <string name="headline">FSC Where\'s What</string>
+    <string name="app_logo_description">App Logo</string>
+    <string name="arrow_forward">Forward</string>
+    <string name="arrow_backward">Backward</string>
+
+    //Explanation Screen Strings
+    <string name="explanation_body">is an interactive campus map that allows users to find</string>
+    <string name="explanation_event">Events that are marked with a flag.\nThey represent nearby events from RamCentral</string>
+    <string name="explanation_event_img">Events marked with red flag</string>
+    <string name="explanation_building">Buildings that are marked with this icon to the right.\nThey represent the campus buildings of FSC</string>
+    <string name="explanation_building_img">Buildings marked with rectangle</string>
+    <string name="explanation_node">Nodes that are marked with a question mark.\nThey represent the amenities and utilities around the campus</string>
+    <string name="explanation_node_img">Nodes marked with question mark</string>
+
+    //Login Screen Strings
+    <string name="login_heading">LOGIN</string>
+    <string name="login_welcome">Welcome!</string>
+    <string name="login_screen_body">Before we continue, please login</string>
+    <string name="login_google_button">Login with Google</string>
+
+    //Option Screen Strings
+    <string name="options_heading">OPTIONS</string>
+    <string name="options_subheading">Set colors for your markers</string>
+    <string name="options_events_label">EVENTS</string>
+    <string name="options_buildings_label">BUILDINGS</string>
+    <string name="options_confirm_button">CONFIRM</string>
+
+    //Thanks Screen Strings
+    <string name="thanks_heading">Thank you,</string>
+    <string name="thanks_body">Enjoy!</string>
+    <string name="thanks_developers_logo">Developer Logo</string>
+    <string name="thanks_continue_button">Continue to App</string>
+
 </resources>

@@ -22,6 +22,16 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNode
 
 @Dao
 interface OSMNodeDao {
-	@Query ("SELECT * FROM OSMNodes")
+	@Insert (onConflict = OnConflictStrategy.REPLACE)
+	fun insert(vararg node: DBOSMNode)
+
+	@Delete
+	fun delete(vararg node: DBOSMNode)
+
+	@Query("SELECT * FROM OSMNodes")
 	fun getAll() : List<DBOSMNode>
+
+	/** Get by Id **/
+	@Query("SELECT* FROM OSMNodes WHERE id = :node")
+	fun GetById(node: Int) : DBOSMNode
 }

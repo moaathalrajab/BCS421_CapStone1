@@ -22,6 +22,20 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayTag
 
 @Dao
 interface OSMWayTagDao {
-	@Query ("SELECT * FROM OSMWayTags")
+	@Insert (onConflict = OnConflictStrategy.REPLACE)
+	fun insert(vararg wayTag: DBOSMWayTag)
+
+	@Delete
+	fun delete(vararg wayTag: DBOSMWayTag)
+
+	@Query("SELECT * FROM OSMWayTags")
 	fun getAll() : List<DBOSMWayTag>
+
+	/** Get way tag by id **/
+	@Query("SELECT * FROM OSMWayTags WHERE id = :id")
+	fun getById(id: Int) : DBOSMWayTag
+
+	/** Get way tags by parent id **/
+	@Query("SELECT * FROM OSMWayTags WHERE parentId = :id")
+	fun getByParent(id: Int) : List<DBOSMWayTag>
 }

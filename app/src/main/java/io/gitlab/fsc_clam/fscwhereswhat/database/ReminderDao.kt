@@ -22,6 +22,16 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBReminder
 
 @Dao
 interface ReminderDao {
+	@Insert (onConflict = OnConflictStrategy.REPLACE)
+	fun insert(vararg reminder: DBReminder)
+
+	@Delete
+	fun delete(vararg reminder: DBReminder)
+
 	@Query("SELECT * FROM Reminders")
 	fun getAll(): List<DBReminder>
+
+	/** Get reminder by id **/
+	@Query("SELECT * FROM Reminders WHERE eventId = :id")
+	fun getByEventId(id: Int) : DBReminder
 }

@@ -22,6 +22,17 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeTag
 
 @Dao
 interface OSMNodeTagDao {
-	@Query ("SELECT * FROM OSMNodeTags")
-	fun getAll() : List<DBOSMNodeTag>
+	@Insert (onConflict = OnConflictStrategy.REPLACE)
+	fun insert(vararg nodeTag: DBOSMNodeTag)
+
+	@Delete
+	fun delete(vararg nodeTag: DBOSMNodeTag)
+
+	/** get nodeTag by nodeId **/
+	@Query("SELECT * FROM OSMNodeTags WHERE nodeId = :id")
+	fun getAllByNode(id: Int) : List<DBOSMNodeTag>
+
+	/** Get nodeTag by id **/
+	@Query("SELECT * FROM OSMNodeTags WHERE id = :id")
+	fun getById(id: Int) : DBOSMNodeTag
 }

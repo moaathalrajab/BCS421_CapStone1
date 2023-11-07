@@ -22,6 +22,16 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBNote
 
 @Dao
 interface NoteDao {
+	@Insert (onConflict = OnConflictStrategy.REPLACE)
+	fun insert(vararg note: DBNote)
+
+	@Delete
+	fun delete(vararg note: DBNote)
+
 	@Query("SELECT * FROM Notes")
 	fun getAll(): List<DBNote>
+
+	/** Get note by reference **/
+	@Query("SELECT * FROM Notes WHERE reference = :note")
+	fun getById(note: Int) : DBNote
 }

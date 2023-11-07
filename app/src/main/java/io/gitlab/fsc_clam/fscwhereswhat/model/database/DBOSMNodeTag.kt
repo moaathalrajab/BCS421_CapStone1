@@ -21,11 +21,11 @@ import androidx.room.*
 
 @Entity (
 	tableName = "OSMNodeTags",
-	foreignKeys = [ForeignKey(DBOSMNode::class, ["id"], ["parentId"], ForeignKey.CASCADE)]
+	foreignKeys = [ForeignKey(DBOSMNode::class, ["id"], ["nodeId"], ForeignKey.CASCADE)]
 )
 data class DBOSMNodeTag(
 	@PrimaryKey val id: Long,
-	val parentId: Long,
+	val nodeId: Long,
 	val key: String,
 	val value: String
 )

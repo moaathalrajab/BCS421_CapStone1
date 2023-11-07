@@ -22,6 +22,20 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
 
 @Dao
 interface EventDao {
+	@Insert (onConflict = OnConflictStrategy.REPLACE)
+	fun insert(vararg event: DBEvent)
+
+	@Delete
+	fun delete(vararg event: DBEvent)
+
 	@Query("SELECT * FROM Events")
 	fun getAll(): List<DBEvent>
+
+	/** Get by Id **/
+	@Query("SELECT * FROM Events WHERE id = :event")
+	fun getById(event: Int) : DBEvent
+
+	/** Get by location id **/
+	@Query("SELECT * FROM Events WHERE locationId = :id")
+	fun getByLocationId(id: Int) : List<DBEvent>
 }

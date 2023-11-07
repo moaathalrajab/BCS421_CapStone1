@@ -32,5 +32,5 @@ data class ReminderItem(
 	val eventName: String,
 	val imageURL: URL,
 	val remind: ReminderTime,
-	val date: Long
+	val date: String
 )

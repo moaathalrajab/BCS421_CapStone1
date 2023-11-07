@@ -67,4 +67,12 @@ dependencies {
 	debugImplementation("androidx.compose.ui:ui-tooling")
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
 	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+
+	val lifecycle_version = "2.6.2"
+	// ViewModel
+	implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+	// ViewModel utilities for Compose
+	implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+	implementation("io.coil-kt:coil-compose:2.5.0")
+
 }

@@ -34,8 +34,8 @@
     <string name="explanation_event_img">Events marked with red flag</string>
     <string name="explanation_building">Buildings that are marked with this icon to the right.\nThey represent the campus buildings of FSC</string>
     <string name="explanation_building_img">Buildings marked with rectangle</string>
-    <string name="explanation_node">Nodes that are marked with a question mark.\nThey represent the amenities and utilities around the campus</string>
-    <string name="explanation_node_img">Nodes marked with question mark</string>
+    <string name="explanation_node">Utilities that are marked with a question mark.\nThey represent the amenities and utilities around the campus</string>
+    <string name="explanation_node_img">Utilities marked with question mark</string>
 
     //Login Screen Strings
     <string name="login_heading">LOGIN</string>

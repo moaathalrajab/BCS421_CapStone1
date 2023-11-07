@@ -192,7 +192,7 @@ fun EntityExplanations(explanationText: String, img: Painter, imgDescription: St
 
 @Preview
 @Composable
-fun PreviewEnttiyExplanations(){
+fun PreviewEntityExplanations(){
 	Surface {
 		EntityExplanations(
 			explanationText = stringResource(id = R.string.explanation_event),

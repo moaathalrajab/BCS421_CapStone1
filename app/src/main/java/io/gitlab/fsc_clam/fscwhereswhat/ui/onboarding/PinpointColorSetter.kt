@@ -20,18 +20,14 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -45,7 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -60,10 +55,11 @@ import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.drawColorIndicator
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.primaryColor
 
+/**
+ * Creates the pinpoint color options in OptionsScreen
+ */
 @Composable
 fun PinpointColorItem(
 	name: String,
@@ -116,8 +112,9 @@ fun PinpointColorItem(
 			)
 		}
 	}
-
+//Turns on only if isDialogVisible
 	if (isDialogVisible) {
+		//Allows users to change pinpoint colors
 		Dialog(onDismissRequest = { isDialogVisible = false }) {
 			var textColor by remember { mutableStateOf(Color.Transparent) }
 			Column(

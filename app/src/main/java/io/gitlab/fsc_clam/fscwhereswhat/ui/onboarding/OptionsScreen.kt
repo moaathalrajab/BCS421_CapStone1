@@ -21,13 +21,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -75,6 +71,9 @@ fun OptionsScreen() {
 
 }
 
+/**
+ * Creates the content for the OptionsScreen
+ */
 @Composable
 fun OptionsContent(
 	eventColor: Int,
@@ -137,6 +136,7 @@ fun OptionsContent(
 						alignment = Alignment.CenterVertically
 					)
 				) {
+					//For Events
 					PinpointColorItem(
 						name = stringResource(id = R.string.options_events_label),
 						img = painterResource(id = R.drawable.flag_icon),
@@ -148,7 +148,7 @@ fun OptionsContent(
 							setEventColor(it.toArgb())
 						}
 					)
-
+					//For Buildings
 					PinpointColorItem(
 						name = stringResource(id = R.string.options_buildings_label),
 						img = painterResource(id = R.drawable.building_icon),
@@ -160,9 +160,10 @@ fun OptionsContent(
 							setBuildingColor(it.toArgb())
 						}
 					)
+					//For Nodes
 					PinpointColorItem(
 						name = stringResource(id = R.string.options_utilities_label),
-						img = painterResource(id = R.drawable.building_icon),
+						img = painterResource(id = R.drawable.node_icon),
 						imgDescription = stringResource(
 							id = R.string.explanation_node_img
 						),

@@ -26,6 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.gitlab.fsc_clam.fscwhereswhat.R
 
+/**
+ * The app's main fonts
+ */
 val titleFont = FontFamily(
 	Font(R.font.lobster_two_regular, FontWeight.Normal),
 	Font(R.font.lobster_two_bold, FontWeight.Bold),

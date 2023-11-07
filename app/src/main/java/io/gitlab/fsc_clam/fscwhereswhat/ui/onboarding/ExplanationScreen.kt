@@ -22,16 +22,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,8 +41,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -60,7 +55,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
  * Screen to explain the layout of the mop
  */
 @Composable
-fun ExplanationScreen(){
+fun ExplanationScreen() {
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
@@ -69,18 +64,19 @@ fun ExplanationScreen(){
 					contentScale = ContentScale.FillBounds
 				)
 		}) {
-		Box(modifier = Modifier
-			.align(Alignment.Center)
-			.fillMaxWidth(.9f)
-			.fillMaxHeight(.98f)
-			.background(Color.White)){
+		Box(
+			modifier = Modifier
+				.align(Alignment.Center)
+				.padding(16.dp)
+				.fillMaxSize()
+				.background(Color.White)
+		) {
 			Column(
 				modifier = Modifier
-					.fillMaxSize()
-					.wrapContentSize(),
-				verticalArrangement = Arrangement.Top,
+					.fillMaxSize(),
+				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.CenterHorizontally
-			){
+			) {
 				Image(
 					painter = painterResource(id = R.drawable.wheres_what_logo),
 					contentDescription = stringResource(id = R.string.app_logo_description),
@@ -90,34 +86,27 @@ fun ExplanationScreen(){
 						.size(280.dp)
 						.clip(RoundedCornerShape(25))
 				)
+				Text(
+					text = stringResource(id = R.string.headline),
+					fontFamily = headFont,
+					fontWeight = FontWeight.Bold,
+					fontStyle = FontStyle.Italic,
+					fontSize = 36.sp,
+				)
+				Text(
+					text = stringResource(id = R.string.explanation_body),
+					fontFamily = bodyFont,
+					fontWeight = FontWeight.Normal,
+					fontStyle = FontStyle.Normal,
+					fontSize = 20.sp,
+					textAlign = TextAlign.Center,
+				)
+
 				Column(
 					modifier = Modifier
 						.fillMaxSize(),
-					verticalArrangement = Arrangement.Top,
-					horizontalAlignment = Alignment.CenterHorizontally
+					verticalArrangement = Arrangement.SpaceEvenly
 				) {
-					Text(
-						text = stringResource(id = R.string.headline),
-						fontFamily = headFont,
-						fontWeight = FontWeight.Bold,
-						fontStyle = FontStyle.Italic,
-						fontSize = 36.sp,
-					)
-					Text(
-						text = stringResource(id = R.string.explanation_body),
-						fontFamily = bodyFont,
-						fontWeight = FontWeight.Normal,
-						fontStyle = FontStyle.Normal,
-						fontSize = 20.sp,
-						textAlign = TextAlign.Center,
-					)
-
-					Divider(
-						Modifier.padding(vertical = 15.dp),
-						thickness = 2.dp,
-						color = Color.Black
-					)
-
 					EntityExplanations(
 						explanationText = stringResource(id = R.string.explanation_event),
 						img = painterResource(
@@ -125,7 +114,6 @@ fun ExplanationScreen(){
 						),
 						imgDescription = stringResource(id = R.string.explanation_event_img)
 					)
-					Divider(Modifier.padding(bottom = 15.dp))
 					EntityExplanations(
 						explanationText = stringResource(id = R.string.explanation_building),
 						img = painterResource(
@@ -133,7 +121,6 @@ fun ExplanationScreen(){
 						),
 						imgDescription = stringResource(id = R.string.explanation_building_img)
 					)
-					Divider(Modifier.padding(bottom = 15.dp))
 					EntityExplanations(
 						explanationText = stringResource(id = R.string.explanation_node),
 						img = painterResource(
@@ -141,8 +128,6 @@ fun ExplanationScreen(){
 						),
 						imgDescription = stringResource(id = R.string.explanation_node_img)
 					)
-					Divider(Modifier.padding(bottom = 15.dp))
-
 				}
 			}
 		}
@@ -151,23 +136,20 @@ fun ExplanationScreen(){
 
 @Preview
 @Composable
-fun PreviewExplanationScreen(){
+fun PreviewExplanationScreen() {
 	ExplanationScreen()
 }
 
 @Composable
-fun EntityExplanations(explanationText: String, img: Painter, imgDescription: String){
-
-	val explanationFont = FontFamily(
-		Font(R.font.lilitaone_regular, FontWeight.Normal)
-	)
+fun EntityExplanations(explanationText: String, img: Painter, imgDescription: String) {
 	Box(
 		Modifier
 			.fillMaxWidth()
-			.background(Color.White)) {
+			.background(Color.White)
+	) {
 		Text(
 			text = explanationText,
-			fontFamily = explanationFont,
+			fontFamily = bodyFont,
 			fontWeight = FontWeight.Normal,
 			fontStyle = FontStyle.Normal,
 			fontSize = 16.sp,
@@ -185,14 +167,14 @@ fun EntityExplanations(explanationText: String, img: Painter, imgDescription: St
 				.fillMaxWidth(.1f)
 				.align(Alignment.CenterEnd)
 				.requiredSize(35.dp)
-			)
+		)
 
 	}
 }
 
 @Preview
 @Composable
-fun PreviewEntityExplanations(){
+fun PreviewEntityExplanations() {
 	Surface {
 		EntityExplanations(
 			explanationText = stringResource(id = R.string.explanation_event),

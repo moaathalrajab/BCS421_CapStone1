@@ -30,11 +30,11 @@
 
     //Explanation Screen Strings
     <string name="explanation_body">is an interactive campus map that allows users to find</string>
-    <string name="explanation_event">Events that are marked with a flag.\nThey represent nearby events from RamCentral</string>
+    <string name="explanation_event">Events that are marked with a flag.They represent nearby events from RamCentral</string>
     <string name="explanation_event_img">Events marked with red flag</string>
-    <string name="explanation_building">Buildings that are marked with this icon to the right.\nThey represent the campus buildings of FSC</string>
+    <string name="explanation_building">Buildings that are marked with this icon to the right.They represent the campus buildings of FSC</string>
     <string name="explanation_building_img">Buildings marked with rectangle</string>
-    <string name="explanation_node">Utilities that are marked with a question mark.\nThey represent the amenities and utilities around the campus</string>
+    <string name="explanation_node">Utilities that are marked with a question mark.They represent the amenities and utilities around the campus</string>
     <string name="explanation_node_img">Utilities marked with question mark</string>
 
     //Login Screen Strings

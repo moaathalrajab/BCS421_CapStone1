@@ -60,11 +60,12 @@ fun OnboardingView(){
 		5
 	}
 	val state = rememberCoroutineScope()
-
 	Scaffold(
 		bottomBar = {
+			//Creates the bottom bar which holds two icon buttons for navigation and a page indicator
 			BottomAppBar(
 				actions = {
+					//Button to return to previous page
 					IconButton(onClick = {
 						state.launch {
 							pagerState.scrollToPage(pagerState.currentPage - 1)
@@ -73,6 +74,7 @@ fun OnboardingView(){
 						) {
 						Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(id = R.string.arrow_backward))
 					}
+					//Creates the page indicator
 					Row(
 						Modifier
 							.wrapContentHeight()
@@ -91,6 +93,8 @@ fun OnboardingView(){
 							)
 						}
 					}
+					//Button to move to next page
+					//TODO("Make this IconButton turn to an X when at the last page")
 					IconButton(onClick = {
 						state.launch {
 							pagerState.scrollToPage(pagerState.currentPage + 1)
@@ -105,6 +109,7 @@ fun OnboardingView(){
 
 		}
 	) {
+		//Allows users to swap to each screen when horizontally swiped
 		HorizontalPager(
 			modifier = Modifier.padding(it),
 			state = pagerState,

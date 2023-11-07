@@ -17,9 +17,6 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -56,9 +53,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
 /**
  * Screen to thank users
  */
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ThanksScreen(){
+fun ThanksScreen() {
+	//Creates background
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
@@ -69,6 +66,7 @@ fun ThanksScreen(){
 		}
 	)
 	{
+		//Creates white box for content
 		Box(
 			modifier = Modifier
 				.align(Alignment.Center)
@@ -84,6 +82,7 @@ fun ThanksScreen(){
 				verticalArrangement = Arrangement.Top,
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
+				//Developer logo
 				Image(
 					painter = painterResource(id = R.drawable.team_clam_logo),
 					contentDescription = stringResource(id = R.string.thanks_developers_logo),
@@ -108,21 +107,15 @@ fun ThanksScreen(){
 					fontSize = 38.sp,
 					modifier = Modifier.padding(top = 15.dp, bottom = 25.dp)
 				)
-
-				AnimatedVisibility(
-					visible = true,
-					enter = scaleIn()
-					) {
-					Button(
-						onClick = { /*TODO*/ },
-						colors = ButtonDefaults.buttonColors(primaryColor),
-						modifier = Modifier.animateEnterExit()
-					) {
-						Text(
-							text = stringResource(id = R.string.thanks_continue_button),
-							color = Color.Black
-						)
-				}
+				//Button to navigate to MapView
+				Button(
+					onClick = { /*TODO*/ },
+					colors = ButtonDefaults.buttonColors(primaryColor),
+				) {
+					Text(
+						text = stringResource(id = R.string.thanks_continue_button),
+						color = Color.Black
+					)
 
 				}
 			}
@@ -132,6 +125,6 @@ fun ThanksScreen(){
 
 @Preview
 @Composable
-fun PreviewThanksScreen(){
+fun PreviewThanksScreen() {
 	ThanksScreen()
 }

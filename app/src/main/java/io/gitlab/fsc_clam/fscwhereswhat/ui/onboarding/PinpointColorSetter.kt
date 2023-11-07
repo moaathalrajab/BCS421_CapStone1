@@ -41,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -58,7 +59,12 @@ import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
 
 /**
- * Creates the pinpoint color options in OptionsScreen
+ * Composable to let users set colors for each EntityType
+ * @param name is the EntityType
+ * @param img is the associated pinpoint for each EntityType
+ * @param imgDescription is the content description for each img
+ * @param color is the current color of the pinpoint
+ * @param onColorSelected calls to optionsViewModel to set colors
  */
 @Composable
 fun PinpointColorItem(
@@ -68,6 +74,7 @@ fun PinpointColorItem(
 	color: Color,
 	onColorSelected: (Color) -> Unit,
 ) {
+	//controls the Color Picker
 	val controller = rememberColorPickerController()
 	var hexCode by remember { mutableStateOf("") }
 
@@ -80,14 +87,18 @@ fun PinpointColorItem(
 		horizontalArrangement = Arrangement.SpaceBetween,
 		modifier = Modifier.fillMaxWidth()
 	) {
+		//This row contains the img and name
 		Row(
 			verticalAlignment = Alignment.CenterVertically,
 		) {
+			//The Image of the EntityType
 			Image(
 				painter = img,
 				contentDescription = imgDescription,
 				modifier = Modifier.requiredSize(50.dp),
+				colorFilter = ColorFilter.tint(color)
 			)
+			//The name of the EntityType
 			Text(
 				text = name,
 				fontFamily = headFont,
@@ -112,17 +123,18 @@ fun PinpointColorItem(
 			)
 		}
 	}
-//Turns on only if isDialogVisible
 	if (isDialogVisible) {
-		//Allows users to change pinpoint colors
+		//Creates the dialog to let users pick colors
 		Dialog(onDismissRequest = { isDialogVisible = false }) {
 			var textColor by remember { mutableStateOf(Color.Transparent) }
+			//Background of dialog changes to match with currently selected color
 			Column(
 				Modifier
 					.background(textColor)
 					.fillMaxHeight(.6f),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
+				//EntityName as header
 				Text(
 					text = name,
 					fontFamily = headFont,
@@ -131,6 +143,7 @@ fun PinpointColorItem(
 					fontSize = 32.sp,
 					textAlign = TextAlign.Center,
 				)
+				//Color picker
 				HsvColorPicker(
 					modifier = Modifier
 						.padding(5.dp)
@@ -148,6 +161,7 @@ fun PinpointColorItem(
 					},
 					initialColor = Color.Black,
 				)
+				//Contains two buttons to either confirm choice or exit dialog
 				Row(
 					modifier = Modifier
 						.fillMaxWidth()
@@ -155,9 +169,11 @@ fun PinpointColorItem(
 					horizontalArrangement = Arrangement.End,
 					verticalAlignment = Alignment.CenterVertically
 				) {
+					//Exits dialog
 					TextButton(onClick = { isDialogVisible = false }) {
 						Text(text = stringResource(id = android.R.string.cancel))
 					}
+					//Confirms color choice
 					TextButton(onClick = {
 						onColorSelected(textColor)
 						isDialogVisible = false

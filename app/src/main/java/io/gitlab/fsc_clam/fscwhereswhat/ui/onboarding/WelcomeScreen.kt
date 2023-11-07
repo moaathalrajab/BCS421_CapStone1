@@ -22,10 +22,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,7 +46,8 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
  * Opening screen
  */
 @Composable
-fun WelcomeScreen(){
+fun WelcomeScreen() {
+	//Creates background
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
@@ -57,6 +56,7 @@ fun WelcomeScreen(){
 					contentScale = ContentScale.FillBounds
 				)
 		}) {
+		//App logo
 		Image(
 			painter = painterResource(id = R.drawable.wheres_what_logo),
 			contentDescription = stringResource(id = R.string.app_logo_description),
@@ -67,42 +67,34 @@ fun WelcomeScreen(){
 				.clip(RoundedCornerShape(25))
 				.align(Alignment.Center)
 		)
-			Column(
-				modifier = Modifier
-					.fillMaxWidth()
-					.wrapContentSize(),
-				verticalArrangement = Arrangement.Top,
-				horizontalAlignment = Alignment.CenterHorizontally
-			) {
-
-			}
-			Column(
-				modifier = Modifier
-					.fillMaxSize()
-					.padding(vertical = 50.dp),
-				verticalArrangement = Arrangement.Bottom,
-				horizontalAlignment = Alignment.CenterHorizontally
-			) {
-				Text(
-					text = stringResource(id = R.string.welcome_label),
-					fontFamily = titleFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Italic,
-					fontSize = 32.sp,
-				)
-				Text(
-					text = stringResource(id = R.string.headline),
-					fontFamily = titleFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Italic,
-					fontSize = 46.sp,
-				)
-			}
+		//Contains greeting text
+		Column(
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(vertical = 50.dp),
+			verticalArrangement = Arrangement.Bottom,
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			Text(
+				text = stringResource(id = R.string.welcome_label),
+				fontFamily = titleFont,
+				fontWeight = FontWeight.Bold,
+				fontStyle = FontStyle.Italic,
+				fontSize = 32.sp,
+			)
+			Text(
+				text = stringResource(id = R.string.headline),
+				fontFamily = titleFont,
+				fontWeight = FontWeight.Bold,
+				fontStyle = FontStyle.Italic,
+				fontSize = 46.sp,
+			)
+		}
 	}
 }
 
 @Preview
 @Composable
-fun PreviewWelcomeScreen(){
-		WelcomeScreen()
+fun PreviewWelcomeScreen() {
+	WelcomeScreen()
 }

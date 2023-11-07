@@ -57,9 +57,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplLoginViewModel
  * Screen to let users log in with Google
  */
 @Composable
-fun LoginScreen(){
+fun LoginScreen() {
 	val loginViewModel: LoginViewModel = viewModel<ImplLoginViewModel>()
-
+	//Creates background
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
@@ -69,18 +69,22 @@ fun LoginScreen(){
 				)
 		})
 	{
-		Box(modifier = Modifier
-			.align(Alignment.Center)
-			.fillMaxWidth(.9f)
-			.fillMaxHeight(.8f)
-			.background(Color.White)){
+		//Creates white box content container
+		Box(
+			modifier = Modifier
+				.align(Alignment.Center)
+				.fillMaxWidth(.9f)
+				.fillMaxHeight(.8f)
+				.background(Color.White)
+		) {
 			Column(
 				modifier = Modifier
 					.fillMaxWidth()
 					.wrapContentSize(),
 				verticalArrangement = Arrangement.Top,
 				horizontalAlignment = Alignment.CenterHorizontally
-			){
+			) {
+				//Heading
 				Text(
 					text = stringResource(id = R.string.login_heading),
 					fontFamily = headFont,
@@ -89,6 +93,7 @@ fun LoginScreen(){
 					fontSize = 48.sp,
 					textAlign = TextAlign.Center
 				)
+				//App logo
 				Image(
 					painter = painterResource(id = R.drawable.wheres_what_logo),
 					contentDescription = stringResource(id = R.string.app_logo_description),
@@ -98,7 +103,7 @@ fun LoginScreen(){
 						.size(280.dp)
 						.clip(RoundedCornerShape(25))
 				)
-
+				//Subheading
 				Text(
 					text = stringResource(id = R.string.login_welcome),
 					fontFamily = headFont,
@@ -107,7 +112,7 @@ fun LoginScreen(){
 					fontSize = 40.sp,
 					textAlign = TextAlign.Center
 				)
-
+				//Ask users to login
 				Text(
 					text = stringResource(id = R.string.login_screen_body),
 					fontFamily = bodyFont,
@@ -116,10 +121,11 @@ fun LoginScreen(){
 					textAlign = TextAlign.Center,
 					modifier = Modifier.padding(bottom = 30.dp)
 				)
-
+				//Clickable image
+				//May convert to IconButton
 				Image(
 					painter = painterResource(id = R.drawable.google_signin),
-					contentDescription = "",
+					contentDescription = stringResource(id = R.string.login_button_description),
 					modifier = Modifier
 						.wrapContentSize()
 						.clickable(onClick = {
@@ -134,6 +140,6 @@ fun LoginScreen(){
 
 @Preview
 @Composable
-fun PreviewLoginScreen(){
+fun PreviewLoginScreen() {
 	LoginScreen()
 }

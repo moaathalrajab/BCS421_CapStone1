@@ -56,6 +56,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
  */
 @Composable
 fun ExplanationScreen() {
+	//Creates background
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
@@ -64,6 +65,7 @@ fun ExplanationScreen() {
 					contentScale = ContentScale.FillBounds
 				)
 		}) {
+		//Creates white box content container
 		Box(
 			modifier = Modifier
 				.align(Alignment.Center)
@@ -77,6 +79,7 @@ fun ExplanationScreen() {
 				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
+				//App Logo
 				Image(
 					painter = painterResource(id = R.drawable.wheres_what_logo),
 					contentDescription = stringResource(id = R.string.app_logo_description),
@@ -86,6 +89,7 @@ fun ExplanationScreen() {
 						.size(280.dp)
 						.clip(RoundedCornerShape(25))
 				)
+				//Header
 				Text(
 					text = stringResource(id = R.string.headline),
 					fontFamily = headFont,
@@ -93,6 +97,7 @@ fun ExplanationScreen() {
 					fontStyle = FontStyle.Italic,
 					fontSize = 36.sp,
 				)
+				//Subheading
 				Text(
 					text = stringResource(id = R.string.explanation_body),
 					fontFamily = bodyFont,
@@ -107,6 +112,7 @@ fun ExplanationScreen() {
 						.fillMaxSize(),
 					verticalArrangement = Arrangement.SpaceEvenly
 				) {
+					//Explains Event
 					EntityExplanations(
 						explanationText = stringResource(id = R.string.explanation_event),
 						img = painterResource(
@@ -114,6 +120,7 @@ fun ExplanationScreen() {
 						),
 						imgDescription = stringResource(id = R.string.explanation_event_img)
 					)
+					//Explains Buildings
 					EntityExplanations(
 						explanationText = stringResource(id = R.string.explanation_building),
 						img = painterResource(
@@ -121,6 +128,7 @@ fun ExplanationScreen() {
 						),
 						imgDescription = stringResource(id = R.string.explanation_building_img)
 					)
+					//Explains nodes(utilities)
 					EntityExplanations(
 						explanationText = stringResource(id = R.string.explanation_node),
 						img = painterResource(
@@ -154,8 +162,8 @@ fun EntityExplanations(explanationText: String, img: Painter, imgDescription: St
 			fontStyle = FontStyle.Normal,
 			fontSize = 16.sp,
 			modifier = Modifier
-				.fillMaxWidth(.9f)
-				.padding(bottom = 15.dp)
+				.fillMaxWidth(.8f)
+				.padding(bottom = 10.dp)
 				.offset(x = 5.dp)
 				.align(Alignment.CenterStart)
 		)
@@ -164,7 +172,8 @@ fun EntityExplanations(explanationText: String, img: Painter, imgDescription: St
 			painter = img,
 			contentDescription = imgDescription,
 			modifier = Modifier
-				.fillMaxWidth(.1f)
+				.padding(end = 5.dp)
+				.fillMaxWidth(.2f)
 				.align(Alignment.CenterEnd)
 				.requiredSize(35.dp)
 		)

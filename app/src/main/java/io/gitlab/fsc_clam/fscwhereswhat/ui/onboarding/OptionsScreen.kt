@@ -17,14 +17,15 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -54,7 +56,6 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplOptionsViewModel
 /**
  * Screen to let users set pinpoint colors
  */
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun OptionsScreen() {
 	val optionsViewModel: OptionsViewModel = viewModel<ImplOptionsViewModel>()
@@ -66,13 +67,20 @@ fun OptionsScreen() {
 		buildingColor = buildingColor,
 		utilityColor = utilityColor,
 		setEventColor = optionsViewModel::setEventColor,
-		setBuildingColor = optionsViewModel::setBuildingColor
+		setBuildingColor = optionsViewModel::setBuildingColor,
+		setUtilityColor = optionsViewModel::setUtilityColor
 	)
 
 }
 
 /**
- * Creates the content for the OptionsScreen
+ * Content for the Options Screen
+ * @param eventColor is passed from the optionsViewModel
+ * @param buildingColor is passed from the optionsViewModel
+ * @param utilityColor is passed from the optionsViewModel
+ * @param setEventColor is called to the optionsViewModel
+ * @param setBuildingColor is called to the optionsViewModel
+ * @param setUtilityColor is called to the optionsViewModel
  */
 @Composable
 fun OptionsContent(
@@ -80,8 +88,10 @@ fun OptionsContent(
 	buildingColor: Int,
 	utilityColor: Int,
 	setEventColor: (Int) -> Unit,
-	setBuildingColor: (Int) -> Unit
+	setBuildingColor: (Int) -> Unit,
+	setUtilityColor: (Int) -> Unit
 ) {
+	//Creates the background
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
@@ -92,6 +102,7 @@ fun OptionsContent(
 		}
 	)
 	{
+		//Creates the white background to hold content
 		Surface(
 			modifier = Modifier
 				.padding(16.dp)
@@ -105,12 +116,15 @@ fun OptionsContent(
 					16.dp,
 					alignment = Alignment.CenterVertically
 				),
+				horizontalAlignment = Alignment.CenterHorizontally
 			) {
+				//This column only contains the headings
 				Column(
 					modifier = Modifier.fillMaxWidth(),
 					horizontalAlignment = Alignment.CenterHorizontally
 
 				) {
+					//Heading
 					Text(
 						text = stringResource(id = R.string.options_heading),
 						fontFamily = headFont,
@@ -119,6 +133,7 @@ fun OptionsContent(
 						fontSize = 48.sp,
 						textAlign = TextAlign.Center
 					)
+					//Subheading
 					Text(
 						text = stringResource(id = R.string.options_subheading),
 						fontFamily = bodyFont,
@@ -128,7 +143,17 @@ fun OptionsContent(
 						textAlign = TextAlign.Center
 					)
 				}
-
+				//App logo
+				Image(
+					painter = painterResource(id = R.drawable.wheres_what_logo),
+					contentDescription = stringResource(id = R.string.app_logo_description),
+					contentScale = ContentScale.Crop,
+					modifier = Modifier
+						.padding(vertical = 15.dp)
+						.size(280.dp)
+						.clip(RoundedCornerShape(25))
+				)
+				//This column contains the three color setters for each EntityType
 				Column(
 					modifier = Modifier.fillMaxWidth(),
 					verticalArrangement = Arrangement.spacedBy(
@@ -136,7 +161,7 @@ fun OptionsContent(
 						alignment = Alignment.CenterVertically
 					)
 				) {
-					//For Events
+					//Lets users set colors for events
 					PinpointColorItem(
 						name = stringResource(id = R.string.options_events_label),
 						img = painterResource(id = R.drawable.flag_icon),
@@ -148,7 +173,7 @@ fun OptionsContent(
 							setEventColor(it.toArgb())
 						}
 					)
-					//For Buildings
+					//Lets users set colors for buildings
 					PinpointColorItem(
 						name = stringResource(id = R.string.options_buildings_label),
 						img = painterResource(id = R.drawable.building_icon),
@@ -160,7 +185,7 @@ fun OptionsContent(
 							setBuildingColor(it.toArgb())
 						}
 					)
-					//For Nodes
+					//Lets users set colors for utilities
 					PinpointColorItem(
 						name = stringResource(id = R.string.options_utilities_label),
 						img = painterResource(id = R.drawable.node_icon),
@@ -169,7 +194,7 @@ fun OptionsContent(
 						),
 						Color(utilityColor),
 						onColorSelected = {
-							setBuildingColor(it.toArgb())
+							setUtilityColor(it.toArgb())
 						}
 					)
 				}
@@ -182,6 +207,6 @@ fun OptionsContent(
 @Preview
 @Composable
 fun PreviewOptionsContent() {
-	OptionsContent(0,0, 0, {}, {})
+	OptionsContent(50, 50, 50, {}, {}, {})
 }
 

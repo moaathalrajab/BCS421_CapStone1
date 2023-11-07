@@ -42,12 +42,14 @@
     <string name="login_welcome">Welcome!</string>
     <string name="login_screen_body">Before we continue, please login</string>
     <string name="login_google_button">Login with Google</string>
+    <string name="login_button_description">Login with google</string>
 
     //Option Screen Strings
     <string name="options_heading">OPTIONS</string>
     <string name="options_subheading">Set colors for your markers</string>
     <string name="options_events_label">EVENTS</string>
     <string name="options_buildings_label">BUILDINGS</string>
+    <string name="options_utilities_label">UTILITIES</string>
     <string name="options_confirm_button">Confirm</string>
 
     //Thanks Screen Strings
@@ -56,6 +58,5 @@
     <string name="thanks_developers_logo">Developer Logo</string>
     <string name="thanks_continue_button">Continue to App</string>
     <string name="edit">Edit</string>
-    <string name="options_utilities_label">Utilities</string>
 
 </resources>

@@ -1,6 +1,7 @@
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
+	kotlin("plugin.serialization")
 }
 
 android {
@@ -40,7 +41,7 @@ android {
 		compose = true
 	}
 	composeOptions {
-		kotlinCompilerExtensionVersion = "1.4.3"
+		kotlinCompilerExtensionVersion = "1.5.3"
 	}
 	packaging {
 		resources {
@@ -67,4 +68,6 @@ dependencies {
 	debugImplementation("androidx.compose.ui:ui-tooling")
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
 	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+	implementation("com.squareup.okhttp3:okhttp:4.11.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }

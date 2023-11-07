@@ -174,18 +174,17 @@ fun PinpointColorSetter(type: EntityType,){
 				onClick = {
 					val color = textColor.toArgb()
 					when (type) {
-							  EntityType.EVENT -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-								  optionsViewModel.setEventColor(android.graphics.Color.valueOf(color))
-								  Log.d("Set Event Color", color.toString())
-							  }
-							  EntityType.BUILDING -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-							  optionsViewModel.setBuildingColor(android.graphics.Color.valueOf(color))
-								  Log.d("Set Building Color", color.toString())
-						  }
-							  //Only setting color for Building and Event
-							  EntityType.NODE -> {}
-						  }
-						  },
+						EntityType.EVENT -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+							optionsViewModel.setEventColor(android.graphics.Color.valueOf(color))
+						}
+
+						EntityType.BUILDING -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+							optionsViewModel.setBuildingColor(android.graphics.Color.valueOf(color))
+						}
+						//Only setting color for Building and Event
+						EntityType.NODE -> {}
+					}
+				},
 				colors = ButtonDefaults.buttonColors(primaryColor)
 
 				) {

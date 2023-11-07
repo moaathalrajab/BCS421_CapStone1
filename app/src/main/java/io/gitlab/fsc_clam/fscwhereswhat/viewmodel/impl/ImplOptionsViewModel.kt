@@ -18,20 +18,28 @@
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
 import android.graphics.Color
+import androidx.compose.runtime.collectAsState
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.OptionsViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
+/**
+ * Sets colors for the pinpoints of Buildings and Events from the Explanation Screen in Onboarding View
+ */
 class ImplOptionsViewModel(): OptionsViewModel() {
-	override val buildingColor: StateFlow<Color>
-		get() = TODO("Not yet implemented")
-	override val eventColor: StateFlow<Color>
-		get() = TODO("Not yet implemented")
+
+	private val _buildingColor = MutableStateFlow<Color>(Color())
+	override val buildingColor: StateFlow<Color> = _buildingColor.asStateFlow()
+
+	private val _eventColor = MutableStateFlow<Color>(Color())
+	override val eventColor: StateFlow<Color> = _eventColor.asStateFlow()
 
 	override fun setBuildingColor(color: Color) {
-		TODO("Not yet implemented")
+		_buildingColor.value = color
 	}
 
 	override fun setEventColor(color: Color) {
-		TODO("Not yet implemented")
+		_eventColor.value = color
 	}
 }

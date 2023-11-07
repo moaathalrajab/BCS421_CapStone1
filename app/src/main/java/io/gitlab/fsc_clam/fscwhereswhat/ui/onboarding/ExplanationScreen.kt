@@ -177,7 +177,7 @@ fun EntityExplanations(type: EntityType){
 			fontStyle = FontStyle.Normal,
 			fontSize = 16.sp,
 			modifier = Modifier
-				.fillMaxWidth(.8f)
+				.fillMaxWidth(.9f)
 				.padding(bottom = 15.dp)
 				.offset(x = 5.dp)
 				.align(Alignment.CenterStart)
@@ -187,6 +187,7 @@ fun EntityExplanations(type: EntityType){
 			painter = img,
 			contentDescription = imgDescription,
 			modifier = Modifier
+				.fillMaxWidth(.1f)
 				.align(Alignment.CenterEnd)
 				.requiredSize(35.dp)
 			)

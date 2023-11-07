@@ -15,19 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database.entities
+package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
 
-@Entity(tableName = "Events")
-data class DBEvent (
-	@PrimaryKey val id: Int,
-	val name: String,
-	val image: String,
-	val description: String,
-	val instructions: String,
-	val locationName: String,
-	val locationId: Int,
-	val hasRsvp: Boolean,
-	val url: String
-)
+@Dao
+interface EventDao {
+	@Query("SELECT * FROM Events")
+	fun getAll(): List<DBEvent>
+}

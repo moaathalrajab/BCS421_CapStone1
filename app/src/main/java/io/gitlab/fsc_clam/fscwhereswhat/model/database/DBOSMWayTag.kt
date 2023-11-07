@@ -17,8 +17,14 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
+import androidx.room.*
+
+@Entity(
+	tableName = "OSMWayTags",
+	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["parentId"], ForeignKey.CASCADE)]
+)
 data class DBOSMWayTag(
-	val id: Long,
+	@PrimaryKey val id: Long,
 	val parentId: Long,
 	val key: String,
 	val value: String

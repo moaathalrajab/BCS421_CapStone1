@@ -15,13 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database.entities
+package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBNote
 
 @Dao
 interface NoteDao {
 	@Query("SELECT * FROM Notes")
-	fun getAll(): List<Note>
+	fun getAll(): List<DBNote>
 }

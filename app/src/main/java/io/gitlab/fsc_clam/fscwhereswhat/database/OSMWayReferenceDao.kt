@@ -15,17 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database
+package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayReference
 
-@Entity (
-	tableName = "OSMNodeTags",
-	foreignKeys = [ForeignKey(DBOSMNode::class, ["id"], ["parentId"], ForeignKey.CASCADE)]
-)
-data class DBOSMNodeTag(
-	@PrimaryKey val id: Long,
-	val parentId: Long,
-	val key: String,
-	val value: String
-)
+@Dao
+interface OSMWayReferenceDao {
+	@Query ("SELECT * FROM OSMWayReferences")
+	fun getAll() : List<DBOSMWayReference>
+}

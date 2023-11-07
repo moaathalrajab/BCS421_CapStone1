@@ -15,13 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database.entities
+package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayTag
 
 @Dao
-interface ReminderDao {
-	@Query("SELECT * FROM Reminders")
-	fun getAll(): List<ReminderItem>
+interface OSMWayTagDao {
+	@Query ("SELECT * FROM OSMWayTags")
+	fun getAll() : List<DBOSMWayTag>
 }

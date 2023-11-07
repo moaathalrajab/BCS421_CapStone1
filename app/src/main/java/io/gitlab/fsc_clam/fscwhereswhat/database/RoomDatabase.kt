@@ -15,22 +15,26 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database
+package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.entities.DBEvent
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.entities.DBNote
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.entities.DBReminder
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.entities.EventDao
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.entities.NoteDao
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.entities.ReminderDao
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.entities.TypeConversion
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.*
 
-@Database(entities = [DBReminder::class, DBNote::class, DBEvent::class], version=1)
+@Database(
+	version = 1,
+	entities = [
+		DBReminder::class,
+		DBNote::class,
+		DBEvent::class,
+		DBOSMNode::class,
+		DBOSMNodeTag::class,
+		DBOSMWay::class,
+		DBOSMWayReference::class,
+		DBOSMWayReference::class
+	]
+)
 @TypeConverters(TypeConversion::class)
 abstract class AppDatabase : RoomDatabase() {
-	abstract fun reminderDao(): ReminderDao
-	abstract fun eventDao(): EventDao
-	abstract fun noteDao(): NoteDao
+	abstract val reminderDao: ReminderDao
+	abstract val noteDao: NoteDao
 }

@@ -17,6 +17,11 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
+import androidx.room.*
+
+@Entity(
+	tableName = "OSMWays"
+)
 data class DBOSMWay (
-	val id: Long
+	@PrimaryKey val id: Long
 )

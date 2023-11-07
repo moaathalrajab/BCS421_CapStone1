@@ -15,17 +15,29 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database
+package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 
-@Entity (
-	tableName = "OSMNodeTags",
-	foreignKeys = [ForeignKey(DBOSMNode::class, ["id"], ["parentId"], ForeignKey.CASCADE)]
-)
-data class DBOSMNodeTag(
-	@PrimaryKey val id: Long,
-	val parentId: Long,
-	val key: String,
-	val value: String
-)
+class TypeConversion {
+	/**
+	 * Conversions for ReminderTime class
+	 */
+	@TypeConverter
+	fun fromReminderTime(value: ReminderTime) = value.ordinal
+
+	@TypeConverter
+	fun toReminderTime(value: Int) = ReminderTime.values()[value]
+
+	/**
+	 * Conversions for EntityType
+	 */
+
+	@TypeConverter
+	fun fromEntityType(value: EntityType) = value.ordinal
+
+	@TypeConverter
+	fun toEntityType(value: Int) = EntityType.values()[value]
+}

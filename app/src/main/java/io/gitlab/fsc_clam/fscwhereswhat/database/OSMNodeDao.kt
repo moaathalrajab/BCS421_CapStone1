@@ -15,13 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database.entities
+package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNode
 
 @Dao
-interface EventDao {
-	@Query("SELECT * FROM Events")
-	fun getAll(): List<Event>
+interface OSMNodeDao {
+	@Query ("SELECT * FROM OSMNodes")
+	fun getAll() : List<DBOSMNode>
 }

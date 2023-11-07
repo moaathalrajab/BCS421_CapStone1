@@ -15,29 +15,16 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database.entities
+package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 import androidx.room.*
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 
-class TypeConversion {
-	/**
-	 * Conversions for ReminderTime class
-	 */
-	@TypeConverter
-	fun fromReminderTime(value: ReminderTime) = value.ordinal
-
-	@TypeConverter
-	fun toReminderTime(value: Int) = ReminderTime.values()[value]
-
-	/**
-	 * Conversions for EntityType
-	 */
-
-	@TypeConverter
-	fun fromEntityType(value: EntityType) = value.ordinal
-
-	@TypeConverter
-	fun toEntityType(value: Int) = EntityType.values()[value]
-}
+@Entity(
+	tableName = "Reminders",
+	foreignKeys = [ForeignKey(DBEvent::class, ["id"], ["eventId"], ForeignKey.CASCADE)]
+)
+data class DBReminder(
+	@PrimaryKey val eventId: Int,
+	val remind: ReminderTime
+)

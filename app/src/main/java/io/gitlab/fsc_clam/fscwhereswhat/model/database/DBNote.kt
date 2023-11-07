@@ -15,15 +15,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database.entities
+package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 
 @Entity(tableName = "Notes")
 data class DBNote(
-	@PrimaryKey (autoGenerate = true) val NoteId: Int,
 	val comment: String,
-	val reference: Int,
+	@PrimaryKey val reference: Int,
 	val type: EntityType
 )

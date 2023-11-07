@@ -15,17 +15,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database.entities
+package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 import androidx.room.*
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 
-@Entity(tableName = "Reminders")
-data class DBReminder(
-	@PrimaryKey (autoGenerate = true) val rid: Int?,
-	val eventID: Int,
-	val eventName: String,
-	val imageURL: String,
-	val remind: ReminderTime,
-	val date: Long
+@Entity(tableName = "Events")
+data class DBEvent (
+	@PrimaryKey val id: Int,
+	val name: String,
+	val image: String,
+	val description: String,
+	val instructions: String,
+	val locationName: String,
+	val locationId: Int,
+	val hasRSVP: Boolean,
+	val url: String
 )

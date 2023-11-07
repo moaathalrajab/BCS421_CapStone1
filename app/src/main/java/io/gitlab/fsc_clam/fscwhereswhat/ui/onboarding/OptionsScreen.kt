@@ -18,54 +18,42 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
-import kotlinx.coroutines.launch
+import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.bodyFont
+import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.OptionsViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplOptionsViewModel
 
 /**
  * Screen to let users set pinpoint colors
@@ -73,131 +61,116 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun OptionsScreen() {
-	val headFont = FontFamily(
-		Font(R.font.lilitaone_regular)
+	val optionsViewModel: OptionsViewModel = viewModel<ImplOptionsViewModel>()
+	val eventColor by optionsViewModel.eventColor.collectAsState()
+	val buildingColor by optionsViewModel.eventColor.collectAsState()
+	val utilityColor by optionsViewModel.eventColor.collectAsState()
+	OptionsContent(
+		eventColor = eventColor,
+		buildingColor = buildingColor,
+		utilityColor = utilityColor,
+		setEventColor = optionsViewModel::setEventColor,
+		setBuildingColor = optionsViewModel::setBuildingColor
 	)
-	val bodyFont = FontFamily(
-		Font(R.font.roboto_regular, FontWeight.Normal)
-	)
-	val background = Image.Drawable(R.drawable.welcome_screen_background)
 
+}
+
+@Composable
+fun OptionsContent(
+	eventColor: Int,
+	buildingColor: Int,
+	utilityColor: Int,
+	setEventColor: (Int) -> Unit,
+	setBuildingColor: (Int) -> Unit
+) {
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
 				.paint(
-					painterResource(id = background.drawable),
+					painterResource(id = R.drawable.welcome_screen_background),
 					contentScale = ContentScale.FillBounds
 				)
 		}
 	)
 	{
-		Box(
+		Surface(
 			modifier = Modifier
-				.align(Alignment.Center)
-				.fillMaxWidth(.9f)
-				.fillMaxHeight(.8f)
-				.background(Color.White)
+				.padding(16.dp)
+				.fillMaxSize()
 		)
 		{
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.wrapContentSize()
-					.offset(y = (30).dp),
-				verticalArrangement = Arrangement.Top,
-				horizontalAlignment = Alignment.CenterHorizontally
+					.fillMaxSize(),
+				verticalArrangement = Arrangement.spacedBy(
+					16.dp,
+					alignment = Alignment.CenterVertically
+				),
 			) {
-				Text(
-					text = stringResource(id = R.string.options_heading),
-					fontFamily = headFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Normal,
-					fontSize = 48.sp,
-					textAlign = TextAlign.Center
-				)
-				Text(
-					text = stringResource(id = R.string.options_subheading),
-					fontFamily = bodyFont,
-					fontWeight = FontWeight.Normal,
-					fontStyle = FontStyle.Normal,
-					fontSize = 16.sp,
-					textAlign = TextAlign.Center
-				)
-				Divider(Modifier.padding(vertical = 30.dp), thickness = 2.dp, color = Color.Black)
+				Column(
+					modifier = Modifier.fillMaxWidth(),
+					horizontalAlignment = Alignment.CenterHorizontally
 
-				val pagerState = rememberPagerState(
-					initialPage = 0,
-					initialPageOffsetFraction = 0f
 				) {
-					2
+					Text(
+						text = stringResource(id = R.string.options_heading),
+						fontFamily = headFont,
+						fontWeight = FontWeight.Bold,
+						fontStyle = FontStyle.Normal,
+						fontSize = 48.sp,
+						textAlign = TextAlign.Center
+					)
+					Text(
+						text = stringResource(id = R.string.options_subheading),
+						fontFamily = bodyFont,
+						fontWeight = FontWeight.Normal,
+						fontStyle = FontStyle.Normal,
+						fontSize = 16.sp,
+						textAlign = TextAlign.Center
+					)
 				}
-				val state = rememberCoroutineScope()
-				Scaffold(
-					topBar = {
-						CenterAlignedTopAppBar(
-							title = { Text(text = "") },
-							actions = {
-								IconButton(
-									onClick = {
-										state.launch {
-											pagerState.scrollToPage(pagerState.currentPage - 1)
-										}
-									},
-								) {
-									Icon(
-										Icons.Filled.ArrowBack,
-										contentDescription = stringResource(id = R.string.arrow_backward)
-									)
-								}
-								Row(
-									Modifier
-										.wrapContentHeight()
-										.fillMaxWidth(.85f)
-										.padding(bottom = 8.dp),
-									horizontalArrangement = Arrangement.Center,
-								) {
-									repeat(pagerState.pageCount) { iteration ->
-										val color =
-											if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-										Box(
-											modifier = Modifier
-												.padding(2.dp)
-												.clip(CircleShape)
-												.background(color)
-												.size(16.dp)
-										)
-									}
-								}
-								IconButton(onClick = {
-									state.launch {
-										pagerState.scrollToPage(pagerState.currentPage + 1)
-									}
-								}
-								)
-								{
-									Icon(
-										Icons.Filled.ArrowForward,
-										contentDescription = stringResource(id = R.string.arrow_forward)
-									)
-								}
-							}
-						)
-					},
-				) {
-					HorizontalPager(
-						modifier = Modifier.padding(it),
-						state = pagerState,
-					) { page ->
-						when (page) {
-							0 -> PinpointColorSetter(
-								type = EntityType.EVENT,
-							)
 
-							1 -> PinpointColorSetter(
-								type = EntityType.BUILDING,
-							)
+				Column(
+					modifier = Modifier.fillMaxWidth(),
+					verticalArrangement = Arrangement.spacedBy(
+						16.dp,
+						alignment = Alignment.CenterVertically
+					)
+				) {
+					PinpointColorItem(
+						name = stringResource(id = R.string.options_events_label),
+						img = painterResource(id = R.drawable.flag_icon),
+						imgDescription = stringResource(
+							id = R.string.explanation_event_img,
+						),
+						Color(eventColor),
+						onColorSelected = {
+							setEventColor(it.toArgb())
 						}
-					}
+					)
+
+					PinpointColorItem(
+						name = stringResource(id = R.string.options_buildings_label),
+						img = painterResource(id = R.drawable.building_icon),
+						imgDescription = stringResource(
+							id = R.string.explanation_building_img
+						),
+						Color(buildingColor),
+						onColorSelected = {
+							setBuildingColor(it.toArgb())
+						}
+					)
+					PinpointColorItem(
+						name = stringResource(id = R.string.options_utilities_label),
+						img = painterResource(id = R.drawable.building_icon),
+						imgDescription = stringResource(
+							id = R.string.explanation_node_img
+						),
+						Color(utilityColor),
+						onColorSelected = {
+							setBuildingColor(it.toArgb())
+						}
+					)
 				}
 
 			}
@@ -207,7 +180,7 @@ fun OptionsScreen() {
 
 @Preview
 @Composable
-fun PreviewOptionsScreen() {
-	OptionsScreen()
+fun PreviewOptionsContent() {
+	OptionsContent(0,0, 0, {}, {})
 }
 

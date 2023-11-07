@@ -18,28 +18,51 @@
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
 import android.graphics.Color
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewModelScope
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepo
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.OptionsViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 /**
  * Sets colors for the pinpoints of Buildings and Events from the Explanation Screen in Onboarding View
  */
-class ImplOptionsViewModel(): OptionsViewModel() {
+class ImplOptionsViewModel: OptionsViewModel() {
+	private lateinit var repo: PreferencesRepo
 
-	private val _buildingColor = MutableStateFlow<Color>(Color())
-	override val buildingColor: StateFlow<Color> = _buildingColor.asStateFlow()
-
-	private val _eventColor = MutableStateFlow<Color>(Color())
-	override val eventColor: StateFlow<Color> = _eventColor.asStateFlow()
-
-	override fun setBuildingColor(color: Color) {
-		_buildingColor.value = color
+	override val buildingColor: StateFlow<Int> by lazy {
+		repo.getColor(EntityType.BUILDING).stateIn(viewModelScope,
+		SharingStarted.Eagerly, Color.RED)
 	}
 
-	override fun setEventColor(color: Color) {
-		_eventColor.value = color
+	override val eventColor: StateFlow<Int> by lazy {
+		repo.getColor(EntityType.EVENT).stateIn(viewModelScope,
+		SharingStarted.Eagerly, Color.RED)
+	}
+
+	override val utilityColor: StateFlow<Int> by lazy {
+		repo.getColor(EntityType.NODE).stateIn(viewModelScope,
+			SharingStarted.Eagerly, Color.RED)
+	}
+
+	override fun setBuildingColor(color: Int) {
+		viewModelScope.launch {
+			repo.setColor(EntityType.BUILDING, color)
+		}
+	}
+
+	override fun setEventColor(color: Int) {
+		viewModelScope.launch {
+			repo.setColor(EntityType.EVENT, color)
+		}
+	}
+
+	override fun setUtilityColor(color: Int) {
+		viewModelScope.launch {
+			repo.setColor(EntityType.NODE, color)
+		}
 	}
 }

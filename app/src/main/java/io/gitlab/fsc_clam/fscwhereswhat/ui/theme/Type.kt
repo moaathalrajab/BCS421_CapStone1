@@ -21,12 +21,21 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.gitlab.fsc_clam.fscwhereswhat.R
 
+val titleFont = FontFamily(
+	Font(R.font.lobster_two_regular, FontWeight.Normal),
+	Font(R.font.lobster_two_bold, FontWeight.Bold),
+	Font(R.font.lobster_two_bold_italic, FontWeight.Bold, FontStyle.Italic)
+)
 val headFont = FontFamily(
-	Font(R.font.lilitaone_regular, FontWeight.Bold)
+	Font(R.font.lilitaone_regular, FontWeight.Normal)
+)
+val bodyFont = FontFamily(
+	Font(R.font.roboto_regular, FontWeight.Normal)
 )
 // Set of Material typography styles to start with
 val Typography = Typography(

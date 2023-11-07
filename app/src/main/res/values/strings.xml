@@ -18,6 +18,8 @@
 <resources>
     <string name="app_name">FSCWheresWhat</string>
     <string name="developers">Team CLAM</string>
+    
+    <string name="web_client_id">862156382807-e576dg5hglilaje88nl7dbqijef8fbr0.apps.googleusercontent.com</string>
 
     //Welcome Screen Strings
     <string name="welcome_label">Welcome to</string>
@@ -46,12 +48,14 @@
     <string name="options_subheading">Set colors for your markers</string>
     <string name="options_events_label">EVENTS</string>
     <string name="options_buildings_label">BUILDINGS</string>
-    <string name="options_confirm_button">CONFIRM</string>
+    <string name="options_confirm_button">Confirm</string>
 
     //Thanks Screen Strings
     <string name="thanks_heading">Thank you,</string>
     <string name="thanks_body">Enjoy!</string>
     <string name="thanks_developers_logo">Developer Logo</string>
     <string name="thanks_continue_button">Continue to App</string>
+    <string name="edit">Edit</string>
+    <string name="options_utilities_label">Utilities</string>
 
 </resources>

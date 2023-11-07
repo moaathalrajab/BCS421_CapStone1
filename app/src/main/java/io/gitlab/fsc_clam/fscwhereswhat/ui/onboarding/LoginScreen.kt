@@ -40,8 +40,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,7 +48,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
+import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.bodyFont
+import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.LoginViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplLoginViewModel
 
 /**
@@ -58,21 +58,13 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplLoginViewModel
  */
 @Composable
 fun LoginScreen(){
-	val loginViewModel: ImplLoginViewModel = viewModel()
+	val loginViewModel: LoginViewModel = viewModel<ImplLoginViewModel>()
 
-	val headFont = FontFamily(
-		Font(R.font.lilitaone_regular)
-	)
-	val bodyFont = FontFamily(
-		Font(R.font.roboto_regular, FontWeight.Normal)
-	)
-	val logo = Image.Drawable(R.drawable.wheres_what_logo)
-	val background = Image.Drawable(R.drawable.welcome_screen_background)
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
 				.paint(
-					painterResource(id = background.drawable),
+					painterResource(id = R.drawable.welcome_screen_background),
 					contentScale = ContentScale.FillBounds
 				)
 		})
@@ -98,7 +90,7 @@ fun LoginScreen(){
 					textAlign = TextAlign.Center
 				)
 				Image(
-					painter = painterResource(id = logo.drawable),
+					painter = painterResource(id = R.drawable.wheres_what_logo),
 					contentDescription = stringResource(id = R.string.app_logo_description),
 					contentScale = ContentScale.Crop,
 					modifier = Modifier

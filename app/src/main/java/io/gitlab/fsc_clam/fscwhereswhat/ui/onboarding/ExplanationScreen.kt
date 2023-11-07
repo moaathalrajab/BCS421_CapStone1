@@ -22,7 +22,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,32 +53,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
+import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.bodyFont
+import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
 
 /**
  * Screen to explain the layout of the mop
  */
 @Composable
 fun ExplanationScreen(){
-	val headFont = FontFamily(
-		Font(R.font.lobster_two_regular, FontWeight.Normal),
-		Font(R.font.lobster_two_bold, FontWeight.Bold),
-		Font(R.font.lobster_two_italic, FontWeight.Normal, FontStyle.Italic),
-		Font(R.font.lobster_two_bold_italic, FontWeight.Bold, FontStyle.Italic)
-	)
-	val bodyFont = FontFamily(
-		Font(R.font.lilitaone_regular, FontWeight.Normal)
-	)
-	val logo = Image.Drawable(R.drawable.wheres_what_logo)
-	val background = Image.Drawable(R.drawable.welcome_screen_background)
-
-	val entityExplanations = listOf(EntityType.EVENT, EntityType.BUILDING, EntityType.NODE)
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
 				.paint(
-					painterResource(id = background.drawable),
+					painterResource(id = R.drawable.welcome_screen_background),
 					contentScale = ContentScale.FillBounds
 				)
 		}) {
@@ -95,7 +82,7 @@ fun ExplanationScreen(){
 				horizontalAlignment = Alignment.CenterHorizontally
 			){
 				Image(
-					painter = painterResource(id = logo.drawable),
+					painter = painterResource(id = R.drawable.wheres_what_logo),
 					contentDescription = stringResource(id = R.string.app_logo_description),
 					contentScale = ContentScale.Crop,
 					modifier = Modifier
@@ -125,12 +112,37 @@ fun ExplanationScreen(){
 						textAlign = TextAlign.Center,
 					)
 
-					Divider(Modifier.padding(vertical = 15.dp), thickness = 2.dp, color = Color.Black)
+					Divider(
+						Modifier.padding(vertical = 15.dp),
+						thickness = 2.dp,
+						color = Color.Black
+					)
 
-					entityExplanations.forEach {type ->
-						EntityExplanations(type = type)
-						Divider(Modifier.padding(bottom = 15.dp))
-					}
+					EntityExplanations(
+						explanationText = stringResource(id = R.string.explanation_event),
+						img = painterResource(
+							id = R.drawable.flag_icon
+						),
+						imgDescription = stringResource(id = R.string.explanation_event_img)
+					)
+					Divider(Modifier.padding(bottom = 15.dp))
+					EntityExplanations(
+						explanationText = stringResource(id = R.string.explanation_building),
+						img = painterResource(
+							id = R.drawable.building_icon
+						),
+						imgDescription = stringResource(id = R.string.explanation_building_img)
+					)
+					Divider(Modifier.padding(bottom = 15.dp))
+					EntityExplanations(
+						explanationText = stringResource(id = R.string.explanation_node),
+						img = painterResource(
+							id = R.drawable.node_icon
+						),
+						imgDescription = stringResource(id = R.string.explanation_node_img)
+					)
+					Divider(Modifier.padding(bottom = 15.dp))
+
 				}
 			}
 		}
@@ -144,25 +156,8 @@ fun PreviewExplanationScreen(){
 }
 
 @Composable
-fun EntityExplanations(type: EntityType){
-	val eventImg = Image.Drawable(R.drawable.flag_icon)
-	val buildingImg = Image.Drawable(R.drawable.building_icon)
-	val nodeImg = Image.Drawable(R.drawable.node_icon)
-	val explanationText = when(type){
-		EntityType.EVENT -> stringResource(id = R.string.explanation_event)
-		EntityType.BUILDING -> stringResource(id = R.string.explanation_building)
-		EntityType.NODE -> stringResource(id = R.string.explanation_node)
-	}
-	val img = when(type){
-		EntityType.EVENT -> painterResource(id = eventImg.drawable)
-		EntityType.BUILDING -> painterResource(id = buildingImg.drawable)
-		EntityType.NODE -> painterResource(id = nodeImg.drawable)
-	}
-	val imgDescription = when(type){
-		EntityType.EVENT -> stringResource(id = R.string.explanation_event_img)
-		EntityType.BUILDING -> stringResource(id = R.string.explanation_building_img)
-		EntityType.NODE -> stringResource(id = R.string.explanation_node_img)
-	}
+fun EntityExplanations(explanationText: String, img: Painter, imgDescription: String){
+
 	val explanationFont = FontFamily(
 		Font(R.font.lilitaone_regular, FontWeight.Normal)
 	)
@@ -198,11 +193,13 @@ fun EntityExplanations(type: EntityType){
 @Preview
 @Composable
 fun PreviewEnttiyExplanations(){
-	Surface(Modifier.fillMaxSize()) {
-		Column {
-			EntityExplanations(type = EntityType.EVENT)
-			EntityExplanations(type = EntityType.BUILDING)
-			EntityExplanations(type = EntityType.NODE)
-		}
+	Surface {
+		EntityExplanations(
+			explanationText = stringResource(id = R.string.explanation_event),
+			img = painterResource(
+				id = R.drawable.flag_icon
+			),
+			imgDescription = stringResource(id = R.string.explanation_event_img)
+		)
 	}
 }

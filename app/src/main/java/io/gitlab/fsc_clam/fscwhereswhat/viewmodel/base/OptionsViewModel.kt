@@ -17,7 +17,6 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
 
@@ -28,21 +27,31 @@ abstract class OptionsViewModel : ViewModel() {
 	/**
 	 * Color of Building pinpoints
 	 */
-	abstract val buildingColor: StateFlow<Color>
+	abstract val buildingColor: StateFlow<Int>
 
 	/**
 	 * Color of Event pinpoints
 	 */
-	abstract val eventColor: StateFlow<Color>
+	abstract val eventColor: StateFlow<Int>
+
+	/**
+	 * Color of Utility pinpoints
+	 */
+	abstract val utilityColor: StateFlow<Int>
 
 	/**
 	 * Sets color of Building pinpoints
 	 */
-	abstract fun setBuildingColor(color: Color)
+	abstract fun setBuildingColor(color: Int)
 
 	/**
 	 * Sets color of Event pinpoints
 	 */
-	abstract fun setEventColor(color: Color)
+	abstract fun setEventColor(color: Int)
+
+	/**
+	 * Sets color of Utility pinpoints
+	 */
+	abstract fun setUtilityColor(color: Int)
 
 }

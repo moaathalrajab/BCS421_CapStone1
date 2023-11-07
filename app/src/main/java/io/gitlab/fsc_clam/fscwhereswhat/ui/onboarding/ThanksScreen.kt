@@ -44,16 +44,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.primaryColor
+import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
 
 /**
  * Screen to thank users
@@ -61,19 +59,11 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.primaryColor
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ThanksScreen(){
-	val headFont = FontFamily(
-		Font(R.font.lobster_two_regular, FontWeight.Normal),
-		Font(R.font.lobster_two_bold, FontWeight.Bold),
-		Font(R.font.lobster_two_italic, FontWeight.Normal, FontStyle.Italic),
-		Font(R.font.lobster_two_bold_italic, FontWeight.Bold, FontStyle.Italic)
-	)
-	val background = Image.Drawable(R.drawable.welcome_screen_background)
-	val developerLogo = Image.Drawable(R.drawable.team_clam_logo)
 	Box(
 		modifier = with(Modifier) {
 			fillMaxSize()
 				.paint(
-					painterResource(id = background.drawable),
+					painterResource(id = R.drawable.welcome_screen_background),
 					contentScale = ContentScale.FillBounds
 				)
 		}
@@ -95,7 +85,7 @@ fun ThanksScreen(){
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				Image(
-					painter = painterResource(id = developerLogo.drawable),
+					painter = painterResource(id = R.drawable.team_clam_logo),
 					contentDescription = stringResource(id = R.string.thanks_developers_logo),
 					contentScale = ContentScale.Crop,
 					modifier = Modifier
@@ -105,14 +95,14 @@ fun ThanksScreen(){
 				)
 				Text(
 					text = stringResource(id = R.string.thanks_heading),
-					fontFamily = headFont,
+					fontFamily = titleFont,
 					fontWeight = FontWeight.Bold,
 					fontStyle = FontStyle.Normal,
 					fontSize = 46.sp,
 				)
 				Text(
 					text = stringResource(id = R.string.thanks_body),
-					fontFamily = headFont,
+					fontFamily = titleFont,
 					fontWeight = FontWeight.Bold,
 					fontStyle = FontStyle.Normal,
 					fontSize = 38.sp,

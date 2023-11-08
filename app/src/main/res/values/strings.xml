@@ -17,4 +17,11 @@
 
 <resources>
     <string name="app_name">FSCWheresWhat</string>
+    <string name="title_reminders">Reminders</string>
+    <string name="remind_start">Remind at Start of Event</string>
+    <string name="remind_half_hour">Half hour warning before event starts</string>
+    <string name="remind_hour">Remind one hour before event starts</string>
+    <string name="remind_two_hour">Remind two hours before event starts</string>
+    <string name="edit">edit</string>
+    <string name="delete">delete</string>
 </resources>

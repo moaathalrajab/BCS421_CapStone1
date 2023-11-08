@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -148,6 +147,12 @@ fun PreviewExplanationScreen() {
 	ExplanationScreen()
 }
 
+/**
+ * Creates explanation for the each EntityType - Event, Building, Node
+ * @param explanationText is the text explaining how each what each EntityType is and how they are represented
+ * @param img is the image of the pinpoint for each EntityType
+ * @param imgDescription is the content description
+ */
 @Composable
 fun EntityExplanations(explanationText: String, img: Painter, imgDescription: String) {
 	Box(
@@ -163,8 +168,7 @@ fun EntityExplanations(explanationText: String, img: Painter, imgDescription: St
 			fontSize = 16.sp,
 			modifier = Modifier
 				.fillMaxWidth(.8f)
-				.padding(bottom = 10.dp)
-				.offset(x = 5.dp)
+				.padding(bottom = 10.dp, start = 5.dp)
 				.align(Alignment.CenterStart)
 		)
 

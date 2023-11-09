@@ -19,7 +19,19 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 import androidx.room.*
 
-@Entity(tableName = "Events")
+/**
+ * This is a RamCentral event
+ * @param id is the id of the specific event
+ * @param name is the name of the event on RamCentral
+ * @param image is the image URL of the event from RamCentral
+ * @param description is the description of the event on RamCentral
+ * @param instructions if the event has requirements
+ * @param locationName of where the event is located
+ * @param locationId is the mapping between the event and OSM building
+ * @param hasRSVP defines if the event requires an RSVP to attend
+ * @param url is the link to the event on RamCentral
+ */
+@Entity(tableName = "event")
 data class DBEvent (
 	@PrimaryKey val id: Int,
 	val name: String,

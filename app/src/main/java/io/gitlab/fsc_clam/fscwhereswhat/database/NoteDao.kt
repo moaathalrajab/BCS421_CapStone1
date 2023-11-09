@@ -19,7 +19,16 @@ package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBNote
+import kotlinx.coroutines.flow.Flow
 
+/**
+ * The dao for user notes held in the room database
+ * @property insert inserts a single note into the table
+ * @property delete deletes a single note from the table
+ * @property getAll returns a list of all notes as DBNotes
+ * @property getById returns a specific note using its reference as a parameter
+ * @property getAllFlow returns all notes as flows, allowing the notes view to react to changes
+ */
 @Dao
 interface NoteDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -28,10 +37,14 @@ interface NoteDao {
 	@Delete
 	fun delete(vararg note: DBNote)
 
-	@Query("SELECT * FROM Notes")
+	@Query("SELECT * FROM note")
 	fun getAll(): List<DBNote>
 
 	/** Get note by reference **/
-	@Query("SELECT * FROM Notes WHERE reference = :note")
+	@Query("SELECT * FROM note WHERE reference = :note")
 	fun getById(note: Int) : DBNote
+
+	/** Returns all notes with Flow **/
+	@Query("SELECT * FROM note")
+	fun getAllFlow(): Flow<List<DBNote>>
 }

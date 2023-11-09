@@ -20,6 +20,15 @@ package io.gitlab.fsc_clam.fscwhereswhat.database
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
 
+/**
+ * The dao for events from RamCentral held in the room database
+ * @property insert inserts a single event into the table
+ * @property delete deletes a single event from the table
+ * @property getAll returns a list of all events as DBEvents
+ * @property getById returns a specific event using its id as a parameter
+ * @property getByLocationId returns a list of all events associated with the locationId parameter
+ */
+
 @Dao
 interface EventDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -28,14 +37,14 @@ interface EventDao {
 	@Delete
 	fun delete(vararg event: DBEvent)
 
-	@Query("SELECT * FROM Events")
+	@Query("SELECT * FROM event")
 	fun getAll(): List<DBEvent>
 
-	/** Get by Id **/
-	@Query("SELECT * FROM Events WHERE id = :event")
+	/** Get specific item by Id **/
+	@Query("SELECT * FROM event WHERE id = :event")
 	fun getById(event: Int) : DBEvent
 
-	/** Get by location id **/
-	@Query("SELECT * FROM Events WHERE locationId = :id")
+	/** Get a list of events by location id **/
+	@Query("SELECT * FROM event WHERE locationId = :id")
 	fun getByLocationId(id: Int) : List<DBEvent>
 }

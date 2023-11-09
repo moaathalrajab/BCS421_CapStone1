@@ -30,11 +30,18 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.*
 		DBOSMNodeTag::class,
 		DBOSMWay::class,
 		DBOSMWayReference::class,
-		DBOSMWayReference::class
+		DBOSMWayTag::class
 	]
 )
 @TypeConverters(TypeConversion::class)
 abstract class AppDatabase : RoomDatabase() {
 	abstract val reminderDao: ReminderDao
 	abstract val noteDao: NoteDao
+	abstract val eventDao: EventDao
+	abstract val OSMNodeDao: OSMNodeDao
+	abstract val OSMNodeTagDao: OSMNodeTagDao
+	abstract val OSMWayDao: OSMWayDao
+	abstract val OSMWayReferenceDao: OSMWayReferenceDao
+	abstract val OSMWayTagDao: OSMWayTagDao
 }
+

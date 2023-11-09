@@ -20,6 +20,14 @@ package io.gitlab.fsc_clam.fscwhereswhat.database
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayTag
 
+/**
+ * The dao for open street map way tags held in the room database
+ * @property insert inserts a single way tag into the table
+ * @property delete deletes a single way tag from the table
+ * @property getAll returns a list of all stored way tags as DBOSMWayTags
+ * @property getById returns a specific way tag using its id as a parameter
+ * @property getByParent returns a specific way tag using its parentId (associated way) as a parameter
+ */
 @Dao
 interface OSMWayTagDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -28,14 +36,14 @@ interface OSMWayTagDao {
 	@Delete
 	fun delete(vararg wayTag: DBOSMWayTag)
 
-	@Query("SELECT * FROM OSMWayTags")
+	@Query("SELECT * FROM osm_way_tag")
 	fun getAll() : List<DBOSMWayTag>
 
 	/** Get way tag by id **/
-	@Query("SELECT * FROM OSMWayTags WHERE id = :id")
+	@Query("SELECT * FROM osm_way_tag WHERE id = :id")
 	fun getById(id: Int) : DBOSMWayTag
 
 	/** Get way tags by parent id **/
-	@Query("SELECT * FROM OSMWayTags WHERE parentId = :id")
+	@Query("SELECT * FROM osm_way_tag WHERE parentId = :id")
 	fun getByParent(id: Int) : List<DBOSMWayTag>
 }

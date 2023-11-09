@@ -20,6 +20,13 @@ package io.gitlab.fsc_clam.fscwhereswhat.database
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeTag
 
+/**
+ * The dao for open street map node tags stored in the room database
+ * @property insert inserts a single tag into the table
+ * @property delete deletes a single tag from the table
+ * @property getAllByNode returns a list of all tags as DBOSMNodeTags
+ * @property getById returns a specific tag using its id as a parameter
+ */
 @Dao
 interface OSMNodeTagDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -29,10 +36,10 @@ interface OSMNodeTagDao {
 	fun delete(vararg nodeTag: DBOSMNodeTag)
 
 	/** get nodeTag by nodeId **/
-	@Query("SELECT * FROM OSMNodeTags WHERE nodeId = :id")
+	@Query("SELECT * FROM osm_node_tag WHERE nodeId = :id")
 	fun getAllByNode(id: Int) : List<DBOSMNodeTag>
 
 	/** Get nodeTag by id **/
-	@Query("SELECT * FROM OSMNodeTags WHERE id = :id")
+	@Query("SELECT * FROM osm_node_tag WHERE id = :id")
 	fun getById(id: Int) : DBOSMNodeTag
 }

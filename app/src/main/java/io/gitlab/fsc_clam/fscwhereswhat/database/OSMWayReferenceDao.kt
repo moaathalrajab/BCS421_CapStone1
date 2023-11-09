@@ -20,6 +20,13 @@ package io.gitlab.fsc_clam.fscwhereswhat.database
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayReference
 
+/**
+ * The dao for open street map way references stored in the room database
+ * @property insert inserts a single way reference into the table
+ * @property delete deletes a single way reference from the table
+ * @property getAll returns a list of all way references as DBOSMWayReferences
+ * @property getById returns a specific way reference using its id as a parameter
+ */
 @Dao
 interface OSMWayReferenceDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -28,9 +35,10 @@ interface OSMWayReferenceDao {
 	@Delete
 	fun delete(vararg ref: DBOSMWayReference)
 
-	@Query ("SELECT * FROM OSMWayReferences")
+	@Query ("SELECT * FROM osm_way_reference")
 	fun getAll() : List<DBOSMWayReference>
 
-	@Query("SELECT * FROM OSMWayReferences WHERE id = :id") /** Get by id **/
+	/** Get by id **/
+	@Query("SELECT * FROM osm_way_reference WHERE id = :id")
 	fun getById(id: Int) : List<DBOSMWayReference>
 }

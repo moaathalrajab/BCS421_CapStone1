@@ -20,7 +20,13 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.database
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 
-@Entity(tableName = "Notes")
+/**
+ * This is a note for a given entity
+ * @param comment is the String comment inputted by the user
+ * @param reference is the id of the associated entity
+ * @param type defines the type of entity that the reference is
+ */
+@Entity(tableName = "note")
 data class DBNote(
 	val comment: String,
 	@PrimaryKey val reference: Int,

@@ -19,8 +19,15 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 import androidx.room.*
 
+/**
+ * This is a tag associated with a given node
+ * @param id is the id of a specific node tage
+ * @param nodeId is the id of the associated node
+ * @param key is the osm key of the tag
+ * @param value is the value associated with the osm key
+ */
 @Entity (
-	tableName = "OSMNodeTags",
+	tableName = "osm_node_tag",
 	foreignKeys = [ForeignKey(DBOSMNode::class, ["id"], ["nodeId"], ForeignKey.CASCADE)]
 )
 data class DBOSMNodeTag(

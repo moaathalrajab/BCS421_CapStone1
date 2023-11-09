@@ -19,7 +19,16 @@ package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBReminder
+import kotlinx.coroutines.flow.Flow
 
+/**
+ * The dao for user reminders stored in the room database
+ * @property insert inserts a single reminder into the table
+ * @property delete deletes a single reminder from the table
+ * @property getAll returns a list of all reminders as DBReminders
+ * @property getById returns a specific reminder using its id as a parameter
+ * @property getAllFlow returns all reminders as flows, allowing the reminder view to react to changes
+ */
 @Dao
 interface ReminderDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -28,10 +37,14 @@ interface ReminderDao {
 	@Delete
 	fun delete(vararg reminder: DBReminder)
 
-	@Query("SELECT * FROM Reminders")
+	@Query("SELECT * FROM reminder")
 	fun getAll(): List<DBReminder>
 
 	/** Get reminder by id **/
-	@Query("SELECT * FROM Reminders WHERE eventId = :id")
-	fun getByEventId(id: Int) : DBReminder
+	@Query("SELECT * FROM reminder WHERE eventId = :id")
+	fun getById(id: Int) : DBReminder
+
+	/** Returns all reminders with Flow **/
+	@Query("SELECT * FROM reminder")
+	fun getAllFlow(): Flow<List<DBReminder>>
 }

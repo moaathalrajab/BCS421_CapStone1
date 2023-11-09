@@ -20,6 +20,13 @@ package io.gitlab.fsc_clam.fscwhereswhat.database
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNode
 
+/**
+ * The dao for open street map nodes held in the room database
+ * @property insert inserts a single node into the table
+ * @property delete deletes a single node from the table
+ * @property getAll returns a list of all nodes as DBOSMNodes
+ * @property getById returns a specific node using its id as a parameter
+ */
 @Dao
 interface OSMNodeDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
@@ -28,10 +35,10 @@ interface OSMNodeDao {
 	@Delete
 	fun delete(vararg node: DBOSMNode)
 
-	@Query("SELECT * FROM OSMNodes")
+	@Query("SELECT * FROM osm_node")
 	fun getAll() : List<DBOSMNode>
 
 	/** Get by Id **/
-	@Query("SELECT* FROM OSMNodes WHERE id = :node")
-	fun GetById(node: Int) : DBOSMNode
+	@Query("SELECT * FROM osm_node WHERE id = :node")
+	fun getById(node: Int) : DBOSMNode
 }

@@ -20,8 +20,13 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.database
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 
+/**
+ * This is a reminder for a given event
+ * @param eventId is the event the reminder is associated with
+ * @param remind is the time of the reminder
+ */
 @Entity(
-	tableName = "Reminders",
+	tableName = "reminder",
 	foreignKeys = [ForeignKey(DBEvent::class, ["id"], ["eventId"], ForeignKey.CASCADE)]
 )
 data class DBReminder(

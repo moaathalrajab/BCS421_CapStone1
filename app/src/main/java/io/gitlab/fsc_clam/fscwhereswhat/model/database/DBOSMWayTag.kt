@@ -19,8 +19,15 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 import androidx.room.*
 
+/**
+ * This is a tag associated with a given way
+ * @param id is the id of a specific way tag
+ * @param parentId is the id of the associated way
+ * @param key is the osm key of the tag
+ * @param value is the value associated with the osm key
+ */
 @Entity(
-	tableName = "OSMWayTags",
+	tableName = "osm_way_tag",
 	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["parentId"], ForeignKey.CASCADE)]
 )
 data class DBOSMWayTag(

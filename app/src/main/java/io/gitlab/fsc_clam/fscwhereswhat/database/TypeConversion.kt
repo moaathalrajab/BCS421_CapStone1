@@ -21,9 +21,14 @@ import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 
+/**
+ * Defines @TypeConverter for app class types use in DB objects
+ * that are not native to kotlin
+ */
 class TypeConversion {
 	/**
 	 * Conversions for ReminderTime class
+	 * Converts to and from int
 	 */
 	@TypeConverter
 	fun fromReminderTime(value: ReminderTime) = value.ordinal
@@ -33,6 +38,7 @@ class TypeConversion {
 
 	/**
 	 * Conversions for EntityType
+	 * Converts to and from int
 	 */
 
 	@TypeConverter

@@ -17,9 +17,9 @@
 
 <resources>
     <string name="app_name">FSCWheresWhat</string>
-    <string name="developers">Team CLAM</string>
+    <string name="developers" translatable="false">Team CLAM</string>
     
-    <string name="web_client_id">862156382807-e576dg5hglilaje88nl7dbqijef8fbr0.apps.googleusercontent.com</string>
+    <string name="web_client_id" translatable="false">862156382807-e576dg5hglilaje88nl7dbqijef8fbr0.apps.googleusercontent.com</string>
 
     //Welcome Screen Strings
     <string name="welcome_label">Welcome to</string>

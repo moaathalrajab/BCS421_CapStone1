@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.gitlab.fsc_clam.fscwhereswhat.R
 
-/**
+/*
  * Fonts in use for OnboardingView
  */
 val titleFont = FontFamily(

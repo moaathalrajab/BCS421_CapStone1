@@ -55,17 +55,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
  */
 @Composable
 fun ThanksScreen() {
-	//Creates background
-	Box(
-		modifier = with(Modifier) {
-			fillMaxSize()
-				.paint(
-					painterResource(id = R.drawable.welcome_screen_background),
-					contentScale = ContentScale.FillBounds
-				)
-		}
-	)
-	{
+	Box(Modifier.fillMaxSize()) {
 		//Creates white box for content
 		Box(
 			modifier = Modifier
@@ -126,5 +116,14 @@ fun ThanksScreen() {
 @Preview
 @Composable
 fun PreviewThanksScreen() {
-	ThanksScreen()
+	Box(
+		modifier = Modifier
+			.fillMaxSize()
+			.paint(
+				painterResource(id = R.drawable.welcome_screen_background),
+				contentScale = ContentScale.FillBounds
+			)
+	) {
+		ThanksScreen()
+	}
 }

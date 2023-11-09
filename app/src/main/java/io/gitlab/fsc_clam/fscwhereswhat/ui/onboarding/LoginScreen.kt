@@ -51,37 +51,26 @@ import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.bodyFont
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.LoginViewModel
-import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplLoginViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.FakeLoginViewModel
 
 /**
  * Screen to let users log in with Google
  */
 @Composable
 fun LoginScreen() {
-	val loginViewModel: LoginViewModel = viewModel<ImplLoginViewModel>()
-	//Creates background
-	Box(
-		modifier = with(Modifier) {
-			fillMaxSize()
-				.paint(
-					painterResource(id = R.drawable.welcome_screen_background),
-					contentScale = ContentScale.FillBounds
-				)
-		})
-	{
+	val loginViewModel: LoginViewModel = viewModel<FakeLoginViewModel>()
 		//Creates white box content container
 		Box(
 			modifier = Modifier
-				.align(Alignment.Center)
-				.fillMaxWidth(.9f)
-				.fillMaxHeight(.8f)
-				.background(Color.White)
+				.fillMaxSize()
 		) {
 			Column(
 				modifier = Modifier
-					.fillMaxWidth()
-					.wrapContentSize(),
-				verticalArrangement = Arrangement.Top,
+					.fillMaxWidth(.9f)
+					.fillMaxHeight(.8f)
+					.align(Alignment.Center)
+					.background(Color.White),
+				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				//Heading
@@ -134,12 +123,21 @@ fun LoginScreen() {
 						)
 				)
 			}
-		}
 	}
 }
 
 @Preview
 @Composable
 fun PreviewLoginScreen() {
-	LoginScreen()
+	//Creates background
+	Box(
+		modifier = Modifier
+			.fillMaxSize()
+			.paint(
+				painterResource(id = R.drawable.welcome_screen_background),
+				contentScale = ContentScale.FillBounds
+			)
+	) {
+		LoginScreen()
+	}
 }

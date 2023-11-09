@@ -22,9 +22,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -40,7 +41,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,7 +56,7 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingView(){
+fun OnboardingView() {
 	val pagerState = rememberPagerState(
 		initialPage = 0,
 		initialPageOffsetFraction = 0f
@@ -66,24 +70,29 @@ fun OnboardingView(){
 			BottomAppBar(
 				actions = {
 					//Button to return to previous page
-					IconButton(onClick = {
-						state.launch {
-							pagerState.scrollToPage(pagerState.currentPage - 1)
-						}
-					},
-						) {
-						Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(id = R.string.arrow_backward))
+					IconButton(
+						onClick = {
+							state.launch {
+								pagerState.scrollToPage(pagerState.currentPage - 1)
+							}
+						},
+					) {
+						Icon(
+							Icons.Filled.ArrowBack,
+							contentDescription = stringResource(id = R.string.arrow_backward)
+						)
 					}
 					//Creates the page indicator
 					Row(
 						Modifier
 							.wrapContentHeight()
-							.fillMaxWidth(.85f)
+							.widthIn(300.dp, 600.dp)
 							.padding(bottom = 8.dp),
 						horizontalArrangement = Arrangement.Center,
 					) {
 						repeat(pagerState.pageCount) { iteration ->
-							val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+							val color =
+								if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
 							Box(
 								modifier = Modifier
 									.padding(2.dp)
@@ -102,16 +111,25 @@ fun OnboardingView(){
 					}
 					)
 					{
-						Icon(Icons.Filled.ArrowForward, contentDescription = stringResource(id = R.string.arrow_forward))
+						Icon(
+							Icons.Filled.ArrowForward,
+							contentDescription = stringResource(id = R.string.arrow_forward)
+						)
 					}
 				},
 			)
-
 		}
 	) {
 		//Allows users to swap to each screen when horizontally swiped
 		HorizontalPager(
-			modifier = Modifier.padding(it),
+			modifier = Modifier
+				.padding(it)
+				.fillMaxSize()
+				//Creates background for the OnboardingView
+				.paint(
+					painterResource(id = R.drawable.welcome_screen_background),
+					contentScale = ContentScale.FillBounds
+				),
 			state = pagerState,
 		) { page ->
 			when (page) {
@@ -128,6 +146,6 @@ fun OnboardingView(){
 
 @Preview
 @Composable
-fun PreviewOnboardingView(){
+fun PreviewOnboardingView() {
 	OnboardingView()
 }

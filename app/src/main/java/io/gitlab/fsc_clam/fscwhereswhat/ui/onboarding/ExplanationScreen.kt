@@ -55,87 +55,76 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
  */
 @Composable
 fun ExplanationScreen() {
-	//Creates background
+	//Creates white box content container
 	Box(
-		modifier = with(Modifier) {
-			fillMaxSize()
-				.paint(
-					painterResource(id = R.drawable.welcome_screen_background),
-					contentScale = ContentScale.FillBounds
-				)
-		}) {
-		//Creates white box content container
-		Box(
+		modifier = Modifier
+			.padding(16.dp)
+			.fillMaxSize()
+			.background(Color.White)
+	) {
+		Column(
 			modifier = Modifier
-				.align(Alignment.Center)
-				.padding(16.dp)
-				.fillMaxSize()
-				.background(Color.White)
+				.fillMaxSize(),
+			verticalArrangement = Arrangement.Center,
+			horizontalAlignment = Alignment.CenterHorizontally
 		) {
+			//App Logo
+			Image(
+				painter = painterResource(id = R.drawable.wheres_what_logo),
+				contentDescription = stringResource(id = R.string.app_logo_description),
+				contentScale = ContentScale.Crop,
+				modifier = Modifier
+					.padding(vertical = 15.dp)
+					.size(280.dp)
+					.clip(RoundedCornerShape(25))
+			)
+			//Header
+			Text(
+				text = stringResource(id = R.string.headline),
+				fontFamily = headFont,
+				fontWeight = FontWeight.Bold,
+				fontStyle = FontStyle.Italic,
+				fontSize = 36.sp,
+			)
+			//Subheading
+			Text(
+				text = stringResource(id = R.string.explanation_body),
+				fontFamily = bodyFont,
+				fontWeight = FontWeight.Normal,
+				fontStyle = FontStyle.Normal,
+				fontSize = 20.sp,
+				textAlign = TextAlign.Center,
+			)
+
 			Column(
 				modifier = Modifier
 					.fillMaxSize(),
-				verticalArrangement = Arrangement.Center,
-				horizontalAlignment = Alignment.CenterHorizontally
+				verticalArrangement = Arrangement.SpaceEvenly
 			) {
-				//App Logo
-				Image(
-					painter = painterResource(id = R.drawable.wheres_what_logo),
-					contentDescription = stringResource(id = R.string.app_logo_description),
-					contentScale = ContentScale.Crop,
-					modifier = Modifier
-						.padding(vertical = 15.dp)
-						.size(280.dp)
-						.clip(RoundedCornerShape(25))
+				//Explains Event
+				EntityExplanations(
+					explanationText = stringResource(id = R.string.explanation_event),
+					img = painterResource(
+						id = R.drawable.flag_icon
+					),
+					imgDescription = stringResource(id = R.string.explanation_event_img)
 				)
-				//Header
-				Text(
-					text = stringResource(id = R.string.headline),
-					fontFamily = headFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Italic,
-					fontSize = 36.sp,
+				//Explains Buildings
+				EntityExplanations(
+					explanationText = stringResource(id = R.string.explanation_building),
+					img = painterResource(
+						id = R.drawable.building_icon
+					),
+					imgDescription = stringResource(id = R.string.explanation_building_img)
 				)
-				//Subheading
-				Text(
-					text = stringResource(id = R.string.explanation_body),
-					fontFamily = bodyFont,
-					fontWeight = FontWeight.Normal,
-					fontStyle = FontStyle.Normal,
-					fontSize = 20.sp,
-					textAlign = TextAlign.Center,
+				//Explains nodes(utilities)
+				EntityExplanations(
+					explanationText = stringResource(id = R.string.explanation_node),
+					img = painterResource(
+						id = R.drawable.node_icon
+					),
+					imgDescription = stringResource(id = R.string.explanation_node_img)
 				)
-
-				Column(
-					modifier = Modifier
-						.fillMaxSize(),
-					verticalArrangement = Arrangement.SpaceEvenly
-				) {
-					//Explains Event
-					EntityExplanations(
-						explanationText = stringResource(id = R.string.explanation_event),
-						img = painterResource(
-							id = R.drawable.flag_icon
-						),
-						imgDescription = stringResource(id = R.string.explanation_event_img)
-					)
-					//Explains Buildings
-					EntityExplanations(
-						explanationText = stringResource(id = R.string.explanation_building),
-						img = painterResource(
-							id = R.drawable.building_icon
-						),
-						imgDescription = stringResource(id = R.string.explanation_building_img)
-					)
-					//Explains nodes(utilities)
-					EntityExplanations(
-						explanationText = stringResource(id = R.string.explanation_node),
-						img = painterResource(
-							id = R.drawable.node_icon
-						),
-						imgDescription = stringResource(id = R.string.explanation_node_img)
-					)
-				}
 			}
 		}
 	}
@@ -144,7 +133,18 @@ fun ExplanationScreen() {
 @Preview
 @Composable
 fun PreviewExplanationScreen() {
-	ExplanationScreen()
+	//Creates background
+	Box(
+		modifier = Modifier
+			.fillMaxSize()
+			.paint(
+				painterResource(id = R.drawable.welcome_screen_background),
+				contentScale = ContentScale.FillBounds
+			)
+	) {
+		ExplanationScreen()
+	}
+
 }
 
 /**

@@ -47,15 +47,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
  */
 @Composable
 fun WelcomeScreen() {
-	//Creates background
-	Box(
-		modifier = with(Modifier) {
-			fillMaxSize()
-				.paint(
-					painterResource(id = R.drawable.welcome_screen_background),
-					contentScale = ContentScale.FillBounds
-				)
-		}) {
+	Box {
 		//App logo
 		Image(
 			painter = painterResource(id = R.drawable.wheres_what_logo),
@@ -96,5 +88,15 @@ fun WelcomeScreen() {
 @Preview
 @Composable
 fun PreviewWelcomeScreen() {
-	WelcomeScreen()
+	//Creates background
+	Box(
+		modifier = Modifier
+			.fillMaxSize()
+			.paint(
+				painterResource(id = R.drawable.welcome_screen_background),
+				contentScale = ContentScale.FillBounds
+			)
+	) {
+		WelcomeScreen()
+	}
 }

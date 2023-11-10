@@ -32,17 +32,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	fun insert(vararg note: DBNote)
+	suspend fun insert(vararg note: DBNote)
 
 	@Delete
-	fun delete(vararg note: DBNote)
+	suspend fun delete(vararg note: DBNote)
 
 	@Query("SELECT * FROM note")
-	fun getAll(): List<DBNote>
+	suspend fun getAll(): List<DBNote>
 
 	/** Get note by reference **/
 	@Query("SELECT * FROM note WHERE reference = :note")
-	fun getById(note: Int) : DBNote
+	suspend fun getById(note: Int) : DBNote
 
 	/** Returns all notes with Flow **/
 	@Query("SELECT * FROM note")

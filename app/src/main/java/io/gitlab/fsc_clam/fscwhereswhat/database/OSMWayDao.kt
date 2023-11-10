@@ -30,15 +30,15 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWay
 @Dao
 interface OSMWayDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	fun insert(vararg note: DBOSMWay)
+	suspend fun insert(vararg note: DBOSMWay)
 
 	@Delete
-	fun delete(vararg note: DBOSMWay)
+	suspend fun delete(vararg note: DBOSMWay)
 
 	@Query("SELECT * FROM osm_way")
-	fun getAll() : List<DBOSMWay>
+	suspend fun getAll() : List<DBOSMWay>
 
 	/** Get way by id **/
 	@Query("SELECT * FROM osm_way WHERE id = :id")
-	fun getById(id: Int) : DBOSMWay
+	suspend fun getById(id: Int) : DBOSMWay
 }

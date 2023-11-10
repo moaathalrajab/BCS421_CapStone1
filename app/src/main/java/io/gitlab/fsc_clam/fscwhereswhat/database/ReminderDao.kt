@@ -32,17 +32,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ReminderDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	fun insert(vararg reminder: DBReminder)
+	suspend fun insert(vararg reminder: DBReminder)
 
 	@Delete
-	fun delete(vararg reminder: DBReminder)
+	suspend fun delete(vararg reminder: DBReminder)
 
 	@Query("SELECT * FROM reminder")
-	fun getAll(): List<DBReminder>
+	suspend fun getAll(): List<DBReminder>
 
 	/** Get reminder by id **/
 	@Query("SELECT * FROM reminder WHERE eventId = :id")
-	fun getById(id: Int) : DBReminder
+	suspend fun getById(id: Int) : DBReminder
 
 	/** Returns all reminders with Flow **/
 	@Query("SELECT * FROM reminder")

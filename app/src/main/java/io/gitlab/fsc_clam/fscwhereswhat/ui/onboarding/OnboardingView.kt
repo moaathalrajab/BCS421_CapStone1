@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -39,6 +38,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
@@ -69,54 +69,61 @@ fun OnboardingView() {
 			//Creates the bottom bar which holds two icon buttons for navigation and a page indicator
 			BottomAppBar(
 				actions = {
-					//Button to return to previous page
-					IconButton(
-						onClick = {
-							state.launch {
-								pagerState.scrollToPage(pagerState.currentPage - 1)
+					//Create box for alignment
+					Box(Modifier.fillMaxSize()) {
+						//Button to return to previous page
+						IconButton(
+							modifier = Modifier.align(Alignment.CenterStart),
+							onClick = {
+								state.launch {
+									pagerState.scrollToPage(pagerState.currentPage - 1)
+								}
+							},
+						) {
+							Icon(
+								Icons.Filled.ArrowBack,
+								contentDescription = stringResource(id = R.string.arrow_backward)
+							)
+						}
+						//Creates the page indicator
+						Row(
+							Modifier
+								.wrapContentHeight()
+								.align(Alignment.Center)
+								.padding(bottom = 8.dp),
+							horizontalArrangement = Arrangement.Center,
+						) {
+							repeat(pagerState.pageCount) { iteration ->
+								val color =
+									if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+								Box(
+									modifier = Modifier
+										.padding(2.dp)
+										.clip(CircleShape)
+										.background(color)
+										.size(16.dp)
+								)
 							}
-						},
-					) {
-						Icon(
-							Icons.Filled.ArrowBack,
-							contentDescription = stringResource(id = R.string.arrow_backward)
+						}
+						//Button to move to next page
+						//TODO("Make this IconButton turn to an X when at the last page")
+						IconButton(
+							modifier = Modifier.align(Alignment.CenterEnd),
+							onClick = {
+								state.launch {
+									pagerState.scrollToPage(pagerState.currentPage + 1)
+								}
+							}
 						)
-					}
-					//Creates the page indicator
-					Row(
-						Modifier
-							.wrapContentHeight()
-							.widthIn(300.dp, 600.dp)
-							.padding(bottom = 8.dp),
-						horizontalArrangement = Arrangement.Center,
-					) {
-						repeat(pagerState.pageCount) { iteration ->
-							val color =
-								if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-							Box(
-								modifier = Modifier
-									.padding(2.dp)
-									.clip(CircleShape)
-									.background(color)
-									.size(16.dp)
+						{
+							Icon(
+								Icons.Filled.ArrowForward,
+								contentDescription = stringResource(id = R.string.arrow_forward)
 							)
 						}
 					}
-					//Button to move to next page
-					//TODO("Make this IconButton turn to an X when at the last page")
-					IconButton(onClick = {
-						state.launch {
-							pagerState.scrollToPage(pagerState.currentPage + 1)
-						}
-					}
-					)
-					{
-						Icon(
-							Icons.Filled.ArrowForward,
-							contentDescription = stringResource(id = R.string.arrow_forward)
-						)
-					}
-				},
+				}
+
 			)
 		}
 	) {

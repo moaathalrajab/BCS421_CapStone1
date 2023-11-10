@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.database
 
+import android.content.Context
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.*
 
@@ -43,5 +44,20 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract val OSMWayDao: OSMWayDao
 	abstract val OSMWayReferenceDao: OSMWayReferenceDao
 	abstract val OSMWayTagDao: OSMWayTagDao
-}
 
+	companion object {
+		@Volatile
+		private var instance: AppDatabase? = null
+
+		fun buildDatabase(context: Context): AppDatabase? {
+			if (instance == null) {
+				synchronized(AppDatabase::class) {
+					instance = Room.databaseBuilder(context.applicationContext,
+						AppDatabase::class.java,
+						"whereswhat.db").allowMainThreadQueries().build()
+				}
+			}
+			return instance
+		}
+	}
+}

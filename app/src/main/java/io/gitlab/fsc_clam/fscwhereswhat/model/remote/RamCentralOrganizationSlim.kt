@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.remote
 
+@Deprecated("API mismatch")
 data class RamCentralOrganizationSlim(
 	val organizationId: Int?,
 	val name: String?,

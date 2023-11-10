@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.remote
 
+@Deprecated("API mismatch")
 data class RamCentralEvent(
 	val eventId :Int?,
 	val eventName :String?,

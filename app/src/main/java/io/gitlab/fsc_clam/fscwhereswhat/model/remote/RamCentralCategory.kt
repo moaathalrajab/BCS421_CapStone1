@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.remote
 
+@Deprecated("API mismatch")
 data class RamCentralCategory(
 	val categoryId: Int?,
 	val categoryName: String?

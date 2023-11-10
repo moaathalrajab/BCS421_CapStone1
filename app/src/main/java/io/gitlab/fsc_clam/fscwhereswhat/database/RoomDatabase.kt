@@ -50,11 +50,11 @@ abstract class AppDatabase : RoomDatabase() {
 		private var instance: AppDatabase? = null
 
 		fun buildDatabase(context: Context): AppDatabase? {
-			if (instance == null) {
-				synchronized(AppDatabase::class) {
+			synchronized(AppDatabase::class) {
+				if (instance == null) {
 					instance = Room.databaseBuilder(context.applicationContext,
 						AppDatabase::class.java,
-						"whereswhat.db").allowMainThreadQueries().build()
+						"whereswhat.db").build()
 				}
 			}
 			return instance

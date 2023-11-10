@@ -15,22 +15,17 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.local
+package io.gitlab.fsc_clam.fscwhereswhat.model.remote
 
-import java.net.URL
+import kotlinx.serialization.Serializable
 
 /**
- * ReminderItem holds data for the UI Reminder
- * @param eventId is the id of the RamCentral Event
- * @param eventName name for the event
- * @param imageURL the link to the organization profile pic
- * @param remind time of the reminder
- * @param date of the event
+ * Represents a response from the OSM api.
+ *
+ * The only thing we really care about is the elements.
  */
-data class ReminderItem(
-	val eventId: Int,
-	val eventName: String,
-	val imageURL: URL,
-	val remind: ReminderTime,
-	val date: String
+@Serializable
+data class OSMResponse(
+	val elements: List<OSMElement>
 )
+

@@ -15,22 +15,9 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.local
-
-import java.net.URL
+package io.gitlab.fsc_clam.fscwhereswhat.common
 
 /**
- * ReminderItem holds data for the UI Reminder
- * @param eventId is the id of the RamCentral Event
- * @param eventName name for the event
- * @param imageURL the link to the organization profile pic
- * @param remind time of the reminder
- * @param date of the event
+ * URL to OSM API
  */
-data class ReminderItem(
-	val eventId: Int,
-	val eventName: String,
-	val imageURL: URL,
-	val remind: ReminderTime,
-	val date: String
-)
+const val OSM_API_URL = "https://openstreetmap.org/api/0.6/"

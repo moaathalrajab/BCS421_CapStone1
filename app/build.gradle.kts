@@ -1,6 +1,7 @@
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
+	kotlin("plugin.serialization")
 }
 
 android {
@@ -40,7 +41,7 @@ android {
 		compose = true
 	}
 	composeOptions {
-		kotlinCompilerExtensionVersion = "1.4.3"
+		kotlinCompilerExtensionVersion = "1.5.3"
 	}
 	packaging {
 		resources {
@@ -73,4 +74,15 @@ dependencies {
 	implementation("android.room:room-runtime:$room_version")
 	implementation("androidx.room:room-ktx:$room_version")
 	annotationProcessor("android.room:room-compiler:$room_version")
+
+	val lifecycle_version = "2.6.2"
+	// ViewModel
+	implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+	// ViewModel utilities for Compose
+	implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+	implementation("io.coil-kt:coil-compose:2.5.0")
+
+	implementation("com.squareup.okhttp3:okhttp:4.11.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
 }

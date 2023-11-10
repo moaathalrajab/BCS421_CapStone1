@@ -15,21 +15,35 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database
+package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 
 /**
- * This is a reference between a OSM Way and its child nodes
- * @param id is the id of the way
- * @param nodeId is the id of the associated child node
+ * Defines @TypeConverter for app class types use in DB objects
+ * that are not native to kotlin
  */
-@Entity (
-	tableName = "osm_way_reference",
-	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["id"], ForeignKey.CASCADE),
-					ForeignKey(DBOSMNode::class, ["id"], ["nodeID"], ForeignKey.CASCADE)]
-)
-data class DBOSMWayReference(
-	val id: Long,
-	val nodeId: Long,
-)
+class TypeConversion {
+	/**
+	 * Conversions for ReminderTime class
+	 * Converts to and from int
+	 */
+	@TypeConverter
+	fun fromReminderTime(value: ReminderTime) = value.ordinal
+
+	@TypeConverter
+	fun toReminderTime(value: Int) = ReminderTime.values()[value]
+
+	/**
+	 * Conversions for EntityType
+	 * Converts to and from int
+	 */
+
+	@TypeConverter
+	fun fromEntityType(value: EntityType) = value.ordinal
+
+	@TypeConverter
+	fun toEntityType(value: Int) = EntityType.values()[value]
+}

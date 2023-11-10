@@ -29,7 +29,7 @@ import java.net.URL
  * @param instructions if event has requirements
  * @param locationName name of where event is located
  * @param locationId mapping betweeen Event and OSM Building
- * @param hasRsvp if event has RSVP (yes/no)
+ * @param hasRSVP if event has RSVP (yes/no)
  * @param url link to RamCentral
  */
 data class Event(
@@ -40,7 +40,7 @@ data class Event(
 	val instructions: String?,
 	val locationName: String,
 	val locationId: Int,
-	val hasRsvp: Boolean,
+	val hasRSVP: Boolean,
 	val url: URL,
 
 )

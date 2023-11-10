@@ -18,18 +18,17 @@
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 import androidx.room.*
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 
 /**
- * This is a reference between a OSM Way and its child nodes
- * @param id is the id of the way
- * @param nodeId is the id of the associated child node
+ * This is a note for a given entity
+ * @param comment is the String comment inputted by the user
+ * @param reference is the id of the associated entity
+ * @param type defines the type of entity that the reference is
  */
-@Entity (
-	tableName = "osm_way_reference",
-	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["id"], ForeignKey.CASCADE),
-					ForeignKey(DBOSMNode::class, ["id"], ["nodeID"], ForeignKey.CASCADE)]
-)
-data class DBOSMWayReference(
-	val id: Long,
-	val nodeId: Long,
+@Entity(tableName = "note")
+data class DBNote(
+	val comment: String,
+	@PrimaryKey val reference: Int,
+	val type: EntityType
 )

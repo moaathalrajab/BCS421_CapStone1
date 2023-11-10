@@ -17,8 +17,19 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
+import androidx.room.*
+
+/**
+ * This is an OSM node
+ * @param id is the id of a specific node
+ * @param lat is the latitude of the node
+ * @param long is the longitude of the node
+ */
+@Entity (
+	tableName = "osm_node"
+)
 data class DBOSMNode(
-	val id: Long,
+	@PrimaryKey val id: Long,
 	val lat: Float,
 	val long: Float,
 )

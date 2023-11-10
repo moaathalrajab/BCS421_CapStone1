@@ -20,16 +20,26 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.database
 import androidx.room.*
 
 /**
- * This is a reference between a OSM Way and its child nodes
- * @param id is the id of the way
- * @param nodeId is the id of the associated child node
+ * This is a RamCentral event
+ * @param id is the id of the specific event
+ * @param name is the name of the event on RamCentral
+ * @param image is the image URL of the event from RamCentral
+ * @param description is the description of the event on RamCentral
+ * @param instructions if the event has requirements
+ * @param locationName of where the event is located
+ * @param locationId is the mapping between the event and OSM building
+ * @param hasRSVP defines if the event requires an RSVP to attend
+ * @param url is the link to the event on RamCentral
  */
-@Entity (
-	tableName = "osm_way_reference",
-	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["id"], ForeignKey.CASCADE),
-					ForeignKey(DBOSMNode::class, ["id"], ["nodeID"], ForeignKey.CASCADE)]
-)
-data class DBOSMWayReference(
-	val id: Long,
-	val nodeId: Long,
+@Entity(tableName = "event")
+data class DBEvent (
+	@PrimaryKey val id: Int,
+	val name: String,
+	val image: String,
+	val description: String,
+	val instructions: String,
+	val locationName: String,
+	val locationId: Int,
+	val hasRSVP: Boolean,
+	val url: String
 )

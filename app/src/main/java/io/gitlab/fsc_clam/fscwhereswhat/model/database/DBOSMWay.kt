@@ -17,6 +17,15 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
+import androidx.room.*
+
+/**
+ * This is an open street map way
+ * @param id is the id of a specific way
+ */
+@Entity(
+	tableName = "osm_way"
+)
 data class DBOSMWay (
-	val id: Long
+	@PrimaryKey val id: Long
 )

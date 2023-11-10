@@ -17,9 +17,19 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
-data class DBOSMTag(
-	val id: Long,
-	val parentId: Long,
-	val key: String,
-	val value: String
+import androidx.room.*
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
+
+/**
+ * This is a reminder for a given event
+ * @param eventId is the event the reminder is associated with
+ * @param remind is the time of the reminder
+ */
+@Entity(
+	tableName = "reminder",
+	foreignKeys = [ForeignKey(DBEvent::class, ["id"], ["eventId"], ForeignKey.CASCADE)]
+)
+data class DBReminder(
+	@PrimaryKey val eventId: Int,
+	val remind: ReminderTime
 )

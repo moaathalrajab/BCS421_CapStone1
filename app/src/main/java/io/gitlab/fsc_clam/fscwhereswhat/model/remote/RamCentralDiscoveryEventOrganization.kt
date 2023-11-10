@@ -15,16 +15,22 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.common
+package io.gitlab.fsc_clam.fscwhereswhat.model.remote
 
-import okhttp3.HttpUrl.Companion.toHttpUrl
-
-/**
- * URL to OSM API
- */
-const val OSM_API_URL = "https://openstreetmap.org/api/0.6/"
+import kotlinx.serialization.Serializable
 
 /**
- * URL to FSC API
+ * Note, This class does not contain all fields that are provided by the API.
  */
-val RC_API_URL = "https://farmingdale.campuslabs.com/engage/api/".toHttpUrl()
+@Serializable
+data class RamCentralDiscoveryEventOrganization(
+	val id: Long,
+	val name: String,
+	val shortName: String,
+	val websiteKey: String,
+	val email: String,
+	val description: String,
+	val summary: String,
+	val comment: String?,
+	val profilePicture: String
+)

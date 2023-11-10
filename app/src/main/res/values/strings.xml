@@ -65,4 +65,5 @@
     <string name="remind_hour">Remind one hour before event starts</string>
     <string name="remind_two_hour">Remind two hours before event starts</string>
     <string name="delete">delete</string>
+    <string name="close_button">Exit Onboarding</string>
 </resources>

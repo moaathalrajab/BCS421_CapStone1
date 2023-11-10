@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -80,10 +82,13 @@ fun OnboardingView() {
 								}
 							},
 						) {
-							Icon(
-								Icons.Filled.ArrowBack,
-								contentDescription = stringResource(id = R.string.arrow_backward)
-							)
+							//if on WelcomeScreen, hide arrow backwards
+							if(pagerState.currentPage != 0){
+								Icon(
+									Icons.Filled.ArrowBack,
+									contentDescription = stringResource(id = R.string.arrow_backward)
+								)
+							}
 						}
 						//Creates the page indicator
 						Row(
@@ -106,20 +111,33 @@ fun OnboardingView() {
 							}
 						}
 						//Button to move to next page
-						//TODO("Make this IconButton turn to an X when at the last page")
 						IconButton(
 							modifier = Modifier.align(Alignment.CenterEnd),
 							onClick = {
 								state.launch {
-									pagerState.scrollToPage(pagerState.currentPage + 1)
+									//if on last page should navigate to MapView
+									if(pagerState.currentPage == pagerState.pageCount -1){
+										Log.d("X Clicked", "Exit Onboard")
+									}
+									//else move to next screen on OnboardingView
+									else{
+										pagerState.scrollToPage(pagerState.currentPage + 1)
+									}
 								}
 							}
 						)
 						{
-							Icon(
-								Icons.Filled.ArrowForward,
-								contentDescription = stringResource(id = R.string.arrow_forward)
-							)
+							//if moving to next last page, make icon into an X
+							if(pagerState.currentPage == pagerState.pageCount - 1){
+								Icon(Icons.Filled.Close, contentDescription = stringResource(id = R.string.close_button))
+							}
+							else{
+								//else keep arrow forward
+								Icon(
+									Icons.Filled.ArrowForward,
+									contentDescription = stringResource(id = R.string.arrow_forward)
+								)
+							}
 						}
 					}
 				}

@@ -22,7 +22,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepo {
-	fun getColor(type: EntityType): Flow<Color>
+	fun getColor(type: EntityType): Flow<Int>
 
-	suspend fun setColor(type: EntityType, color: Color)
+	suspend fun setColor(type: EntityType, color: Int)
 }

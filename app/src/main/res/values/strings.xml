@@ -17,11 +17,53 @@
 
 <resources>
     <string name="app_name">FSCWheresWhat</string>
+    <string name="developers" translatable="false">Team CLAM</string>
+    
+    <string name="web_client_id" translatable="false">862156382807-e576dg5hglilaje88nl7dbqijef8fbr0.apps.googleusercontent.com</string>
+
+    //Welcome Screen Strings
+    <string name="welcome_label">Welcome to</string>
+    <string name="headline">FSC Where\'s What</string>
+    <string name="app_logo_description">App Logo</string>
+    <string name="arrow_forward">Forward</string>
+    <string name="arrow_backward">Backward</string>
+
+    //Explanation Screen Strings
+    <string name="explanation_body">is an interactive campus map that allows users to find</string>
+    <string name="explanation_event">Events that are marked with a flag.They represent nearby events from RamCentral</string>
+    <string name="explanation_event_img">Events marked with red flag</string>
+    <string name="explanation_building">Buildings that are marked with this icon to the right.They represent the campus buildings of FSC</string>
+    <string name="explanation_building_img">Buildings marked with rectangle</string>
+    <string name="explanation_node">Utilities that are marked with a question mark.They represent the amenities and utilities around the campus</string>
+    <string name="explanation_node_img">Utilities marked with question mark</string>
+
+    //Login Screen Strings
+    <string name="login_heading">LOGIN</string>
+    <string name="login_welcome">Welcome!</string>
+    <string name="login_screen_body">Before we continue, please login</string>
+    <string name="login_google_button">Login with Google</string>
+    <string name="login_button_description">Login with google</string>
+
+    //Option Screen Strings
+    <string name="options_heading">OPTIONS</string>
+    <string name="options_subheading">Set colors for your markers</string>
+    <string name="options_events_label">EVENTS</string>
+    <string name="options_buildings_label">BUILDINGS</string>
+    <string name="options_utilities_label">UTILITIES</string>
+    <string name="options_confirm_button">Confirm</string>
+
+    //Thanks Screen Strings
+    <string name="thanks_heading">Thank you,</string>
+    <string name="thanks_body">Enjoy!</string>
+    <string name="thanks_developers_logo">Developer Logo</string>
+    <string name="thanks_continue_button">Continue to App</string>
+    <string name="edit">Edit</string>
+
     <string name="title_reminders">Reminders</string>
     <string name="remind_start">Remind at Start of Event</string>
     <string name="remind_half_hour">Half hour warning before event starts</string>
     <string name="remind_hour">Remind one hour before event starts</string>
     <string name="remind_two_hour">Remind two hours before event starts</string>
-    <string name="edit">edit</string>
     <string name="delete">delete</string>
+    <string name="close_button">Exit Onboarding</string>
 </resources>

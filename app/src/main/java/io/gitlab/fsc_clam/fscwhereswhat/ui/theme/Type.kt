@@ -19,10 +19,27 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import io.gitlab.fsc_clam.fscwhereswhat.R
 
+/*
+ * Fonts in use for OnboardingView
+ */
+val titleFont = FontFamily(
+	Font(R.font.lobster_two_regular, FontWeight.Normal),
+	Font(R.font.lobster_two_bold, FontWeight.Bold),
+	Font(R.font.lobster_two_bold_italic, FontWeight.Bold, FontStyle.Italic)
+)
+val headFont = FontFamily(
+	Font(R.font.lilitaone_regular, FontWeight.Normal)
+)
+val bodyFont = FontFamily(
+	Font(R.font.roboto_regular, FontWeight.Normal)
+)
 // Set of Material typography styles to start with
 val Typography = Typography(
 	bodyLarge = TextStyle(
@@ -31,8 +48,7 @@ val Typography = Typography(
 		fontSize = 16.sp,
 		lineHeight = 24.sp,
 		letterSpacing = 0.5.sp
-	)
-	/* Other default text styles to override
+	),
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -46,6 +62,5 @@ val Typography = Typography(
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
-    )
-    */
+    ),
 )

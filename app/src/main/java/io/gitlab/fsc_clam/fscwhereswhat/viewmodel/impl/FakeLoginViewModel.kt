@@ -15,29 +15,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
+package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
-import androidx.lifecycle.ViewModel
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.OnboardScreen
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.LoginViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.net.URL
 
-/**
- * For Onboarding Process
- */
-abstract class OnboardingViewModel: ViewModel() {
-	/**
-	 * Holds current screen in Onboarding Process
-	 */
-	abstract val screen: StateFlow<OnboardScreen>
+class FakeLoginViewModel(): LoginViewModel(){
+	override val user: StateFlow<User?> = MutableStateFlow(User(1, "", URL("https://www.google.com/"),""))
 
-	/**
-	 * Navigates to next screen
-	 */
-	abstract fun nextScreen()
-
-	/**
-	 * Returns to previous screen
-	 */
-	abstract fun lastScreen()
 }

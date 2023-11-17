@@ -21,7 +21,8 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
 import kotlinx.coroutines.flow.Flow
 
 interface ReminderRepo {
-	fun getReminder(): Flow<Reminder>
+	fun getReminder(eventId: Int): Flow<Reminder?> // Nullable
+	// Results should be flow Id
 
 	fun getAllReminders(): Flow<List<Reminder>>
 	suspend fun updateReminder(reminder: Reminder)

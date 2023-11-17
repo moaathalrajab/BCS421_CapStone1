@@ -15,14 +15,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 // ALL EMITS ARE EXAMPLES
@@ -32,9 +33,10 @@ class FakeReminderRepo : ReminderRepo {
 	private val reminderState =
 		MutableStateFlow(listOf<Reminder>(Reminder(0, ReminderTime.START)))
 
-	override fun getReminder(): Flow<Reminder> = flow {
-		emit(Reminder(0, ReminderTime.START)) // DEFAULT
-	}
+	//Add all reminder parameters
+	//You get reminder based on eventId
+	override fun getReminder(eventId: Int): Flow<Reminder?> =
+		reminderState.map { reminderList -> reminderList.find { it.eventId == eventId } } // eventId matches eventID of argument
 
 	override fun getAllReminders(): Flow<List<Reminder>> = reminderState
 

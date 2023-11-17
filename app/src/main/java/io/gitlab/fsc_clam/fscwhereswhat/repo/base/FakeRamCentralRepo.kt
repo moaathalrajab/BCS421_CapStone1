@@ -19,14 +19,28 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 
-// TODO: Make a Fake Repo
-// TODO: map, single value intitalization
-interface RamCentralRepo {
-	suspend fun getEvent(id: Int): Event
+// File: FakeRamCentralRepo.kt
 
-	suspend fun addEvent(event: Event)
+class FakeRamCentralRepo : RamCentralRepo {
+	private val events: MutableMap<Int, Event> = mutableMapOf()
 
-	suspend fun updateEvent(event: Event)
+	override suspend fun getEvent(id: Int): Event {
+		return events[id] ?: throw NoSuchElementException("Event with id $id not found")
+	}
 
-	suspend fun deleteEvent(event: Event)
+	override suspend fun addEvent(event: Event) {
+		events[event.id] = event
+	}
+
+	override suspend fun updateEvent(event: Event) {
+		if (events.containsKey(event.id)) {
+			events[event.id] = event
+		} else {
+			throw NoSuchElementException("Event with id ${event.id} not found")
+		}
+	}
+
+	override suspend fun deleteEvent(event: Event) {
+		events.remove(event.id)
+	}
 }

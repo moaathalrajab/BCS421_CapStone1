@@ -39,20 +39,26 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
-import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.FakeNotesViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplNotesViewModel
 
 /**
  * The overall View of Notes, including ViewModel and NotesContent
  */
 @Composable
 fun NotesView() {
-	val notesViewModel: NotesViewModel = viewModel<FakeNotesViewModel>()
+	val notesViewModel: NotesViewModel = viewModel<ImplNotesViewModel>()
 	val notes by notesViewModel.notes.collectAsState()
 	NotesContent(
 		notes = notes,
 		onUpdate = notesViewModel::updateNote,
 		onDelete = notesViewModel::deleteNote
 	)
+}
+
+@Preview()
+@Composable
+fun PreviewNotesView(){
+	NotesView()
 }
 
 /**

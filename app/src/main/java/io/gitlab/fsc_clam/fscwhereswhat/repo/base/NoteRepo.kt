@@ -21,7 +21,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepo {
-	fun getNote(): Flow<Note>
+	fun getNote(parentId: Int): Flow<Note?>
 
 	fun getAllNotes(): Flow<List<Note>>
 	suspend fun updateNote(note: Note)

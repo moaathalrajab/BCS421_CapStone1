@@ -17,12 +17,15 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
+import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeNotesRepo
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * Fake ViewModel for NotesView
@@ -31,21 +34,31 @@ class ImplNotesViewModel: NotesViewModel() {
 	//private lateinit var repo: FakeNotesRepo
 	override val notes: MutableStateFlow<List<NoteItem>> = MutableStateFlow(arrayListOf(
 		NoteItem(
-			"", 3, EntityType.EVENT,
-			Image.Drawable(3), ""
+			"This is a comment", 3, EntityType.EVENT,
+			Image.Drawable(3), "Event Name"
 		)
 	))
 
 	override fun updateNote(note: NoteItem) {
-		val noteList = ArrayList(notes.value)
-		val pos = noteList.indexOf(note)
-		noteList[pos] = note
-		notes.value = noteList
+		viewModelScope.launch {
+			val noteList = ArrayList(notes.value)
+			var pos = noteList.indexOfFirst {
+				it.reference == note.reference
+			}
+			if(pos != -1) {
+				noteList[pos] = note
+				notes.value = noteList
+			}
+			//repo.updateNote(Note(note.comment, note.reference, note.type))
+		}
 	}
 
 	override fun deleteNote(note: NoteItem) {
-		val noteList = ArrayList(notes.value)
-		noteList.remove(note)
-		notes.value = noteList
+		viewModelScope.launch {
+			val noteList = ArrayList(notes.value)
+			noteList.remove(note)
+			notes.value = noteList
+			//repo.deleteNote(Note(note.comment, note.reference, note.type))
+		}
 	}
 }

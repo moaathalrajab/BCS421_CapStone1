@@ -63,6 +63,9 @@ fun PreviewNotesView(){
 
 /**
  * Creates the UI for the Notes View
+ * @param notes	is the list of NoteItems
+ * @param onUpdate the function in the NotesViewModel that updates the note
+ * @param onDelete the function in the NotesViewModel that deletes the note
  */
 @Composable
 fun NotesContent(

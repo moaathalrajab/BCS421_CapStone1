@@ -20,14 +20,15 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeNotesRepo
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Fake ViewModel for NotesView
  */
-class FakeNotesViewModel: NotesViewModel() {
-	//private lateinit var repo: NoteRepo
+class ImplNotesViewModel: NotesViewModel() {
+	//private lateinit var repo: FakeNotesRepo
 	override val notes: MutableStateFlow<List<NoteItem>> = MutableStateFlow(arrayListOf(
 		NoteItem(
 			"", 3, EntityType.EVENT,

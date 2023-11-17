@@ -22,27 +22,29 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Fake ViewModel for NotesView
  */
 class FakeNotesViewModel: NotesViewModel() {
 	//private lateinit var repo: NoteRepo
-	val noteList = arrayListOf(
+	override val notes: MutableStateFlow<List<NoteItem>> = MutableStateFlow(arrayListOf(
 		NoteItem(
 			"", 3, EntityType.EVENT,
 			Image.Drawable(3), ""
 		)
-	)
-	override val notes: StateFlow<List<NoteItem>> = MutableStateFlow(noteList)
+	))
 
 	override fun updateNote(note: NoteItem) {
+		val noteList = ArrayList(notes.value)
 		val pos = noteList.indexOf(note)
-		noteList.set(pos, note)
+		noteList[pos] = note
+		notes.value = noteList
 	}
 
 	override fun deleteNote(note: NoteItem) {
+		val noteList = ArrayList(notes.value)
 		noteList.remove(note)
+		notes.value = noteList
 	}
 }

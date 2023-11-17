@@ -59,6 +59,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
 
 /**
  * Creates individual cards for a NoteItem
+ * @param note is the individual NoteItem
+ * @param onUpdate the function in the NotesViewModel that updates the note
+ * @param onDelete the function in the NotesViewModel that deletes the note
  */
 @Composable
 fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem) -> Unit) {

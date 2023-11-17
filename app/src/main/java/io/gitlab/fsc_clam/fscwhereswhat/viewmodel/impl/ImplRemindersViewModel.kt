@@ -21,10 +21,10 @@ import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.FakeRamCentralRepo
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.FakeReminderRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeReminderRepo
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.RemindersViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

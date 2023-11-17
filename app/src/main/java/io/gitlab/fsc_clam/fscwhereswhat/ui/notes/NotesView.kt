@@ -17,43 +17,65 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.notes
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.FakeNotesViewModel
 
 @Composable
 fun NotesView() {
-
+	val notesViewModel: NotesViewModel = viewModel<FakeNotesViewModel>()
+	val notes by notesViewModel.notes.collectAsState()
+	NotesContent(
+		notes = notes,
+		onUpdate = notesViewModel::updateNote,
+		onDelete = notesViewModel::deleteNote
+	)
 }
 
 @Composable
 fun NotesContent(
 	notes: List<NoteItem>, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem) -> Unit
 ) {
-	Text(
-		text = stringResource(id = R.string.notesHeading),
-		style = MaterialTheme.typography.headlineLarge
-	)
-	LazyColumn(
-		Modifier.fillMaxWidth(),
-		contentPadding = PaddingValues(16.dp)
-	) {
-		items(notes) { note ->
-			NotesCard(note = note, onUpdate = onUpdate, onDelete = onDelete)
+	Scaffold(topBar = {
+		Text(
+			text = stringResource(id = R.string.notesHeading),
+			style = MaterialTheme.typography.headlineLarge
+		)
+	}) {
+		LazyColumn(
+			Modifier
+				.padding(it)
+				.fillMaxWidth(),
+			contentPadding = PaddingValues(16.dp),
+			verticalArrangement = Arrangement.spacedBy(8.dp)
+		) {
+			items(notes) { note ->
+				NotesCard(note = note, onUpdate = onUpdate, onDelete = onDelete)
+			}
 		}
 	}
+
+
 }
 
 @Preview

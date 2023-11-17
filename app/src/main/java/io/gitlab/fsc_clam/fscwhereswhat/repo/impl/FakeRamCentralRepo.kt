@@ -32,13 +32,14 @@ class FakeRamCentralRepo : RamCentralRepo {
 		events[event.id] = event
 	}
 
-	override suspend fun updateEvent(event: Event) {
-		if (events.containsKey(event.id)) {
-			events[event.id] = event
-		} else {
-			throw NoSuchElementException("Event with id ${event.id} not found")
-		}
-	}
+	override suspend fun updateEvent(event: Event)  = addEvent(event)
+
+		//if (events.containsKey(event.id)) {
+		//	events[event.id] = event
+		//} else {
+		//	throw NoSuchElementException("Event with id ${event.id} not found")
+		//}
+
 
 	override suspend fun deleteEvent(event: Event) {
 		events.remove(event.id)

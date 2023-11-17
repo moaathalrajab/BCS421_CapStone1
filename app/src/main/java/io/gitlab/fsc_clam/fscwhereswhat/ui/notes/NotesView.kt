@@ -41,6 +41,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.FakeNotesViewModel
 
+/**
+ * The overall View of Notes, including ViewModel and NotesContent
+ */
 @Composable
 fun NotesView() {
 	val notesViewModel: NotesViewModel = viewModel<FakeNotesViewModel>()
@@ -52,16 +55,21 @@ fun NotesView() {
 	)
 }
 
+/**
+ * Creates the UI for the Notes View
+ */
 @Composable
 fun NotesContent(
 	notes: List<NoteItem>, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem) -> Unit
 ) {
+	//For the top app bar
 	Scaffold(topBar = {
 		Text(
 			text = stringResource(id = R.string.notesHeading),
 			style = MaterialTheme.typography.headlineLarge
 		)
 	}) {
+		//Lists all current notes
 		LazyColumn(
 			Modifier
 				.padding(it)
@@ -69,6 +77,7 @@ fun NotesContent(
 			contentPadding = PaddingValues(16.dp),
 			verticalArrangement = Arrangement.spacedBy(8.dp)
 		) {
+			//for each note, create its card
 			items(notes) { note ->
 				NotesCard(note = note, onUpdate = onUpdate, onDelete = onDelete)
 			}

@@ -24,6 +24,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Fake ViewModel for NotesView
+ */
 class FakeNotesViewModel: NotesViewModel() {
 	//private lateinit var repo: NoteRepo
 	val noteList = arrayListOf(

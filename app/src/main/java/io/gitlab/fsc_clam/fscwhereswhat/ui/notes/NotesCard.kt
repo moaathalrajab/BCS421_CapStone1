@@ -60,17 +60,22 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
 
+/**
+ * Creates individual cards for a NoteItem
+ */
 @Composable
 fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem) -> Unit) {
+	//holds state if user is editing
 	var isEditingVisible by remember { mutableStateOf(false) }
 	Card() {
 		Row(
 			horizontalArrangement = Arrangement.SpaceBetween,
 			verticalAlignment = Alignment.CenterVertically,
 			modifier = Modifier.fillMaxWidth()
-			) {
+		) {
 
-			Row(Modifier.fillMaxWidth(.8f)){
+			Row(Modifier.fillMaxWidth(.8f)) {
+				//Image of the Entity
 				AsyncImage(
 					model = note.image,
 					contentDescription = "",
@@ -88,6 +93,7 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 							modifier = Modifier.size(24.dp),
 							contentAlignment = Alignment.CenterStart
 						) {
+							//Creates corresponding Image for EntityType
 							when (note.type) {
 								EntityType.EVENT -> Image(
 									painter = painterResource(id = R.drawable.flag_icon),
@@ -112,6 +118,7 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 							}
 
 						}
+						//Name of the Entity
 						Text(
 							text = note.referenceName,
 							modifier = Modifier
@@ -121,7 +128,7 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 							overflow = TextOverflow.Ellipsis
 						)
 					}
-
+					//The comment about the entity
 					Text(
 						text = note.comment,
 						modifier = Modifier.padding(bottom = 4.dp)
@@ -131,46 +138,51 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 			}
 
 			Column(Modifier.padding(8.dp)) {
-				IconButton(onClick = {
-					isEditingVisible = !isEditingVisible
-					//Update only when user is done editing
-
-				}) {
-					if (isEditingVisible) {
-						Icon(Icons.Filled.Check, "")
-					} else {
-						Icon(Icons.Filled.Edit, "")
-					}
+				//Edit Icon Button
+				//On Click, the user is in edit mode
+				IconButton(onClick = { isEditingVisible = !isEditingVisible })
+				{
+					Icon(Icons.Filled.Edit, "")
 				}
-				IconButton(onClick = { onDelete }) {
+				//Delete Icon Button
+				//On click, sends to ViewModel to delete this note
+				IconButton(onClick = { onDelete(note.copy()) }) {
 					Icon(Icons.Filled.Delete, "")
 				}
 			}
 		}
 	}
+	//if user is in edit mode, opens a Dialog to allow users to edit their comment
 	if (isEditingVisible) {
 		Dialog(
 			onDismissRequest = { isEditingVisible = false },
 		) {
+			//holds state of the comment
 			var comment by remember { mutableStateOf(note.comment) }
-
-			Column(modifier = Modifier.fillMaxHeight(.5f).background(Color.White),
+			Column(
+				modifier = Modifier
+					.fillMaxHeight(.5f)
+					.background(Color.White),
 				verticalArrangement = Arrangement.Center,
-				horizontalAlignment = Alignment.CenterHorizontally) {
+				horizontalAlignment = Alignment.CenterHorizontally
+			) {
+				//Name of Entity
 				Text(
 					text = note.referenceName,
 					style = MaterialTheme.typography.headlineSmall,
 					fontWeight = FontWeight.Bold,
 					overflow = TextOverflow.Ellipsis
 				)
+				//Textfield of comment
 				TextField(
 					value = comment,
 					onValueChange = { comment = it },
 					modifier = Modifier.weight(1f)
 				)
-
 				Row(
-					Modifier.background(Color.White).fillMaxWidth(),
+					Modifier
+						.background(Color.White)
+						.fillMaxWidth(),
 					horizontalArrangement = Arrangement.SpaceAround
 				) {
 					//Exits dialog
@@ -178,6 +190,7 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 						Text(text = stringResource(id = android.R.string.cancel))
 					}
 					//Confirms  edit
+					//On click, sends to NotesViewModel to update notes
 					TextButton(onClick = {
 						isEditingVisible = false
 						onUpdate(note.copy(comment = comment))
@@ -199,8 +212,10 @@ fun PreviewNotesCard() {
 		NoteItem("This is a comment", 0, EntityType.BUILDING, img, "Building Name"),
 		NoteItem("This is a comment", 0, EntityType.NODE, img, "Node Name")
 	)
-	Column(verticalArrangement = Arrangement.spacedBy(8.dp),
-		modifier = Modifier.fillMaxSize()) {
+	Column(
+		verticalArrangement = Arrangement.spacedBy(8.dp),
+		modifier = Modifier.fillMaxSize()
+	) {
 		NotesCard(notes[0], {}, {})
 		NotesCard(notes[1], {}, {})
 		NotesCard(notes[2], {}, {})

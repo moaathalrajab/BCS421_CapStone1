@@ -18,7 +18,6 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.notes
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,16 +28,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +44,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -159,31 +156,27 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 		) {
 			//holds state of the comment
 			var comment by remember { mutableStateOf(note.comment) }
-			Column(
+			Card(
 				modifier = Modifier
 					.fillMaxHeight(.5f)
-					.background(Color.White),
-				verticalArrangement = Arrangement.Center,
-				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				//Name of Entity
 				Text(
-					text = note.referenceName,
+					text = stringResource(id = R.string.editComment),
 					style = MaterialTheme.typography.headlineSmall,
-					fontWeight = FontWeight.Bold,
-					overflow = TextOverflow.Ellipsis
+					overflow = TextOverflow.Ellipsis,
+					modifier = Modifier.padding(8.dp)
 				)
 				//Textfield of comment
-				TextField(
+				OutlinedTextField(
 					value = comment,
 					onValueChange = { comment = it },
-					modifier = Modifier.weight(1f)
+					modifier = Modifier.weight(1f).padding(8.dp).fillMaxWidth()
 				)
 				Row(
 					Modifier
-						.background(Color.White)
 						.fillMaxWidth(),
-					horizontalArrangement = Arrangement.SpaceAround
+					horizontalArrangement = Arrangement.End
 				) {
 					//Exits dialog
 					TextButton(onClick = { isEditingVisible = false }) {

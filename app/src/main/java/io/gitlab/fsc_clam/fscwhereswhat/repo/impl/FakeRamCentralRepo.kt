@@ -22,7 +22,10 @@ import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepo
 import java.net.URL
 
 class FakeRamCentralRepo : RamCentralRepo {
-	private val events: MutableMap<Int, Event> = mutableMapOf()
+	private val events: MutableMap<Int, Event> = mutableMapOf(0 to Event(0, "Basketball", URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api"),
+		"Basketball Competition", "Just bring yourself and appropriate clothes!", "Nold hall", 10,
+		false, URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api")
+	))
 
 	override suspend fun getEvent(id: Int): Event {
 		return events[id] ?: throw NoSuchElementException("Event with id $id not found")

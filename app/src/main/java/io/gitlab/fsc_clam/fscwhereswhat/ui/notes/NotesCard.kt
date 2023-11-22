@@ -183,7 +183,10 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 				) {
 					//Exits dialog
 					TextButton(onClick = { isEditingVisible = false }) {
-						Text(text = stringResource(id = android.R.string.cancel))
+						Text(
+							text = stringResource(id = R.string.options_cancel_button),
+							fontWeight = FontWeight.Bold
+							)
 					}
 					//Confirms  edit
 					//On click, sends to NotesViewModel to update notes
@@ -191,7 +194,10 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 						isEditingVisible = false
 						onUpdate(note.copy(comment = comment))
 					}) {
-						Text(text = stringResource(id = R.string.options_confirm_button))
+						Text(
+							text = stringResource(id = R.string.options_confirm_button),
+							fontWeight = FontWeight.Bold
+							)
 					}
 				}
 			}

@@ -50,7 +50,7 @@
     <string name="options_events_label">EVENTS</string>
     <string name="options_buildings_label">BUILDINGS</string>
     <string name="options_utilities_label">UTILITIES</string>
-    <string name="options_confirm_button">Confirm</string>
+    <string name="options_confirm_button">CONFIRM</string>
 
     //Thanks Screen Strings
     <string name="thanks_heading">Thank you,</string>
@@ -68,4 +68,5 @@
     <string name="close_button">Exit Onboarding</string>
     <string name="notesHeading">Notes</string>
     <string name="editComment">Edit Comment</string>
+    <string name="options_cancel_button">CANCEL</string>
 </resources>

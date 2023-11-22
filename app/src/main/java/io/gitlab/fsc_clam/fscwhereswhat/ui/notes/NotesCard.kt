@@ -201,6 +201,32 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 
 @Preview
 @Composable
+fun PreviewDialogButtons(){
+	Row(
+		Modifier
+			.fillMaxWidth(),
+		horizontalArrangement = Arrangement.End
+	) {
+		//Exits dialog
+		TextButton(onClick = { }) {
+			Text(
+				text = stringResource(id = R.string.options_cancel_button),
+				fontWeight = FontWeight.Bold
+				)
+		}
+		//Confirms  edit
+		//On click, sends to NotesViewModel to update notes
+		TextButton(onClick = {}) {
+			Text(
+				text = stringResource(id = R.string.options_confirm_button),
+				fontWeight = FontWeight.Bold
+			)
+		}
+	}
+}
+
+@Preview
+@Composable
 fun PreviewNotesCard() {
 	val img = Image.Drawable(R.drawable.flag_icon)
 	val notes = listOf(

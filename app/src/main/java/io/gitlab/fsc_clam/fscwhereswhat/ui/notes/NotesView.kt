@@ -69,7 +69,9 @@ fun PreviewNotesView(){
  */
 @Composable
 fun NotesContent(
-	notes: List<NoteItem>, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem) -> Unit
+	notes: List<NoteItem>,
+	onUpdate: (NoteItem) -> Unit,
+	onDelete: (NoteItem) -> Unit
 ) {
 	//For the top app bar
 	Scaffold(topBar = {

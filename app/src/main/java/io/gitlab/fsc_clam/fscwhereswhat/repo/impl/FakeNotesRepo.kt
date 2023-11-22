@@ -28,9 +28,8 @@ import kotlinx.coroutines.flow.map
 class FakeNotesRepo: NoteRepo {
 
 	private val notes = MutableStateFlow(listOf(Note("comment", 0, EntityType.EVENT)))
-	override fun getNote(parentId: Int): Flow<Note> {
-		return notes.map { notes ->  notes[parentId]}
-	}
+	override fun getNote(parentId: Int): Flow<Note?> =
+		notes.map { notes -> notes.find { it.reference == parentId } }
 
 	override fun getAllNotes(): Flow<List<Note>> {
 		return notes

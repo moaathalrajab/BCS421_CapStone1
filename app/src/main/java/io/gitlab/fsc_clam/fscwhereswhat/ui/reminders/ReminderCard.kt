@@ -121,9 +121,7 @@ fun ReminderCard(reminder: ReminderItem, onDelete: () -> Unit, onUpdate: (Remind
 					var expanded by remember {
 						mutableStateOf(false)
 					}
-					IconButton(
-						onClick = { expanded = true }
-					) {
+					IconButton(onClick = { expanded = true }) {
 						Icon(
 							imageVector = Icons.Default.Edit,
 							contentDescription = stringResource(id = R.string.edit)
@@ -151,47 +149,42 @@ fun ReminderCard(reminder: ReminderItem, onDelete: () -> Unit, onUpdate: (Remind
  */
 @Composable
 fun ReminderCardDropDownMenu(
-	expanded: Boolean,
-	onDismissRequest: () -> Unit,
-	onUpdate: (ReminderTime) -> Unit
+	expanded: Boolean, onDismissRequest: () -> Unit, onUpdate: (ReminderTime) -> Unit
 ) {
 	DropdownMenu(
-		expanded = expanded,
-		onDismissRequest = onDismissRequest
+		expanded = expanded, onDismissRequest = onDismissRequest
 	) {
-		DropdownMenuItem(
-			text = { Text("Remind when event starts") },
-			onClick = { onUpdate(ReminderTime.START) } // Set reminder to START
-		)
-		DropdownMenuItem(
-			text = { Text("Remind 30 minutes before event") },
-			onClick = { onUpdate(ReminderTime.HALF_HOUR_BEFORE) } // Set reminder to HALF_HOUR_BEFORE
-		)
-		DropdownMenuItem(
-			text = { Text("Remind 1 hour before event") },
-			onClick = { onUpdate(ReminderTime.HOUR_BEFORE) } // Set reminder to HOUR_BEFORE
-		)
-		DropdownMenuItem(
-			text = { Text("Remind 2 hours before event") },
-			onClick = { onUpdate(ReminderTime.TWO_HOUR_BEFORE) } // Set reminder to TWO_HOUR_BEFORE
-		)
+		DropdownMenuItem(text = { Text("Remind when event starts") }, onClick = {
+			onUpdate(ReminderTime.START) // Set reminder to START
+			onDismissRequest.invoke()
+		})
+		DropdownMenuItem(text = { Text("Remind 30 minutes before event") }, onClick = {
+			onUpdate(ReminderTime.HALF_HOUR_BEFORE) // Set reminder to HALF_HOUR_BEFORE
+			onDismissRequest.invoke()
+		})
+		DropdownMenuItem(text = { Text("Remind 1 hour before event") }, onClick = {
+			onUpdate(ReminderTime.HOUR_BEFORE) // Set reminder to HOUR_BEFORE
+			onDismissRequest.invoke()
+		})
+		DropdownMenuItem(text = { Text("Remind 2 hours before event") }, onClick = {
+			onUpdate(ReminderTime.TWO_HOUR_BEFORE) // Set reminder to TWO_HOUR_BEFORE
+			onDismissRequest.invoke()
+		})
 	}
 }
 
 @Preview
 @Composable
 fun PreviewReminderCard() {
-	ReminderCard(
-		reminder = ReminderItem(
-			eventId = 1,
-			eventName = "Event Name",
-			imageURL = URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api"),
-			remind = ReminderTime.HALF_HOUR_BEFORE,
-			date = "Event date"
-		), onDelete = {
+	ReminderCard(reminder = ReminderItem(
+		eventId = 1,
+		eventName = "Event Name",
+		imageURL = URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api"),
+		remind = ReminderTime.HALF_HOUR_BEFORE,
+		date = "Event date"
+	), onDelete = {
 
-		}, onUpdate = {
+	}, onUpdate = {
 
-		}
-	)
+	})
 }

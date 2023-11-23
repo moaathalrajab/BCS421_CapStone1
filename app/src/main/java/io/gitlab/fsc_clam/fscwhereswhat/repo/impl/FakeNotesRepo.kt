@@ -15,16 +15,35 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.NoteRepo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
-interface NoteRepo {
-	fun getNote(parentId: Int): Flow<Note?>
+class FakeNotesRepo: NoteRepo {
 
-	fun getAllNotes(): Flow<List<Note>>
-	suspend fun updateNote(note: Note)
-	suspend fun deleteNote(note: Note)
-	suspend fun createNote(note: Note)
+	private val notes = MutableStateFlow(listOf(Note("comment", 0, EntityType.EVENT)))
+	override fun getNote(parentId: Int): Flow<Note?> =
+		notes.map { notes -> notes.find { it.reference == parentId } }
+
+	override fun getAllNotes(): Flow<List<Note>> {
+		return notes
+	}
+
+	override suspend fun updateNote(note: Note) {
+		flowOf(note)
+	}
+
+	override suspend fun deleteNote(note: Note) {
+		flowOf(note)
+	}
+
+	override suspend fun createNote(note: Note) {
+		flowOf(note)
+	}
 }

@@ -33,11 +33,21 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.net.URL
 
+/**
+ * Implementation of the [RemindersViewModel] interface that handles interactions
+ * between the UI and the data layer for reminders.
+ *
+ * @param repo The repository for handling reminders.
+ * @param ramCentralRepo The repository for handling central data (e.g., events).
+ */
 class ImplRemindersViewModel(
 	private val repo: ReminderRepo = FakeReminderRepo(),
 	private val ramCentralRepo: RamCentralRepo = FakeRamCentralRepo()
 ) : RemindersViewModel() {
 
+	/**
+	 * A [StateFlow] emitting a list of [ReminderItem]s derived from reminders in the repository.
+	 */
 	override val reminders: StateFlow<List<ReminderItem>> =
 		repo.getAllReminders().map { reminderItems ->
 			reminderItems.map { reminder ->
@@ -52,6 +62,11 @@ class ImplRemindersViewModel(
 			}
 		}.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
+	/**
+	 * Deletes a reminder from the repository.
+	 *
+	 * @param reminderItem The [ReminderItem] representing the reminder to be deleted.
+	 */
 	override fun deleteReminder(reminderItem: ReminderItem) {
 		viewModelScope.launch {
 			repo.deleteReminder(
@@ -63,6 +78,12 @@ class ImplRemindersViewModel(
 		}
 	}
 
+	/**
+	 * Updates the reminder time in the repository.
+	 *
+	 * @param id The ID of the reminder to be updated.
+	 * @param time The new [ReminderTime] for the reminder.
+	 */
 	override fun updateReminderTime(id: Int, time: ReminderTime) {
 		viewModelScope.launch {
 			repo.updateReminder(Reminder(id, time))

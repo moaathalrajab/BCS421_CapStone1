@@ -19,14 +19,37 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 
-// TODO: Make a Fake Repo
-// TODO: map, single value intitalization
+/**
+ * Interface defining operations for interacting with events from Ram Central.
+ */
 interface RamCentralRepo {
+
+	/**
+	 * Retrieves an event with the specified eventID.
+	 *
+	 * @param id The ID of the event to be retrieved.
+	 * @return The event with the given ID.
+	 */
 	suspend fun getEvent(id: Int): Event
 
+	/**
+	 * Adds a new event to the repository.
+	 *
+	 * @param event The event to be added.
+	 */
 	suspend fun addEvent(event: Event)
 
+	/**
+	 * Updates an existing event in the repository.
+	 *
+	 * @param event The event to be updated.
+	 */
 	suspend fun updateEvent(event: Event)
 
+	/**
+	 * Deletes an event from the repository.
+	 *
+	 * @param event The event to be deleted.
+	 */
 	suspend fun deleteEvent(event: Event)
 }

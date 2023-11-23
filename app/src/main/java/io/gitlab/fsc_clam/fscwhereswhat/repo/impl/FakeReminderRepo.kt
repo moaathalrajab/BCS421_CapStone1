@@ -26,31 +26,51 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-// ALL EMITS ARE EXAMPLES
-
+/**
+ * A fake implementation of [ReminderRepo] for testing purposes.
+ */
 class FakeReminderRepo : ReminderRepo {
 
-	private val reminderState =
-		MutableStateFlow(listOf<Reminder>(Reminder(0, ReminderTime.START)))
+	// Internal state for storing reminders
+	private val reminderState = MutableStateFlow(listOf<Reminder>(Reminder(0, ReminderTime.START)))
 
-	//Add all reminder parameters
-	//You get reminder based on eventId
+	/**
+	 * Retrieves a reminder with the specified event ID from the fake repository.
+	 *
+	 * @param eventId The ID of the event associated with the reminder.
+	 * @return A [Flow] emitting the reminder with the given event ID, or null if not found.
+	 */
 	override fun getReminder(eventId: Int): Flow<Reminder?> =
 		reminderState.map { reminderList -> reminderList.find { it.eventId == eventId } } // eventId matches eventID of argument
 
+	/**
+	 * Retrieves all reminders stored in the fake repository.
+	 *
+	 * @return A [Flow] emitting a list of all reminders.
+	 */
 	override fun getAllReminders(): Flow<List<Reminder>> = reminderState
 
+	/**
+	 * Updates an existing reminder in the fake repository.
+	 *
+	 * @param reminder The reminder to be updated.
+	 */
 	override suspend fun updateReminder(reminder: Reminder) {
 		withContext(Dispatchers.IO) {
 			val reminderList = ArrayList(reminderState.value) // Casting to ArrayList
 			val i = reminderList.indexOfFirst { it.eventId == reminder.eventId }
 			if (i != -1) {
 				reminderList[i] = reminder
+				reminderState.value = reminderList
 			}
-			reminderState.value = reminderList
 		}
 	}
 
+	/**
+	 * Deletes a reminder from the fake repository.
+	 *
+	 * @param reminder The reminder to be deleted.
+	 */
 	override suspend fun deleteReminder(reminder: Reminder) {
 		withContext(Dispatchers.IO) {
 			val reminderList = ArrayList(reminderState.value) // Casting to ArrayList
@@ -59,6 +79,11 @@ class FakeReminderRepo : ReminderRepo {
 		}
 	}
 
+	/**
+	 * Creates a new reminder in the fake repository.
+	 *
+	 * @param reminder The reminder to be created.
+	 */
 	override suspend fun createReminder(reminder: Reminder) {
 		withContext(Dispatchers.IO) {
 			val reminderList = ArrayList(reminderState.value) // Casting to ArrayList

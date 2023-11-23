@@ -21,29 +21,58 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepo
 import java.net.URL
 
+/**
+ * A fake implementation of [RamCentralRepo] for testing purposes.
+ */
 class FakeRamCentralRepo : RamCentralRepo {
-	private val events: MutableMap<Int, Event> = mutableMapOf(0 to Event(0, "Basketball", URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api"),
-		"Basketball Competition", "Just bring yourself and appropriate clothes!", "Nold hall", 10,
-		false, URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api")
-	))
 
+	//Internal storage for events
+	private val events: MutableMap<Int, Event> = mutableMapOf(
+		0 to Event(
+			0,
+			"Basketball",
+			URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api"),
+			"Basketball Competition",
+			"Just bring yourself and appropriate clothes!",
+			"Nold hall",
+			10,
+			false,
+			URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api")
+		)
+	)
+
+	/**
+	 * Retrieves an event with the specified ID from the fake repository.
+	 *
+	 * @param id The ID of the event to be retrieved.
+	 * @return The event with the given ID.
+	 * @throws NoSuchElementException if no event with the specified ID is found.
+	 */
 	override suspend fun getEvent(id: Int): Event {
 		return events[id] ?: throw NoSuchElementException("Event with id $id not found")
 	}
 
+	/**
+	 * Adds a new event to the fake repository.
+	 *
+	 * @param event The event to be added.
+	 */
 	override suspend fun addEvent(event: Event) {
 		events[event.id] = event
 	}
 
-	override suspend fun updateEvent(event: Event)  = addEvent(event)
+	/**
+	 * Updates an existing event in the fake repository.
+	 *
+	 * @param event The event to be updated.
+	 */
+	override suspend fun updateEvent(event: Event) = addEvent(event)
 
-		//if (events.containsKey(event.id)) {
-		//	events[event.id] = event
-		//} else {
-		//	throw NoSuchElementException("Event with id ${event.id} not found")
-		//}
-
-
+	/**
+	 * Deletes an event from the fake repository.
+	 *
+	 * @param event The event to be deleted.
+	 */
 	override suspend fun deleteEvent(event: Event) {
 		events.remove(event.id)
 	}

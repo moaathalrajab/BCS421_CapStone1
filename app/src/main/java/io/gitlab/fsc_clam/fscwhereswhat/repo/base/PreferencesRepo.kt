@@ -25,4 +25,9 @@ interface PreferencesRepo {
 	fun getColor(type: EntityType): Flow<Int>
 
 	suspend fun setColor(type: EntityType, color: Int)
+
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

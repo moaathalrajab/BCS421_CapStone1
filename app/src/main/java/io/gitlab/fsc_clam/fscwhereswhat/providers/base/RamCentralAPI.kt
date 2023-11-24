@@ -101,4 +101,9 @@ interface RamCentralAPI {
 	 * @see "discovery/event/[eventId]/organizations"
 	 */
 	suspend fun getOrganizationsForEvent(eventId: Long): List<RamCentralDiscoveryEventOrganization>
+
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

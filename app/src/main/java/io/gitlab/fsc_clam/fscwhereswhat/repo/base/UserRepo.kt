@@ -23,4 +23,8 @@ import kotlinx.coroutines.flow.StateFlow
 interface UserRepo {
 	val user: StateFlow<User?>
 
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

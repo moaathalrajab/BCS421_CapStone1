@@ -30,4 +30,9 @@ interface LocationRepo {
 	fun setLongitude(longitude: Float)
 
 	fun setLatitude(latitude: Float)
+
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

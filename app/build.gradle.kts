@@ -89,4 +89,7 @@ dependencies {
 	implementation("com.squareup.okhttp3:okhttp:4.11.0")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
+	// Firebase
+	implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+	implementation("com.google.firebase:firebase-auth")
 }

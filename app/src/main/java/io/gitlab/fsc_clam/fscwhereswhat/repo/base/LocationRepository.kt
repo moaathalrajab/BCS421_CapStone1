@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -24,12 +25,12 @@ import kotlinx.coroutines.flow.StateFlow
  */
 
 interface LocationRepository {
-	val longitude: StateFlow<Float>
-	val latitude: StateFlow<Float>
+	val longitude: MutableStateFlow<Double>
+	val latitude: StateFlow<Double>
 
-	fun setLongitude(longitude: Float)
+	fun setLongitude(longitude: Double)
 
-	fun setLatitude(latitude: Float)
+	fun setLatitude(latitude: Double)
 
 	/**
 	 * Binding point for Implementation getter

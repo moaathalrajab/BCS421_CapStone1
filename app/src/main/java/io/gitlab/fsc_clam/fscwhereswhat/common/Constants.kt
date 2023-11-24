@@ -17,7 +17,14 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.common
 
+import okhttp3.HttpUrl.Companion.toHttpUrl
+
 /**
  * URL to OSM API
  */
 const val OSM_API_URL = "https://openstreetmap.org/api/0.6/"
+
+/**
+ * URL to FSC API
+ */
+val RC_API_URL = "https://farmingdale.campuslabs.com/engage/api/".toHttpUrl()

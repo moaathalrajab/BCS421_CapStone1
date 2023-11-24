@@ -17,8 +17,20 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.remote
 
-@Deprecated("API mismatch")
-data class RamCentralCategory(
-	val categoryId: Int?,
-	val categoryName: String?
+import kotlinx.serialization.Serializable
+
+/**
+ * Note, This class does not contain all fields that are provided by the API.
+ */
+@Serializable
+data class RamCentralDiscoveryEventOrganization(
+	val id: Long,
+	val name: String,
+	val shortName: String,
+	val websiteKey: String,
+	val email: String,
+	val description: String,
+	val summary: String,
+	val comment: String?,
+	val profilePicture: String
 )

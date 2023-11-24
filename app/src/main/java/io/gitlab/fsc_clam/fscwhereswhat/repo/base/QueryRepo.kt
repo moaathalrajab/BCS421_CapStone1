@@ -27,4 +27,9 @@ interface QueryRepo {
 	fun setQuery(query: String?)
 
 	fun setActiveFilter(filter: EntityType?)
+
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

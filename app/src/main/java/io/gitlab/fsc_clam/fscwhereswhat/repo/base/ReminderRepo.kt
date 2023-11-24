@@ -60,4 +60,9 @@ interface ReminderRepo {
 	 * @param reminder The reminder to be created.
 	 */
 	suspend fun createReminder(reminder: Reminder)
+
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

@@ -29,4 +29,8 @@ interface OSMRepository {
 
 	suspend fun update(entites: List<OSMEntity>)
 
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

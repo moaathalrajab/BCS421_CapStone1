@@ -52,4 +52,9 @@ interface RamCentralRepo {
 	 * @param event The event to be deleted.
 	 */
 	suspend fun deleteEvent(event: Event)
+
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

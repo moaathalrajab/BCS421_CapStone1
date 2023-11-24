@@ -27,4 +27,9 @@ interface NoteRepo {
 	suspend fun updateNote(note: Note)
 	suspend fun deleteNote(note: Note)
 	suspend fun createNote(note: Note)
+
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

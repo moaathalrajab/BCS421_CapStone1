@@ -53,4 +53,9 @@ interface OpenStreetMapAPI {
 		right: Float,
 		top: Float,
 	): OSMResponse
+
+	/**
+	 * Binding point for Implementation getter
+	 */
+	companion object
 }

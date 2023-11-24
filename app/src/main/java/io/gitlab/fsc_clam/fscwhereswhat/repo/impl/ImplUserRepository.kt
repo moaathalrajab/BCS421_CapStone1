@@ -20,9 +20,12 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 import com.google.firebase.auth.FirebaseAuth
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.UserRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.runBlocking
 
 /**
  * Implementation of the User Repository
@@ -34,15 +37,17 @@ class ImplUserRepository : UserRepository {
 		val listener = FirebaseAuth.AuthStateListener { auth ->
 			// This is invoked on the UI thread, so keep it snappy
 
-			trySend(
-				auth.currentUser?.let {
-					User(
-						it.uid,
-						it.displayName ?: "Unknwon",
-						it.photoUrl,
-					)
-				}
-			)
+			runBlocking {
+				send(
+					auth.currentUser?.let {
+						User(
+							it.uid,
+							it.displayName ?: "Unknwon",
+							it.photoUrl,
+						)
+					}
+				)
+			}
 		}
 
 		// Add listener
@@ -52,7 +57,7 @@ class ImplUserRepository : UserRepository {
 			// Remove Listener when no longer needed
 			firebaseAuth.removeAuthStateListener(listener)
 		}
-	}
+	}.flowOn(Dispatchers.Main)
 
 	companion object {
 		private var repo: ImplUserRepository? = null

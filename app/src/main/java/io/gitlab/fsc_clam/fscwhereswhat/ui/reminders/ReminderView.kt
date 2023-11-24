@@ -39,6 +39,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.RemindersViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplRemindersViewModel
 import java.net.URL
 
 /**
@@ -47,7 +48,7 @@ import java.net.URL
  */
 @Composable
 fun ReminderView() {
-	val viewModel: RemindersViewModel = viewModel()
+	val viewModel: RemindersViewModel = viewModel<ImplRemindersViewModel>()
 	val reminders by viewModel.reminders.collectAsState()
 	FSCWheresWhatTheme {
 		RemindersContent(
@@ -155,5 +156,10 @@ fun PreviewReminder() {
 		),
 		{}, { _, _ -> }
 	)
+}
+@Preview
+@Composable
+fun PreviewRemindersView(){
+	ReminderView()
 }
 

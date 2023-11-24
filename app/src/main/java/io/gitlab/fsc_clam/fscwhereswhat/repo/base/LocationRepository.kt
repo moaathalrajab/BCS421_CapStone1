@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
  * By default provides middle of campus
  */
 
-interface LocationRepo {
+interface LocationRepository {
 	val longitude: StateFlow<Float>
 	val latitude: StateFlow<Float>
 

@@ -75,9 +75,9 @@ dependencies {
 	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
 	val room_version = "2.6.0"
-	implementation("android.room:room-runtime:$room_version")
+	implementation("androidx.room:room-runtime:$room_version")
 	implementation("androidx.room:room-ktx:$room_version")
-	annotationProcessor("android.room:room-compiler:$room_version")
+	annotationProcessor("androidx.room:room-compiler:$room_version")
 
 	val lifecycle_version = "2.6.2"
 	// ViewModel

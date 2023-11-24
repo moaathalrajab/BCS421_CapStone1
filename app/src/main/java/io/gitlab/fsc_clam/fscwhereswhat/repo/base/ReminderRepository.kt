@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Interface defining operations for interacting with reminders in a repository.
  */
-interface ReminderRepo {
+interface ReminderRepository {
 
 	/**
 	 * Retrieves a reminder by the event ID.

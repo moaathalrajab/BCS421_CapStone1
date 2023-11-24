@@ -49,7 +49,7 @@ abstract class AppDatabase : RoomDatabase() {
 		@Volatile
 		private var instance: AppDatabase? = null
 
-		fun buildDatabase(context: Context): AppDatabase? {
+		fun get(context: Context): AppDatabase {
 			synchronized(AppDatabase::class) {
 				if (instance == null) {
 					instance = Room.databaseBuilder(context.applicationContext,
@@ -57,7 +57,7 @@ abstract class AppDatabase : RoomDatabase() {
 						"whereswhat.db").build()
 				}
 			}
-			return instance
+			return instance!!
 		}
 	}
 }

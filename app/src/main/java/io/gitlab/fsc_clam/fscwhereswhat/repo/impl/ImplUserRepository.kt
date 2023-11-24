@@ -32,6 +32,8 @@ class ImplUserRepository : UserRepository {
 
 	override val user: Flow<User?> = callbackFlow {
 		val listener = FirebaseAuth.AuthStateListener { auth ->
+			// This is invoked on the UI thread, so keep it snappy
+
 			trySend(
 				auth.currentUser?.let {
 					User(
@@ -43,8 +45,11 @@ class ImplUserRepository : UserRepository {
 			)
 		}
 
+		// Add listener
 		firebaseAuth.addAuthStateListener(listener)
+
 		awaitClose {
+			// Remove Listener when no longer needed
 			firebaseAuth.removeAuthStateListener(listener)
 		}
 	}

@@ -17,19 +17,60 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
+import android.annotation.SuppressLint
+import android.app.Application
+import android.location.Location
+import android.location.LocationManager
+import androidx.core.content.getSystemService
+import androidx.core.location.LocationListenerCompat
+import androidx.core.location.LocationManagerCompat
+import androidx.core.location.LocationRequestCompat
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 
-class ImplLocationRepository : LocationRepository {
-	override val longitude = MutableStateFlow(-73.42942148736103)
-	override val latitude = MutableStateFlow(40.75145183660949)
-	override fun setLongitude(longitude: Double) {
-		this.longitude.value = longitude
+class ImplLocationRepository(application: Application) : LocationRepository {
+	private val manager: LocationManager = application.getSystemService()!!
+
+	@SuppressLint("MissingPermission")
+	val locations: Flow<Location> = callbackFlow {
+		// Get last known location to at least have the UI work quickly
+		val lastLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+		if (lastLocation != null)
+			send(lastLocation)
+
+		// Provide new locations
+		val locationListener = LocationListenerCompat { newLocation ->
+			trySend(newLocation)
+		}
+
+		// Start listening to location updates
+		LocationManagerCompat.requestLocationUpdates(
+			manager,
+			LocationManager.GPS_PROVIDER,
+			LocationRequestCompat.Builder(10000)
+				.setQuality(LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY)
+				.build(),
+			Dispatchers.Default.asExecutor(),
+			locationListener
+		)
+
+		// No one is subscribed anymore, close flow and remove listener
+		awaitClose {
+			LocationManagerCompat.removeUpdates(manager, locationListener)
+		}
 	}
 
-	override fun setLatitude(latitude: Double) {
-		this.latitude.value = latitude
-	}
+	override val longitude = locations.map { it.longitude }
+
+	override val latitude = locations.map { it.latitude }
+
+	override val bearing = locations.map { it.bearing }
 
 	companion object {
 		private var repo: ImplLocationRepository? = null
@@ -38,11 +79,14 @@ class ImplLocationRepository : LocationRepository {
 		 * Get implementation of ImplLocationRepository
 		 */
 		@Synchronized
-		fun LocationRepository.Companion.get(): LocationRepository {
+		fun LocationRepository.Companion.get(application: Application): LocationRepository {
 			if (repo == null)
-				repo = ImplLocationRepository()
+				repo = ImplLocationRepository(application)
 
 			return repo!!
 		}
+
+		const val defaultLong = -73.42942148736103
+		const val defaultLat = 40.75145183660949
 	}
 }

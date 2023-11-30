@@ -126,10 +126,4 @@ dependencies {
 	//OSM
 	implementation("org.osmdroid:osmdroid-android:6.1.17")
 	implementation("tech.utsmankece:osm-androd-compose:+")
-
-	//OSM
-	implementation("org.osmdroid:osmdroid-android:6.1.17")
-	implementation("tech.utsmankece:osm-androd-compose:+")
-	implementation("com.google.android.gms:play-services-location:21.0.1")
-
 }

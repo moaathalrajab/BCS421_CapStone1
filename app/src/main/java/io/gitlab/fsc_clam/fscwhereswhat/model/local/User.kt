@@ -17,14 +17,14 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import java.net.URL
+import android.net.Uri
+
 
 /**
  * Represents a user
  */
 data class User(
-	val id: Int,
+	val id: String,
 	val name: String,
-	val image: URL,
-	val accessToken: String
+	val image: Uri?,
 )

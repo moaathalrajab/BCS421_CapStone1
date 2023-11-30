@@ -17,13 +17,13 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
+import android.net.Uri
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.LoginViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.net.URL
 
-class FakeLoginViewModel(): LoginViewModel(){
-	override val user: StateFlow<User?> = MutableStateFlow(User(1, "", URL("https://www.google.com/"),""))
+class FakeLoginViewModel() : LoginViewModel() {
+	override val user: StateFlow<User?> = MutableStateFlow(User("1", "", Uri.EMPTY))
 
 }

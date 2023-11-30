@@ -18,10 +18,10 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
-interface UserRepo {
-	val user: StateFlow<User?>
+interface UserRepository {
+	val user: Flow<User?>
 
 	/**
 	 * Binding point for Implementation getter

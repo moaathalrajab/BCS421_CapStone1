@@ -42,7 +42,7 @@ class ImplUserRepository : UserRepository {
 					auth.currentUser?.let {
 						User(
 							it.uid,
-							it.displayName ?: "Unknwon",
+							it.displayName ?: "Unknown",
 							it.photoUrl,
 						)
 					}

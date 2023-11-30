@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.Flow
  * The dao for user notes held in the room database
  * @property insert inserts a single note into the table
  * @property delete deletes a single note from the table
+ * @property update updates a specific note from the table
  * @property getAll returns a list of all notes as DBNotes
  * @property getById returns a specific note using its reference as a parameter
  * @property getAllFlow returns all notes as flows, allowing the notes view to react to changes
@@ -32,17 +33,20 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insert(vararg note: DBNote)
+	suspend fun insert(note: DBNote)
+
+	@Update
+	suspend fun update(note: DBNote)
 
 	@Delete
-	suspend fun delete(vararg note: DBNote)
+	suspend fun delete(note: DBNote)
 
 	@Query("SELECT * FROM note")
 	suspend fun getAll(): List<DBNote>
 
 	/** Get note by reference **/
 	@Query("SELECT * FROM note WHERE reference = :note")
-	suspend fun getById(note: Int) : DBNote
+	fun getById(note: Int) : Flow<DBNote?>
 
 	/** Returns all notes with Flow **/
 	@Query("SELECT * FROM note")

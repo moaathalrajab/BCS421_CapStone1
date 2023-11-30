@@ -19,13 +19,13 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.NoteRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.NoteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
-class FakeNotesRepo: NoteRepo {
+class FakeNotesRepo: NoteRepository {
 
 	private val notes = MutableStateFlow(listOf(Note("comment", 0, EntityType.EVENT)))
 	override fun getNote(parentId: Int): Flow<Note?> =

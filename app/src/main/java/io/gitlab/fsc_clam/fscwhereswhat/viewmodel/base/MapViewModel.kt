@@ -86,6 +86,7 @@ abstract class MapViewModel(application: Application) : AndroidViewModel(applica
 	/**
 	 * When user clicks pinpoint, zoom in to the point
 	 */
-	abstract fun setFocus(pinpoint: Pinpoint?)
+	abstract fun setFocus(pinpoint: Pinpoint)
+
 
 }

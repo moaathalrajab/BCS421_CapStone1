@@ -26,7 +26,7 @@ import android.graphics.Color
 data class Pinpoint(
 	val latitude: Float,
 	val longitude: Float,
-	val color: Color,
+	val color: Int,
 	val id: Int,
 	val type: EntityType,
 	val isFocused: Boolean

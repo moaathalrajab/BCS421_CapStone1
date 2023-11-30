@@ -20,12 +20,41 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
 import kotlinx.coroutines.flow.Flow
 
-interface NoteRepo {
+interface NoteRepository {
+	/**
+	 * Get an note by it's parent ID
+	 *
+	 * @param parentId is the id of the event/utility that the note is attached to
+	 * @return a [Flow] returning the note with the given parentId, or null if none found
+	 */
 	fun getNote(parentId: Int): Flow<Note?>
 
+	/**
+	 * Get all notes stored in the repository
+	 *
+	 * @return a [Flow] of all notes
+	 */
 	fun getAllNotes(): Flow<List<Note>>
+
+	/**
+	 * Updates an existing note in the repository
+	 *
+	 * @note the note to be updated
+	 */
 	suspend fun updateNote(note: Note)
+
+	/**
+	 * Deletes a note in the repository
+	 *
+	 * @note the note to be deleted
+	 */
 	suspend fun deleteNote(note: Note)
+
+	/**
+	 * Creates a note and stores it in the repository
+	 *
+	 * @note the note to be created
+	 */
 	suspend fun createNote(note: Note)
 
 	/**

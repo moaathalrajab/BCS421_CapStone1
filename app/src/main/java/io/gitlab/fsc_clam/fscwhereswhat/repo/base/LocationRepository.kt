@@ -17,19 +17,27 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 /**
  * By default provides middle of campus
  */
 
-interface LocationRepo {
-	val longitude: StateFlow<Float>
-	val latitude: StateFlow<Float>
+interface LocationRepository {
+	/**
+	 * Longitude of current user location
+	 */
+	val longitude: Flow<Double>
 
-	fun setLongitude(longitude: Float)
+	/**
+	 * Latitude of current user location
+	 */
+	val latitude: Flow<Double>
 
-	fun setLatitude(latitude: Float)
+	/**
+	 * The direction the user is pointing
+	 */
+	val bearing: Flow<Float>
 
 	/**
 	 * Binding point for Implementation getter

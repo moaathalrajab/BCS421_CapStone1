@@ -58,6 +58,26 @@ abstract class MapViewModel : ViewModel() {
 	abstract val latitude: StateFlow<Float>
 
 	/**
+	 * If user clicks a pinpoint, that pinpoint is zoomed in to focus
+	 */
+	abstract val focus: StateFlow<Pinpoint?>
+
+	/**
+	 * Building color of pinpoints
+	 */
+	abstract val buildingColor: StateFlow<Int>
+
+	/**
+	 * Event color of pinpoints
+	 */
+	abstract val eventColor: StateFlow<Int>
+
+	/**
+	 * Node color of pinpoints
+	 */
+	abstract val nodeColor: StateFlow<Int>
+
+	/**
 	 * Sets active filter when user clicks filter button
 	 */
 	abstract fun setActiveFilter(filter: EntityType?)
@@ -66,6 +86,5 @@ abstract class MapViewModel : ViewModel() {
 	 * When user clicks pinpoint, zoom in to the point
 	 */
 	abstract fun setFocus(pinpoint: Pinpoint)
-
 
 }

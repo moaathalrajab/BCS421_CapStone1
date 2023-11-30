@@ -22,7 +22,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepo
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeReminderRepo
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.RemindersViewModel
@@ -41,7 +41,7 @@ import java.net.URL
  * @param ramCentralRepo The repository for handling central data (e.g., events).
  */
 class ImplRemindersViewModel(
-	private val repo: ReminderRepo = FakeReminderRepo(),
+	private val repo: ReminderRepository = FakeReminderRepo(),
 	private val ramCentralRepo: RamCentralRepo = FakeRamCentralRepo()
 ) : RemindersViewModel() {
 

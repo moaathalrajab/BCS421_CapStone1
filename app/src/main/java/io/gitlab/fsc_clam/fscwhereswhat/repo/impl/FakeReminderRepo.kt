@@ -19,7 +19,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,9 +27,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 /**
- * A fake implementation of [ReminderRepo] for testing purposes.
+ * A fake implementation of [ReminderRepository] for testing purposes.
  */
-class FakeReminderRepo : ReminderRepo {
+class FakeReminderRepo : ReminderRepository {
 
 	// Internal state for storing reminders
 	private val reminderState = MutableStateFlow(listOf<Reminder>(Reminder(0, ReminderTime.START)))

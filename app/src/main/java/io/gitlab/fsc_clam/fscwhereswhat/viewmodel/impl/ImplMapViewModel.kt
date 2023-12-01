@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
+import android.graphics.Color
 import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
@@ -47,7 +48,7 @@ class ImplMapViewModel() : MapViewModel() {
 
 	override val activeFilter: MutableStateFlow<EntityType?> = MutableStateFlow(null)
 
-	override val pinpoints: StateFlow<List<Pinpoint>> = TODO()
+	override val pinpoints: StateFlow<List<Pinpoint>> = MutableStateFlow(emptyList())
 
 	override val longitude: StateFlow<Float> by lazy {
 		locationRepo.longitude
@@ -57,21 +58,26 @@ class ImplMapViewModel() : MapViewModel() {
 		locationRepo.latitude
 	}
 
-	//do we need this?
-	val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)
+	override val buildingColor: StateFlow<Int> by lazy {
+		prefRepo.getColor(EntityType.BUILDING).stateIn(viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK)
+	}
+	override val eventColor: StateFlow<Int> by lazy {
+		prefRepo.getColor(EntityType.EVENT).stateIn(viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK)
+	}
 
+	override val nodeColor: StateFlow<Int> by lazy {
+		prefRepo.getColor(EntityType.NODE).stateIn(viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK)
+	}
+
+	override val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)
 	override fun setActiveFilter(filter: EntityType?) {
 		activeFilter.value = filter
 	}
 
-	override fun setFocus(pinpoint: Pinpoint) {
+	override fun setFocus(pinpoint: Pinpoint?) {
 		focus.value = pinpoint
-	}
-
-	//should I add this to MapViewModel?
-	fun getColor(type: EntityType): Int {
-		return prefRepo.getColor(type).stateIn(
-			viewModelScope, SharingStarted.Eagerly, 0
-		).value
 	}
 }

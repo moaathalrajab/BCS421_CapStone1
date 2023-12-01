@@ -121,6 +121,7 @@ fun PreviewMapView() {
  * @param setActiveFilter is the function from the viewmodel that sets current active filter when user presses filter button
  * @param setFocus is when the user clicks on the pinpoint
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapContent(
 	modifier: Modifier,
@@ -133,12 +134,15 @@ fun MapContent(
 	setActiveFilter: (EntityType?) -> Unit,
 	setFocus: (Pinpoint) -> Unit
 ) {
-	//default values for now
+	//@Deprecated("For testing purposes only)
+	//Remove this later, @Deprecated seems to only work for functions
+	var isEntityDetailVisible by remember { mutableStateOf(false) }
+	val sheetState = rememberModalBottomSheetState()
+
 	val latitude = remember{ -73.4295}
 	val longitude = remember{ 40.7515}
 
 	val context = LocalContext.current
-	var activeFilter by remember { mutableStateOf(activeFilter) }
 	val cameraState = rememberCameraState {
 		geoPoint = GeoPoint(longitude, latitude)
 		zoom = 18.0// optional, default is 5.0
@@ -150,6 +154,7 @@ fun MapContent(
 	val overlayManagerState = rememberOverlayManagerState()
 
 	val tileSize = remember{ 256}
+	//public map style
 	val style = remember{"clpi9vo3b00n701o91pugfmeh"}
 
 	//https://api.mapbox.com/styles/v1/arachas/clpi9vo3b00n701o91pugfmeh/static/-73.4295,40.7515,17.55,0/300x200?access_token=pk.eyJ1IjoiYXJhY2hhcyIsImEiOiJjbHBoanZsN20wMnprMmtwYzVjOXFsZzZ1In0.6XnE7YufNR9NoBluIGKH7g
@@ -174,7 +179,7 @@ fun MapContent(
 			.copy(isTilesScaledToDpi = true)
 			.copy(tileSources = tileSource)
 			.copy(isEnableRotationGesture = true)
-			.copy(zoomButtonVisibility = ZoomButtonVisibility.ALWAYS)
+			.copy(zoomButtonVisibility = ZoomButtonVisibility.NEVER)
 	}
 
 	Box(
@@ -189,22 +194,28 @@ fun MapContent(
 			overlayManagerState = overlayManagerState,
 		) {
 			//for each pinpoint create a marker
-			pinPoints.forEach {
-				val point = rememberMarkerState(
-					geoPoint = GeoPoint(it.latitude.toDouble(), it.longitude.toDouble())
-				)
-				//the icon is chosen based on EntityType
-				val icon = when (it.type) {
-					EntityType.BUILDING -> context.getDrawable(R.drawable.map_building)
-					EntityType.EVENT -> context.getDrawable(R.drawable.map_event)
-					EntityType.NODE -> context.getDrawable(R.drawable.map_node)
-				}
+			pinPoints.forEach { pinpoint ->
+				if (pinpoint.type == activeFilter || activeFilter == null) {
+					val point = rememberMarkerState(
+						geoPoint = GeoPoint(
+							pinpoint.latitude.toDouble(),
+							pinpoint.longitude.toDouble()
+						)
+					)
+					//the icon is chosen based on EntityType
+					val icon = when (pinpoint.type) {
+						EntityType.BUILDING -> context.getDrawable(R.drawable.map_building)
+						EntityType.EVENT -> context.getDrawable(R.drawable.map_event)
+						EntityType.NODE -> context.getDrawable(R.drawable.map_node)
+					}
 
-				//marker composable
-				Marker(
-					state = point,
-					icon = icon,
-				)
+					Marker(
+						state = point,
+						icon = icon,
+					) {
+						setFocus(pinpoint)
+					}
+				}
 			}
 		}
 		//Creates the Map UI after map creation
@@ -213,12 +224,30 @@ fun MapContent(
 				.fillMaxSize()
 		) {
 			MapUI(
+				user = user,
 				activeFilter = activeFilter,
 				buildingColor = buildingColor,
 				eventColor = eventColor,
 				nodeColor = nodeColor,
 				setActiveFilter = setActiveFilter
 			)
+		}
+	}
+	//when pinpoint is clicked show entity detail
+	if (isEntityDetailVisible) {
+		ModalBottomSheet(
+			onDismissRequest = {
+				setFocus(null)
+			},
+			sheetState = sheetState
+		) {
+			Box(
+				modifier = Modifier
+					.padding(8.dp)
+					.fillMaxHeight(.7f)
+			) {
+				EntityDetail()
+			}
 		}
 	}
 }

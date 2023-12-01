@@ -126,11 +126,14 @@ fun PreviewMapView() {
 fun MapContent(
 	modifier: Modifier,
 	user: User?,
+	userLatitude: Float,
+	userLongitude: Float,
 	pinPoints: List<Pinpoint>,
 	activeFilter: EntityType?,
 	buildingColor: Int,
 	eventColor: Int,
 	nodeColor: Int,
+	focus: Pinpoint?,
 	setActiveFilter: (EntityType?) -> Unit,
 	setFocus: (Pinpoint) -> Unit
 ) {
@@ -259,6 +262,8 @@ fun PreviewMapContent() {
 	MapContent(
 		modifier = Modifier,
 		user,
+		userLatitude = 40.75175f,
+		userLongitude = -73.42902f,
 		listOf(
 			Pinpoint(
 				40.75175f,
@@ -269,18 +274,27 @@ fun PreviewMapContent() {
 				false
 			),
 			Pinpoint(
-				40.758f,
-				-73.42902f,
+				40.751485f,
+				-73.428329f,
 				0,
 				0,
 				EntityType.BUILDING,
 				false
 			),
+			Pinpoint(
+				40.751632f,
+				-73.428936f,
+				0,
+				0,
+				EntityType.EVENT,
+				false
+			)
 		),
 		null,
 		Color.Red.toArgb(),
 		Color.Red.toArgb(),
 		Color.Red.toArgb(),
+		null,
 		{},
 		{}
 	)

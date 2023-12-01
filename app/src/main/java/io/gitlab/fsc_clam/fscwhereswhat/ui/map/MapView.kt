@@ -104,6 +104,10 @@ fun MapView() {
 
 }
 
+@Preview
+@Composable
+fun PreviewMapView() {
+	MapView()
 }
 
 /**

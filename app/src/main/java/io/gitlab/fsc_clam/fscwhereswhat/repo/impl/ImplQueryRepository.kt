@@ -15,21 +15,38 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.repo.base
+package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
-import kotlinx.coroutines.flow.StateFlow
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.QueryRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 
-interface QueryRepo {
-	val query: StateFlow<String?>
-	val activeFilter: StateFlow<EntityType?>
+class ImplQueryRepository : QueryRepository {
+	override val repoQuery = MutableStateFlow(null as String?)
+	override val activeFilter = MutableStateFlow(null as EntityType?)
 
-	fun setQuery(query: String?)
+	override fun setQuery(query: String?) {
+		repoQuery.value = query
+	}
 
-	fun setActiveFilter(filter: EntityType?)
+	override fun setActiveFilter(filter: EntityType?) {
+		activeFilter.value = filter
+	}
 
-	/**
-	 * Binding point for Implementation getter
-	 */
-	companion object
+	companion object {
+		private var repo: ImplQueryRepository? = null
+
+		/**
+		 * Get the implementation of [QueryRepository]
+		 */
+		@Synchronized
+		fun QueryRepository.Companion.get(
+		): QueryRepository {
+			if (repo == null) {
+				repo = ImplQueryRepository()
+			}
+
+			return repo!!
+		}
+	}
 }

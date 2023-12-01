@@ -24,6 +24,9 @@ import kotlinx.serialization.Serializable
  * Instead of using a "Map<String,String>" for tags, we can use this data structure instead.
  *
  * Contains all the relevant information to the application.
+ *
+ * @param emergency For SOS phones on campus
+ * 	https://wiki.openstreetmap.org/wiki/Key:emergency
  */
 @Serializable
 data class OSMTags(
@@ -43,5 +46,6 @@ data class OSMTags(
 	val building: String? = null,
 	val name: String? = null,
 	@SerialName("social_facility")
-	val socialFacility: String? = null
+	val socialFacility: String? = null,
+	val emergency: String? = null
 )

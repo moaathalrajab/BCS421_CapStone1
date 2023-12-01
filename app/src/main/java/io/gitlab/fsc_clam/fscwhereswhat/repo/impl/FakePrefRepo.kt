@@ -17,16 +17,31 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
-class FakePrefRepo: PreferencesRepo {
+class FakePrefRepo : PreferencesRepo {
+
+	private val colors: MutableMap<EntityType, Int> = mutableMapOf(
+		EntityType.BUILDING to Color.Black.toArgb(),
+		EntityType.EVENT to Color.Black.toArgb(),
+		EntityType.NODE to Color.Black.toArgb()
+	)
+
 	override fun getColor(type: EntityType): Flow<Int> {
-		TODO("Not yet implemented")
+		// Create an immutable flow that emits the current color for the specified entity type
+		val colorFlow = flow {
+			emit(colors[type] ?: Color.Black.toArgb())
+		}
+		return colorFlow
 	}
 
+
 	override suspend fun setColor(type: EntityType, color: Int) {
-		TODO("Not yet implemented")
+		colors[type] = color
 	}
 }

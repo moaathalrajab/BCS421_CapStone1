@@ -27,6 +27,8 @@ import kotlinx.serialization.Serializable
  *
  * @param emergency For SOS phones on campus
  * 	https://wiki.openstreetmap.org/wiki/Key:emergency
+ * @param shop For shops on campus
+ *  https://wiki.openstreetmap.org/wiki/Key:shop
  */
 @Serializable
 data class OSMTags(
@@ -47,5 +49,6 @@ data class OSMTags(
 	val name: String? = null,
 	@SerialName("social_facility")
 	val socialFacility: String? = null,
-	val emergency: String? = null
+	val emergency: String? = null,
+	val shop: String? = null
 )

@@ -17,24 +17,59 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.withContext
 
 class FakeOSMRepo: OSMRepository {
+
+	private val entities: MutableStateFlow<List<OSMEntity>> = MutableStateFlow(
+		listOf<OSMEntity>(
+			OSMEntity.Node(
+				id =0,
+				lat = 43.0f,
+				long = -73.0f,
+				name = "Example",
+				description = "Description",
+				hours = OpeningHours(true, true, true, true, true, true, true, 0, 0 ,0, 0),
+				nodeType = NodeType.SOS
+			)
+		)
+	)
 	override suspend fun query(token: Token): List<OSMEntity> {
-		TODO("Not yet implemented")
+		return entities.value
 	}
 
 	override suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity> {
-		TODO("Not yet implemented")
+		val randomList = listOf(
+			OSMEntity.Node(
+				id = 0,
+				lat = latitude,
+				long = longitude,
+				name = "Example",
+				description = "Description",
+				hours = OpeningHours(true, true, true, true, true, true, true, 0, 0 ,0, 0),
+				nodeType = NodeType.SOS
+			)
+		)
+		return randomList
 	}
 
 	override suspend fun get(id: Long): OSMEntity {
-		TODO("Not yet implemented")
+		return entities.value.find { it.id == id }?: throw NoSuchElementException("Entity with cannot be found with $id")
 	}
 
+
 	override suspend fun update(entites: List<OSMEntity>) {
-		TODO("Not yet implemented")
+		withContext(Dispatchers.IO){
+			val entityList = ArrayList(entities.value)
+			entityList.addAll(entityList.size - 1, entites)
+			entities.value = entityList
+		}
 	}
 }

@@ -18,10 +18,13 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -34,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.utsman.osmandcompose.DefaultMapProperties
 import com.utsman.osmandcompose.Marker
@@ -63,28 +67,42 @@ fun MapView() {
 	val user by mapViewModel.user.collectAsState()
 	val pinpoints by mapViewModel.pinpoints.collectAsState()
 	val activeFilter by mapViewModel.activeFilter.collectAsState()
+	val buildingColor by mapViewModel.buildingColor.collectAsState()
+	val eventColor by mapViewModel.eventColor.collectAsState()
+	val nodeColor by mapViewModel.nodeColor.collectAsState()
+	val focus by mapViewModel.focus.collectAsState()
 	Scaffold(
 		bottomBar = {
-			BottomAppBar(
-				actions = {
-					TODO("Put banner ad")
-				}
-			)
+		//banner ad here
 		}
-	){
+	) {
+		//pinpoints is fake data currently
 		MapContent(
 			modifier = Modifier.padding(it),
 			user = user,
-			pinPoints = pinpoints,
+			userLatitude = 40.75175f,
+			userLongitude = -73.42902f,
+			pinPoints = listOf(
+				Pinpoint(
+					40.75175f,
+					-73.42902f,
+					0,
+					0,
+					EntityType.NODE,
+					false
+				)
+			),
 			activeFilter = activeFilter,
-			buildingColor = Color.Red.toArgb(),
-			eventColor = Color.Red.toArgb(),
-			nodeColor = Color.Red.toArgb(),
+			buildingColor = buildingColor,
+			eventColor = eventColor,
+			nodeColor = nodeColor,
+			focus = focus,
 			setActiveFilter = mapViewModel::setActiveFilter,
 			setFocus = mapViewModel::setFocus
 		)
-		TODO("Pinpoint colors are placeholders, when pref repo is implemented, must change MapContent params")
 	}
+
+}
 
 }
 

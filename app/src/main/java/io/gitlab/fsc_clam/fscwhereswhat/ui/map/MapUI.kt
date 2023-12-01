@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -37,9 +39,15 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,9 +56,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 
 /**
  * Creates the UI for Map Content
@@ -60,194 +71,262 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
  * @param nodeColor is the color of node pinpoints from preferences repo
  * @param setActiveFilter will change the active filter to selected filter type from viewmodel
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapUI(
+	user: User?,
 	activeFilter: EntityType?,
 	buildingColor: Int,
 	eventColor: Int,
 	nodeColor: Int,
 	setActiveFilter: (EntityType?) -> Unit,
 ) {
-	Box(
-		modifier = Modifier.fillMaxSize()
-	) {
-		IconButton(
-			modifier = Modifier
-				.padding(12.dp)
-				.align(Alignment.TopStart),
-			onClick = { /*TODO*/ }
+	FSCWheresWhatTheme {
+		//holds the current user input
+		var userQuery by remember { mutableStateOf("") }
+		//state of showing search bar
+		var isSearchVisible by remember { mutableStateOf(false) }
+		Box(
+			modifier = Modifier.fillMaxSize()
 		) {
-			Icon(
-				Icons.Filled.AccountCircle,
-				contentDescription = stringResource(id = R.string.account_icon),
-				modifier = Modifier.size(50.dp)
-			)
-		}
-		//Holds the search bar and filter buttons
-		Column(
-			modifier = Modifier
-				.fillMaxWidth()
-				.align(Alignment.BottomStart),
-			verticalArrangement = Arrangement.Bottom,
-			horizontalAlignment = Alignment.Start
-		) {
-
-			//Creates the filter buttons
-			Row(
+			//Icon of the Account
+			//WIP should include functionality to login
+			IconButton(
 				modifier = Modifier
-					.padding(horizontal = 12.dp)
-					.fillMaxWidth(),
-				horizontalArrangement = Arrangement.spacedBy(8.dp,),
-				verticalAlignment = Alignment.CenterVertically
+					.padding(12.dp)
+					.align(Alignment.TopStart),
+				onClick = { /*TODO*/ }
 			) {
-				when (activeFilter) {
-					//if activeFilter is building, the only selected filterButton is building
-					EntityType.BUILDING -> {
-						FilterButtons(
-							filter = EntityType.BUILDING,
-							img = Image.Drawable(R.drawable.building_icon),
-							pinPointColor = buildingColor,
-							true,
-							onSelected = {
-								setActiveFilter(it)
-							}
-						)
-						FilterButtons(
-							filter = EntityType.EVENT,
-							img = Image.Drawable(R.drawable.flag_icon),
-							pinPointColor = eventColor,
-							false,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.NODE,
-							img = Image.Drawable(R.drawable.node_icon),
-							pinPointColor = nodeColor,
-							false,
-							onSelected = { setActiveFilter(it) }
-						)
+				if (user != null) {
+					AsyncImage(
+						model = user.image,
+						contentDescription = stringResource(id = R.string.account_icon)
+					)
+				} else {
+					Icon(
+						Icons.Filled.AccountCircle,
+						contentDescription = stringResource(id = R.string.account_icon),
+						modifier = Modifier.size(50.dp)
+					)
+				}
+			}
+			//Holds the search bar and filter buttons
+			Column(
+				modifier = Modifier
+					.fillMaxWidth()
+					.align(Alignment.BottomStart),
+				verticalArrangement = Arrangement.Bottom,
+				horizontalAlignment = Alignment.Start
+			) {
+
+				//Creates the filter buttons
+				Row(
+					modifier = Modifier
+						.padding(horizontal = 12.dp)
+						.fillMaxWidth(),
+					horizontalArrangement = Arrangement.spacedBy(8.dp),
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					when (activeFilter) {
+						//if activeFilter is building, the only selected filterButton is building
+						EntityType.BUILDING -> {
+							FilterButtons(
+								filter = EntityType.BUILDING,
+								img = Image.Drawable(R.drawable.building_icon),
+								pinPointColor = buildingColor,
+								isSelected = true,
+								onSelected = {
+									setActiveFilter(it)
+								}
+							)
+							FilterButtons(
+								filter = EntityType.EVENT,
+								img = Image.Drawable(R.drawable.flag_icon),
+								pinPointColor = eventColor,
+								false,
+								onSelected = { setActiveFilter(it) }
+							)
+							FilterButtons(
+								filter = EntityType.NODE,
+								img = Image.Drawable(R.drawable.node_icon),
+								pinPointColor = nodeColor,
+								false,
+								onSelected = { setActiveFilter(it) }
+							)
+						}
+						//if activeFilter is event, the only selected filterButton is event
+						EntityType.EVENT -> {
+							FilterButtons(
+								filter = EntityType.BUILDING,
+								img = Image.Drawable(R.drawable.building_icon),
+								pinPointColor = buildingColor,
+								isSelected = false,
+								onSelected = {
+									setActiveFilter(it)
+								}
+							)
+							FilterButtons(
+								filter = EntityType.EVENT,
+								img = Image.Drawable(R.drawable.flag_icon),
+								pinPointColor = eventColor,
+								isSelected = true,
+								onSelected = { setActiveFilter(it) }
+							)
+							FilterButtons(
+								filter = EntityType.NODE,
+								img = Image.Drawable(R.drawable.node_icon),
+								pinPointColor = nodeColor,
+								isSelected = false,
+								onSelected = { setActiveFilter(it) }
+							)
+						}
+						//if activeFilter is node, the only selected filterButton is node
+						EntityType.NODE -> {
+							FilterButtons(
+								filter = EntityType.BUILDING,
+								img = Image.Drawable(R.drawable.building_icon),
+								pinPointColor = buildingColor,
+								isSelected = false,
+								onSelected = {
+									setActiveFilter(it)
+								}
+							)
+							FilterButtons(
+								filter = EntityType.EVENT,
+								img = Image.Drawable(R.drawable.flag_icon),
+								pinPointColor = eventColor,
+								isSelected = false,
+								onSelected = { setActiveFilter(it) }
+							)
+							FilterButtons(
+								filter = EntityType.NODE,
+								img = Image.Drawable(R.drawable.node_icon),
+								pinPointColor = nodeColor,
+								isSelected = true,
+								onSelected = { setActiveFilter(it) }
+							)
+						}
+						//if activeFilter is null, the  selected filterButton is all the filterButtons
+						else -> {
+							FilterButtons(
+								filter = EntityType.BUILDING,
+								img = Image.Drawable(R.drawable.building_icon),
+								pinPointColor = buildingColor,
+								isSelected = true,
+								onSelected = { setActiveFilter(it) }
+							)
+							FilterButtons(
+								filter = EntityType.EVENT,
+								img = Image.Drawable(R.drawable.flag_icon),
+								pinPointColor = eventColor,
+								isSelected = true,
+								onSelected = { setActiveFilter(it) }
+							)
+							FilterButtons(
+								filter = EntityType.NODE,
+								img = Image.Drawable(R.drawable.node_icon),
+								pinPointColor = nodeColor,
+								isSelected = true,
+								onSelected = { setActiveFilter(it) }
+							)
+						}
 					}
-					//if activeFilter is event, the only selected filterButton is event
-					EntityType.EVENT -> {
-						FilterButtons(
-							filter = EntityType.BUILDING,
-							img = Image.Drawable(R.drawable.building_icon),
-							pinPointColor = buildingColor,
-							false,
-							onSelected = {
-								setActiveFilter(it)
+				}
+				//bottom bar holds search and more button
+				Row(
+					modifier = Modifier
+						.padding(8.dp)
+						.fillMaxWidth(),
+					horizontalArrangement = Arrangement.SpaceAround,
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					//search bar on click expands to show search view
+					Card(
+						shape = CircleShape,
+						modifier = Modifier
+							.fillMaxWidth(.8f)
+							.requiredHeight(35.dp)
+							.clickable {
+								isSearchVisible = true
+							},
+						elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+					) {
+						Row(
+							modifier = Modifier
+								.fillMaxSize(),
+							verticalAlignment = Alignment.CenterVertically,
+						) {
+							Icon(
+								Icons.Default.Search,
+								stringResource(id = R.string.search_bar_label),
+								modifier = Modifier.padding(horizontal = 8.dp)
+							)
+							Text(text = let {
+								if (userQuery.isNotEmpty())
+									userQuery
+								else
+									stringResource(id = R.string.search_bar_label)
 							}
-						)
-						FilterButtons(
-							filter = EntityType.EVENT,
-							img = Image.Drawable(R.drawable.flag_icon),
-							pinPointColor = eventColor,
-							true,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.NODE,
-							img = Image.Drawable(R.drawable.node_icon),
-							pinPointColor = nodeColor,
-							false,
-							onSelected = { setActiveFilter(it) }
-						)
+							)
+						}
 					}
-					//if activeFilter is node, the only selected filterButton is node
-					EntityType.NODE -> {
-						FilterButtons(
-							filter = EntityType.BUILDING,
-							img = Image.Drawable(R.drawable.building_icon),
-							pinPointColor = buildingColor,
-							false,
-							onSelected = {
-								setActiveFilter(it)
-							}
-						)
-						FilterButtons(
-							filter = EntityType.EVENT,
-							img = Image.Drawable(R.drawable.flag_icon),
-							pinPointColor = eventColor,
-							false,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.NODE,
-							img = Image.Drawable(R.drawable.node_icon),
-							pinPointColor = nodeColor,
-							true,
-							onSelected = { setActiveFilter(it) }
-						)
-					}
-					//if activeFilter is null, the  selected filterButton is all the filterButtons
-					else -> {
-						FilterButtons(
-							filter = EntityType.BUILDING,
-							img = Image.Drawable(R.drawable.building_icon),
-							pinPointColor = buildingColor,
-							true,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.EVENT,
-							img = Image.Drawable(R.drawable.flag_icon),
-							pinPointColor = eventColor,
-							true,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.NODE,
-							img = Image.Drawable(R.drawable.node_icon),
-							pinPointColor = nodeColor,
-							true,
-							onSelected = { setActiveFilter(it) }
-						)
+					//The more button
+					Card {
+						IconButton(
+							onClick = { /*TODO*/ },
+							modifier = Modifier
+								.size(35.dp)
+						) {
+							Icon(
+								painter = painterResource(id = R.drawable.baseline_more_horiz_24),
+								contentDescription = stringResource(id = R.string.more_button_desc),
+							)
+						}
 					}
 				}
 			}
-			//bottom bar holds search and more button
-			Row(
-				modifier = Modifier
-					.padding(8.dp)
-					.fillMaxWidth(),
-				horizontalArrangement = Arrangement.SpaceAround,
-				verticalAlignment = Alignment.CenterVertically
-			) {
-				Card(
-					shape = CircleShape,
-					modifier = Modifier
-						.fillMaxWidth(.8f)
-						.clickable {
-
-						},
-					elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-				) {
-					Row(
-						verticalAlignment = Alignment.CenterVertically
-					) {
-						IconButton(onClick = {}) {
-							Icon(Icons.Default.Search, "Search")
-						}
-						Text(text = stringResource(id = R.string.search_bar_label))
-					}
-				}
+		}
+		//placeholder for search view
+		if (isSearchVisible) {
+			ModalBottomSheet(onDismissRequest = { isSearchVisible = false }) {
 				Card {
-					IconButton(
-						onClick = { /*TODO*/ },
+					Column(
 						modifier = Modifier
-							.size(35.dp)
+							.padding(12.dp)
+							.fillMaxSize(),
+						verticalArrangement = Arrangement.spacedBy(8.dp),
+						horizontalAlignment = Alignment.CenterHorizontally
 					) {
+						//The Search Bar
+						Card(
+							shape = CircleShape,
+							modifier = Modifier
+								.fillMaxWidth(.8f)
+								.border(2.dp, Color.Black, CircleShape),
+							elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+						) {
+							Row(
+								verticalAlignment = Alignment.CenterVertically
+							) {
+								Icon(
+									Icons.Default.Search,
+									stringResource(id = R.string.search_bar_label),
+									modifier = Modifier.padding(horizontal = 8.dp)
+								)
+								TextField(
+									value = userQuery,
+									onValueChange = { userQuery = it },
+									label = { Text(text = stringResource(id = R.string.search_bar_label)) }
+								)
 
-						Icon(
-							painter = painterResource(id = R.drawable.baseline_more_horiz_24),
-							contentDescription = stringResource(id = R.string.more_button_desc),
-
-							)
+							}
+						}
 					}
 				}
 			}
 		}
 	}
+
 }
 
 @Preview
@@ -255,6 +334,7 @@ fun MapUI(
 fun PreviewMapUI() {
 	Surface {
 		MapUI(
+			null,
 			null,
 			Color.Red.toArgb(),
 			Color.Red.toArgb(),
@@ -288,12 +368,7 @@ fun FilterButtons(
 			Text(
 				text = filter.toString(),
 				style = MaterialTheme.typography.bodyMedium,
-				color = Color.let {
-					if(isSelected)
-						Color.Black
-					else
-						Color.White
-				}
+				color = Color.Black
 			)
 		},
 		leadingIcon = {

@@ -135,7 +135,7 @@ fun MapContent(
 	nodeColor: Int,
 	focus: Pinpoint?,
 	setActiveFilter: (EntityType?) -> Unit,
-	setFocus: (Pinpoint) -> Unit
+	setFocus: (Pinpoint?) -> Unit
 ) {
 	//@Deprecated("For testing purposes only)
 	//Remove this later, @Deprecated seems to only work for functions

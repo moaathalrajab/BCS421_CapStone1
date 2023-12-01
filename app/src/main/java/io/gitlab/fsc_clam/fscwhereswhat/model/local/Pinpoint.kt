@@ -17,7 +17,6 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import android.graphics.Color
 
 /**
  * This is a data class for the UI as a pin on the map

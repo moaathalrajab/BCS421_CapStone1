@@ -18,19 +18,17 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepo
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeLocationRepo: LocationRepo {
-	override val longitude: StateFlow<Float>
-		get() = TODO("Not yet implemented")
-	override val latitude: StateFlow<Float>
-		get() = TODO("Not yet implemented")
+class FakeLocationRepo : LocationRepo {
+	override val longitude: MutableStateFlow<Float> = MutableStateFlow(-73f)
 
+	override val latitude: MutableStateFlow<Float> = MutableStateFlow(43f)
 	override fun setLongitude(longitude: Float) {
-		TODO("Not yet implemented")
+		this.longitude.value = longitude
 	}
 
 	override fun setLatitude(latitude: Float) {
-		TODO("Not yet implemented")
+		this.latitude.value = latitude
 	}
 }

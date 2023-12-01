@@ -19,9 +19,9 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.UserRepo
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeUserRepo: UserRepo {
-	override val user: StateFlow<User?>
-		get() = TODO("Not yet implemented")
+	override val user: StateFlow<User?> = MutableStateFlow(null)
 }

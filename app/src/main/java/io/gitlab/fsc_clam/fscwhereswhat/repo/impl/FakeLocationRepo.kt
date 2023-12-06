@@ -17,18 +17,31 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepo
+import android.util.Log
+import androidx.compose.runtime.remember
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
-class FakeLocationRepo : LocationRepo {
-	override val longitude: MutableStateFlow<Float> = MutableStateFlow(-73f)
+class FakeLocationRepo : LocationRepository {
 
-	override val latitude: MutableStateFlow<Float> = MutableStateFlow(43f)
-	override fun setLongitude(longitude: Float) {
-		this.longitude.value = longitude
-	}
+	override val longitude: MutableStateFlow<Double> = MutableStateFlow(40.7515)
 
-	override fun setLatitude(latitude: Float) {
-		this.latitude.value = latitude
-	}
+	override val latitude: MutableStateFlow<Double> = MutableStateFlow(-73.4295)
+
+	override val bearing: Flow<Float> = MutableStateFlow(0f)
+
+//	init {
+//		GlobalScope.launch {
+//			delay(5000)
+//			while (true) {
+//				Log.d("fakelocrepo", "${latitude.value}")
+//				latitude.value += .0001
+//				delay(2000)
+//			}
+//		}
+//	}
 }

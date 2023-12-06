@@ -84,16 +84,7 @@ fun MapView() {
 			user = user,
 			latitude = latitude,
 			longitude = longitude,
-			pinPoints = listOf(
-				Pinpoint(
-					40.75175f,
-					-73.42902f,
-					0,
-					0,
-					EntityType.NODE,
-					false
-				)
-			),
+			pinPoints = pinpoints,
 			activeFilter = activeFilter,
 			buildingColor = buildingColor,
 			eventColor = eventColor,

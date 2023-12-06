@@ -48,7 +48,18 @@ class ImplMapViewModel() : MapViewModel() {
 
 	override val activeFilter: MutableStateFlow<EntityType?> = MutableStateFlow(null)
 
-	override val pinpoints: StateFlow<List<Pinpoint>> = MutableStateFlow(emptyList())
+	override val pinpoints: StateFlow<List<Pinpoint>> = MutableStateFlow(
+		listOf(
+			Pinpoint(
+				40.75175f,
+				-73.42902f,
+				0,
+				0,
+				EntityType.NODE,
+				false
+			)
+		)
+	)
 
 	override val longitude: StateFlow<Double> by lazy {
 		locationRepo.longitude

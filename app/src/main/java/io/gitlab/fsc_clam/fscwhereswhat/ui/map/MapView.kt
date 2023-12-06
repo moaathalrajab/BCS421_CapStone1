@@ -172,7 +172,7 @@ fun MapContent(
 	//public map style
 	val style = remember { "clpi9vo3b00n701o91pugfmeh" }
 
-	//https://api.mapbox.com/styles/v1/arachas/clpi9vo3b00n701o91pugfmeh/static/-73.4295,40.7515,17.55,0/300x200?access_token=pk.eyJ1IjoiYXJhY2hhcyIsImEiOiJjbHBoanZsN20wMnprMmtwYzVjOXFsZzZ1In0.6XnE7YufNR9NoBluIGKH7g
+	//https://api.mapbox.com/styles/v1/arachas/clpi9vo3b00n701o91pugfmeh/static/-73.4295,40.7515,17.55,0/300x200?access_token=
 	//The code is the same, but the tiles are screwed up -- idk
 	val tileSource = remember {
 		object : OnlineTileSourceBase(

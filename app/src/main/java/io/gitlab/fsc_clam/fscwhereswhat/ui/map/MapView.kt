@@ -49,16 +49,14 @@ import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
 import com.utsman.osmandcompose.rememberOverlayManagerState
-import io.gitlab.fsc_clam.fscwhereswhat.BuildConfig
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import io.gitlab.fsc_clam.fscwhereswhat.providers.MapBoxTileSource
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMapViewModel
-import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.util.MapTileIndex
 
 /**
  * MapView contains the viewmodels and the MapContent
@@ -164,40 +162,17 @@ fun MapContent(
 	}
 
 	// define properties with remember with default value
-	var mapProperties by remember { mutableStateOf(DefaultMapProperties) }
+	val mapProperties = remember {
+		DefaultMapProperties
+			.copy(
+				isTilesScaledToDpi = true,
+				tileSources = MapBoxTileSource,
+				isEnableRotationGesture = true,
+				zoomButtonVisibility = ZoomButtonVisibility.NEVER,
+			)
+	}
 
 	val overlayManagerState = rememberOverlayManagerState()
-
-	val tileSize = remember { 256 }
-	//public map style
-	val style = remember { "clpi9vo3b00n701o91pugfmeh" }
-
-	//https://api.mapbox.com/styles/v1/arachas/clpi9vo3b00n701o91pugfmeh/static/-73.4295,40.7515,17.55,0/300x200?access_token=
-	//The code is the same, but the tiles are screwed up -- idk
-	val tileSource = remember {
-		object : OnlineTileSourceBase(
-			"MapBox", 13, 20, tileSize, ".png",
-			arrayOf("https://api.mapbox.com/styles/v1/arachas/$style/static/$latitude,$longitude,")
-		) {
-			override fun getTileURLString(tileIndex: Long): String {
-				return baseUrl +
-						"/${MapTileIndex.getZoom(tileIndex)}" +
-						",0" +
-						"/300x200" +
-						"?access_token=${BuildConfig.mapboxAPI}"
-			}
-		}
-	}
-
-	// setup mapProperties in side effect
-	SideEffect {
-		mapProperties = mapProperties
-			.copy(isTilesScaledToDpi = true)
-			.copy(tileSources = tileSource)
-			.copy(isEnableRotationGesture = true)
-			.copy(zoomButtonVisibility = ZoomButtonVisibility.NEVER)
-	}
-
 	Box(
 		modifier = Modifier
 			.fillMaxSize()

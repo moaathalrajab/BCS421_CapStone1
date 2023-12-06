@@ -24,7 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.gitlab.fsc_clam.fscwhereswhat.ui.notes.NotesView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding.OnboardingView
-import io.gitlab.fsc_clam.fscwhereswhat.ui.reminders.ReminderView
+import io.gitlab.fsc_clam.fscwhereswhat.ui.reminders.RemindersView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 
 @Preview
@@ -50,7 +50,7 @@ fun MainContent() {
 			NotesView()
 		}
 		composable("reminders") {
-			ReminderView()
+			RemindersView()
 		}
 		composable("map") {
 		}

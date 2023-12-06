@@ -47,7 +47,7 @@ import java.net.URL
  * There are options to edit and delete each reminder
  */
 @Composable
-fun ReminderView() {
+fun RemindersView() {
 	val viewModel: RemindersViewModel = viewModel<ImplRemindersViewModel>()
 	val reminders by viewModel.reminders.collectAsState()
 	FSCWheresWhatTheme {
@@ -160,6 +160,6 @@ fun PreviewReminder() {
 @Preview
 @Composable
 fun PreviewRemindersView(){
-	ReminderView()
+	RemindersView()
 }
 

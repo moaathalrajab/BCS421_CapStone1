@@ -126,4 +126,5 @@ dependencies {
 	//OSM
 	implementation("org.osmdroid:osmdroid-android:6.1.17")
 	implementation("tech.utsmankece:osm-androd-compose:+")
+
 }

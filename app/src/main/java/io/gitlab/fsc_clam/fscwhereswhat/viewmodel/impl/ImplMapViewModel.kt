@@ -50,11 +50,11 @@ class ImplMapViewModel() : MapViewModel() {
 
 	override val pinpoints: StateFlow<List<Pinpoint>> = MutableStateFlow(emptyList())
 
-	override val longitude: StateFlow<Float> by lazy {
+	override val longitude: StateFlow<Double> by lazy {
 		locationRepo.longitude
 	}
 
-	override val latitude: StateFlow<Float> by lazy {
+	override val latitude: StateFlow<Double> by lazy {
 		locationRepo.latitude
 	}
 

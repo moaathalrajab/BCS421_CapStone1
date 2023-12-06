@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -109,6 +110,19 @@ fun MapUI(
 						modifier = Modifier.size(50.dp)
 					)
 				}
+			}
+
+			IconButton(
+				modifier = Modifier
+					.padding(12.dp)
+					.align(Alignment.TopEnd),
+				onClick = { /*TODO*/ }
+			) {
+				Icon(
+					Icons.Filled.LocationOn,
+					contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
+					modifier = Modifier.size(50.dp)
+					)
 			}
 			//Holds the search bar and filter buttons
 			Column(

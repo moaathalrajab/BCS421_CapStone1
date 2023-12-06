@@ -50,12 +50,12 @@ abstract class MapViewModel : ViewModel() {
 	/**
 	 * The current longitude of user
 	 */
-	abstract val longitude: StateFlow<Float>
+	abstract val longitude: StateFlow<Double>
 
 	/**
 	 * The current latitude of user
 	 */
-	abstract val latitude: StateFlow<Float>
+	abstract val latitude: StateFlow<Double>
 
 	/**
 	 * If user clicks a pinpoint, that pinpoint is zoomed in to focus

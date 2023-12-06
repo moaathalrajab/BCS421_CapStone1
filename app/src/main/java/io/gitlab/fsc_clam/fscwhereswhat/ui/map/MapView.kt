@@ -20,6 +20,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,7 +30,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -80,7 +80,7 @@ fun MapView() {
 	) {
 		//pinpoints is fake data currently
 		MapContent(
-			modifier = Modifier.padding(it),
+			it,
 			user = user,
 			latitude = latitude,
 			longitude = longitude,
@@ -117,7 +117,7 @@ fun PreviewMapView() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapContent(
-	modifier: Modifier,
+	padding: PaddingValues,
 	user: User?,
 	latitude: Double,
 	longitude: Double,
@@ -166,6 +166,7 @@ fun MapContent(
 	val overlayManagerState = rememberOverlayManagerState()
 	Box(
 		modifier = Modifier
+			.padding(padding)
 			.fillMaxSize()
 	) {
 		//creates map from OSM
@@ -279,7 +280,6 @@ fun PreviewMapContent() {
 		Color.Red.toArgb(),
 		Color.Red.toArgb(),
 		null,
-		{},
 		{}
-	)
+	) {}
 }

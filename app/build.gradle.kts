@@ -87,7 +87,7 @@ dependencies {
 	implementation("io.coil-kt:coil-compose:2.5.0")
 
 	implementation("com.squareup.okhttp3:okhttp:4.12.0")
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
 	// Firebase
 	implementation(platform("com.google.firebase:firebase-bom:32.6.0"))

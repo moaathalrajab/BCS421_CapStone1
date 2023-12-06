@@ -184,8 +184,13 @@ fun MapContent(
 			properties = mapProperties,
 			overlayManagerState = overlayManagerState,
 		) {
-			//for each pinpoint create a marker
-			pinPoints.forEach { pinpoint ->
+			pinPoints.filter {
+				// Don't display other pin points if we have a focus
+				if (focus != null)
+					it == focus
+				else true
+			}.forEach { pinpoint ->
+				//for each pinpoint create a marker
 				if (pinpoint.type == activeFilter || activeFilter == null) {
 					val point = rememberMarkerState(
 						geoPoint = GeoPoint(

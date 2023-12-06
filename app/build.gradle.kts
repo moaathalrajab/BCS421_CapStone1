@@ -61,7 +61,7 @@ dependencies {
 	implementation("androidx.compose.ui:ui-graphics")
 	implementation("androidx.compose.ui:ui-tooling-preview")
 	implementation("androidx.compose.material3:material3")
-	implementation("androidx.room:room-common:2.6.0")
+	implementation("androidx.room:room-common:2.6.1")
 	implementation("com.google.firebase:firebase-database:20.3.0")
 	implementation("com.github.skydoves:colorpicker-compose:1.0.5")
 

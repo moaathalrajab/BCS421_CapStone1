@@ -72,7 +72,7 @@ dependencies {
 	androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 	debugImplementation("androidx.compose.ui:ui-tooling")
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
-	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
 	val room_version = "2.6.0"
 	implementation("androidx.room:room-runtime:$room_version")

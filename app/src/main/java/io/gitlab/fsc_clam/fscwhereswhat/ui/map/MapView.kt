@@ -140,6 +140,11 @@ fun MapContent(
 		geoPoint = GeoPoint(longitude, latitude)
 		zoom = 18.0// optional, default is 5.0
 	}
+
+	fun onRecenter() {
+		cameraState.geoPoint = GeoPoint(longitude, latitude)
+	}
+
 	val userMarker = rememberMarkerState(
 		geoPoint = GeoPoint(
 			latitude,
@@ -223,7 +228,8 @@ fun MapContent(
 				buildingColor = buildingColor,
 				eventColor = eventColor,
 				nodeColor = nodeColor,
-				setActiveFilter = setActiveFilter
+				setActiveFilter = setActiveFilter,
+				onRecenter = ::onRecenter
 			)
 		}
 	}

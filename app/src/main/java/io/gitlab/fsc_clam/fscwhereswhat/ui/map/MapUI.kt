@@ -81,6 +81,7 @@ fun MapUI(
 	eventColor: Int,
 	nodeColor: Int,
 	setActiveFilter: (EntityType?) -> Unit,
+	onRecenter: () -> Unit
 ) {
 	FSCWheresWhatTheme {
 		//holds the current user input
@@ -116,13 +117,13 @@ fun MapUI(
 				modifier = Modifier
 					.padding(12.dp)
 					.align(Alignment.TopEnd),
-				onClick = { /*TODO*/ }
+				onClick = onRecenter
 			) {
 				Icon(
 					Icons.Filled.LocationOn,
 					contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
 					modifier = Modifier.size(50.dp)
-					)
+				)
 			}
 			//Holds the search bar and filter buttons
 			Column(
@@ -353,6 +354,7 @@ fun PreviewMapUI() {
 			Color.Red.toArgb(),
 			Color.Red.toArgb(),
 			Color.Red.toArgb(),
+			{},
 			{}
 		)
 	}

@@ -23,9 +23,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -57,16 +59,17 @@ fun NotesView() {
 
 @Preview()
 @Composable
-fun PreviewNotesView(){
+fun PreviewNotesView() {
 	NotesView()
 }
 
 /**
  * Creates the UI for the Notes View
- * @param notes	is the list of NoteItems
+ * @param notes    is the list of NoteItems
  * @param onUpdate the function in the NotesViewModel that updates the note
  * @param onDelete the function in the NotesViewModel that deletes the note
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesContent(
 	notes: List<NoteItem>,
@@ -75,9 +78,13 @@ fun NotesContent(
 ) {
 	//For the top app bar
 	Scaffold(topBar = {
-		Text(
-			text = stringResource(id = R.string.notesHeading),
-			style = MaterialTheme.typography.headlineLarge
+		TopAppBar(
+			title = {
+				Text(
+					text = stringResource(id = R.string.notesHeading),
+					style = MaterialTheme.typography.headlineLarge
+				)
+			}
 		)
 	}) {
 		//Lists all current notes

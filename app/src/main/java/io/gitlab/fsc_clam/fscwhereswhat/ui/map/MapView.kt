@@ -17,6 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +28,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -56,7 +59,6 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMapViewModel
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.util.MapTileIndex
-import java.net.URL
 
 /**
  * MapView contains the viewmodels and the MapContent
@@ -66,6 +68,8 @@ fun MapView() {
 	val mapViewModel: MapViewModel = viewModel<ImplMapViewModel>()
 	val user by mapViewModel.user.collectAsState()
 	val pinpoints by mapViewModel.pinpoints.collectAsState()
+	val latitude by mapViewModel.latitude.collectAsState()
+	val longitude by mapViewModel.longitude.collectAsState()
 	val activeFilter by mapViewModel.activeFilter.collectAsState()
 	val buildingColor by mapViewModel.buildingColor.collectAsState()
 	val eventColor by mapViewModel.eventColor.collectAsState()
@@ -73,15 +77,15 @@ fun MapView() {
 	val focus by mapViewModel.focus.collectAsState()
 	Scaffold(
 		bottomBar = {
-		//banner ad here
+			//banner ad here
 		}
 	) {
 		//pinpoints is fake data currently
 		MapContent(
 			modifier = Modifier.padding(it),
 			user = user,
-			userLatitude = 40.75175f,
-			userLongitude = -73.42902f,
+			latitude = latitude,
+			longitude = longitude,
 			pinPoints = listOf(
 				Pinpoint(
 					40.75175f,
@@ -126,8 +130,8 @@ fun PreviewMapView() {
 fun MapContent(
 	modifier: Modifier,
 	user: User?,
-	userLatitude: Float,
-	userLongitude: Float,
+	latitude: Double,
+	longitude: Double,
 	pinPoints: List<Pinpoint>,
 	activeFilter: EntityType?,
 	buildingColor: Int,
@@ -142,13 +146,21 @@ fun MapContent(
 	var isEntityDetailVisible by remember { mutableStateOf(false) }
 	val sheetState = rememberModalBottomSheetState()
 
-	val latitude = remember{ -73.4295}
-	val longitude = remember{ 40.7515}
-
 	val context = LocalContext.current
 	val cameraState = rememberCameraState {
 		geoPoint = GeoPoint(longitude, latitude)
 		zoom = 18.0// optional, default is 5.0
+	}
+	val userMarker = rememberMarkerState(
+		geoPoint = GeoPoint(
+			latitude,
+			longitude
+		)
+	)
+
+	LaunchedEffect(longitude, latitude) {
+		Log.d("compose", "Update camera")
+		userMarker.geoPoint = GeoPoint(longitude, latitude)
 	}
 
 	// define properties with remember with default value
@@ -156,11 +168,12 @@ fun MapContent(
 
 	val overlayManagerState = rememberOverlayManagerState()
 
-	val tileSize = remember{ 256}
+	val tileSize = remember { 256 }
 	//public map style
-	val style = remember{"clpi9vo3b00n701o91pugfmeh"}
+	val style = remember { "clpi9vo3b00n701o91pugfmeh" }
 
 	//https://api.mapbox.com/styles/v1/arachas/clpi9vo3b00n701o91pugfmeh/static/-73.4295,40.7515,17.55,0/300x200?access_token=pk.eyJ1IjoiYXJhY2hhcyIsImEiOiJjbHBoanZsN20wMnprMmtwYzVjOXFsZzZ1In0.6XnE7YufNR9NoBluIGKH7g
+	//The code is the same, but the tiles are screwed up -- idk
 	val tileSource = remember {
 		object : OnlineTileSourceBase(
 			"MapBox", 13, 20, tileSize, ".png",
@@ -258,12 +271,12 @@ fun MapContent(
 @Preview
 @Composable
 fun PreviewMapContent() {
-	val user = User(0, "", URL("https://google.com"), "")
+	val user = User(":", "", Uri.parse("https://google.com"))
 	MapContent(
 		modifier = Modifier,
 		user,
-		userLatitude = 40.75175f,
-		userLongitude = -73.42902f,
+		latitude = 40.75175,
+		longitude = -73.42902,
 		listOf(
 			Pinpoint(
 				40.75175f,

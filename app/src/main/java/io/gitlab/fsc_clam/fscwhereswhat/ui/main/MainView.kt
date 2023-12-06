@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import io.gitlab.fsc_clam.fscwhereswhat.ui.map.MapView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.notes.NotesView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding.OnboardingView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.reminders.RemindersView
@@ -61,6 +62,7 @@ fun MainContent() {
 			)
 		}
 		composable("map") {
+			MapView()
 		}
 	}
 }

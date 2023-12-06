@@ -75,7 +75,7 @@ fun MapView() {
 	val focus by mapViewModel.focus.collectAsState()
 	Scaffold(
 		bottomBar = {
-			//banner ad here
+			// TODO banner ad here
 		}
 	) {
 		//pinpoints is fake data currently

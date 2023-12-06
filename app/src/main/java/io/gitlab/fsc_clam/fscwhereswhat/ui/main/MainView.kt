@@ -56,7 +56,9 @@ fun MainContent() {
 			)
 		}
 		composable("reminders") {
-			RemindersView()
+			RemindersView(
+				onBack = navController::popBackStack
+			)
 		}
 		composable("map") {
 		}

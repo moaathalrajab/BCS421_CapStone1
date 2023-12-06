@@ -22,7 +22,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -47,14 +51,17 @@ import java.net.URL
  * There are options to edit and delete each reminder
  */
 @Composable
-fun ReminderView() {
+fun RemindersView(
+	onBack: () -> Unit
+) {
 	val viewModel: RemindersViewModel = viewModel<ImplRemindersViewModel>()
 	val reminders by viewModel.reminders.collectAsState()
 	FSCWheresWhatTheme {
 		RemindersContent(
 			reminders,
 			viewModel::deleteReminder,
-			viewModel::updateReminderTime
+			viewModel::updateReminderTime,
+			onBack
 		)
 	}
 }
@@ -71,13 +78,19 @@ fun ReminderView() {
 fun RemindersContent(
 	reminders: List<ReminderItem>,
 	onDelete: (ReminderItem) -> Unit,
-	onUpdate: (Int, ReminderTime) -> Unit
+	onUpdate: (Int, ReminderTime) -> Unit,
+	onBack: () -> Unit
 ) {
 	Scaffold(
 		topBar = {
 			TopAppBar(
 				//backgroundColor = MaterialTheme.colors.primary,
-				title = { Text(stringResource(R.string.title_reminders)) }
+				title = { Text(stringResource(R.string.title_reminders)) },
+				navigationIcon = {
+					IconButton(onBack) {
+						Icon(Icons.Default.ArrowBack, stringResource(R.string.nav_back))
+					}
+				}
 			)
 		},
 	) {
@@ -154,12 +167,17 @@ fun PreviewReminder() {
 				date = "Event date"
 			)
 		),
-		{}, { _, _ -> }
+		{},
+		{ _, _ -> },
+		{}
 	)
 }
+
 @Preview
 @Composable
-fun PreviewRemindersView(){
-	ReminderView()
+fun PreviewRemindersView() {
+	RemindersView(
+		onBack = {}
+	)
 }
 

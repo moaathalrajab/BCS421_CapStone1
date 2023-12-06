@@ -23,9 +23,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,39 +51,55 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplNotesViewModel
  * The overall View of Notes, including ViewModel and NotesContent
  */
 @Composable
-fun NotesView() {
+fun NotesView(
+	onBack: () -> Unit
+) {
 	val notesViewModel: NotesViewModel = viewModel<ImplNotesViewModel>()
 	val notes by notesViewModel.notes.collectAsState()
 	NotesContent(
 		notes = notes,
 		onUpdate = notesViewModel::updateNote,
-		onDelete = notesViewModel::deleteNote
+		onDelete = notesViewModel::deleteNote,
+		onBack = onBack
 	)
 }
 
 @Preview()
 @Composable
-fun PreviewNotesView(){
-	NotesView()
+fun PreviewNotesView() {
+	NotesView(
+		onBack = {}
+	)
 }
 
 /**
  * Creates the UI for the Notes View
- * @param notes	is the list of NoteItems
+ * @param notes    is the list of NoteItems
  * @param onUpdate the function in the NotesViewModel that updates the note
  * @param onDelete the function in the NotesViewModel that deletes the note
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesContent(
 	notes: List<NoteItem>,
 	onUpdate: (NoteItem) -> Unit,
-	onDelete: (NoteItem) -> Unit
+	onDelete: (NoteItem) -> Unit,
+	onBack: () -> Unit
 ) {
 	//For the top app bar
 	Scaffold(topBar = {
-		Text(
-			text = stringResource(id = R.string.notesHeading),
-			style = MaterialTheme.typography.headlineLarge
+		TopAppBar(
+			title = {
+				Text(
+					text = stringResource(id = R.string.notesHeading),
+					style = MaterialTheme.typography.headlineLarge
+				)
+			},
+			navigationIcon = {
+				IconButton(onBack) {
+					Icon(Icons.Default.ArrowBack, stringResource(R.string.nav_back))
+				}
+			}
 		)
 	}) {
 		//Lists all current notes
@@ -107,5 +129,5 @@ fun PreviewNotesContent() {
 		NoteItem("This is a comment", 0, EntityType.BUILDING, img, "Building Name"),
 		NoteItem("This is a comment", 0, EntityType.NODE, img, "Node Name")
 	)
-	NotesContent(notes, {}, {})
+	NotesContent(notes, {}, {}, {})
 }

@@ -44,7 +44,11 @@ fun MainContent() {
 		startDestination = "onboarding",
 	) {
 		composable("onboarding") {
-			OnboardingView()
+			OnboardingView(
+				onFinish = {
+					navController.navigate("map")
+				}
+			)
 		}
 		composable("notes") {
 			NotesView()

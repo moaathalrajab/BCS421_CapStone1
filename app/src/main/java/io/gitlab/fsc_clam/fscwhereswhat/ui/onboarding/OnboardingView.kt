@@ -58,7 +58,9 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingView() {
+fun OnboardingView(
+	onFinish: () -> Unit
+) {
 	val pagerState = rememberPagerState(
 		initialPage = 0,
 		initialPageOffsetFraction = 0f
@@ -83,7 +85,7 @@ fun OnboardingView() {
 							},
 						) {
 							//if on WelcomeScreen, hide arrow backwards
-							if(pagerState.currentPage != 0){
+							if (pagerState.currentPage != 0) {
 								Icon(
 									Icons.Filled.ArrowBack,
 									contentDescription = stringResource(id = R.string.arrow_backward)
@@ -116,11 +118,11 @@ fun OnboardingView() {
 							onClick = {
 								state.launch {
 									//if on last page should navigate to MapView
-									if(pagerState.currentPage == pagerState.pageCount -1){
+									if (pagerState.currentPage == pagerState.pageCount - 1) {
 										Log.d("X Clicked", "Exit Onboard")
 									}
 									//else move to next screen on OnboardingView
-									else{
+									else {
 										pagerState.scrollToPage(pagerState.currentPage + 1)
 									}
 								}
@@ -128,10 +130,12 @@ fun OnboardingView() {
 						)
 						{
 							//if moving to next last page, make icon into an X
-							if(pagerState.currentPage == pagerState.pageCount - 1){
-								Icon(Icons.Filled.Close, contentDescription = stringResource(id = R.string.close_button))
-							}
-							else{
+							if (pagerState.currentPage == pagerState.pageCount - 1) {
+								Icon(
+									Icons.Filled.Close,
+									contentDescription = stringResource(id = R.string.close_button)
+								)
+							} else {
 								//else keep arrow forward
 								Icon(
 									Icons.Filled.ArrowForward,
@@ -162,7 +166,7 @@ fun OnboardingView() {
 				1 -> ExplanationScreen()
 				2 -> LoginScreen()
 				3 -> OptionsScreen()
-				4 -> ThanksScreen()
+				4 -> ThanksScreen(onFinish)
 			}
 		}
 	}
@@ -172,5 +176,7 @@ fun OnboardingView() {
 @Preview
 @Composable
 fun PreviewOnboardingView() {
-	OnboardingView()
+	OnboardingView(
+		onFinish = {}
+	)
 }

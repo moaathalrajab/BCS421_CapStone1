@@ -54,7 +54,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
  * Screen to thank users
  */
 @Composable
-fun ThanksScreen() {
+fun ThanksScreen(
+	onFinish: () -> Unit
+) {
 	Box(Modifier.fillMaxSize()) {
 		//Creates white box for content
 		Box(
@@ -99,7 +101,7 @@ fun ThanksScreen() {
 				)
 				//Button to navigate to MapView
 				Button(
-					onClick = { /*TODO*/ },
+					onClick = onFinish,
 					colors = ButtonDefaults.buttonColors(primaryColor),
 				) {
 					Text(
@@ -124,6 +126,8 @@ fun PreviewThanksScreen() {
 				contentScale = ContentScale.FillBounds
 			)
 	) {
-		ThanksScreen()
+		ThanksScreen(
+			onFinish = {}
+		)
 	}
 }

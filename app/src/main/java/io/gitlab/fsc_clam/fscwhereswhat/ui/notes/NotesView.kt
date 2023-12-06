@@ -23,7 +23,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -47,20 +51,25 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplNotesViewModel
  * The overall View of Notes, including ViewModel and NotesContent
  */
 @Composable
-fun NotesView() {
+fun NotesView(
+	onBack: () -> Unit
+) {
 	val notesViewModel: NotesViewModel = viewModel<ImplNotesViewModel>()
 	val notes by notesViewModel.notes.collectAsState()
 	NotesContent(
 		notes = notes,
 		onUpdate = notesViewModel::updateNote,
-		onDelete = notesViewModel::deleteNote
+		onDelete = notesViewModel::deleteNote,
+		onBack = onBack
 	)
 }
 
 @Preview()
 @Composable
 fun PreviewNotesView() {
-	NotesView()
+	NotesView(
+		onBack = {}
+	)
 }
 
 /**
@@ -74,7 +83,8 @@ fun PreviewNotesView() {
 fun NotesContent(
 	notes: List<NoteItem>,
 	onUpdate: (NoteItem) -> Unit,
-	onDelete: (NoteItem) -> Unit
+	onDelete: (NoteItem) -> Unit,
+	onBack: () -> Unit
 ) {
 	//For the top app bar
 	Scaffold(topBar = {
@@ -84,6 +94,11 @@ fun NotesContent(
 					text = stringResource(id = R.string.notesHeading),
 					style = MaterialTheme.typography.headlineLarge
 				)
+			},
+			navigationIcon = {
+				IconButton(onBack) {
+					Icon(Icons.Default.ArrowBack, stringResource(R.string.nav_back))
+				}
 			}
 		)
 	}) {
@@ -114,5 +129,5 @@ fun PreviewNotesContent() {
 		NoteItem("This is a comment", 0, EntityType.BUILDING, img, "Building Name"),
 		NoteItem("This is a comment", 0, EntityType.NODE, img, "Node Name")
 	)
-	NotesContent(notes, {}, {})
+	NotesContent(notes, {}, {}, {})
 }

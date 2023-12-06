@@ -51,7 +51,9 @@ fun MainContent() {
 			)
 		}
 		composable("notes") {
-			NotesView()
+			NotesView(
+				onBack = navController::popBackStack
+			)
 		}
 		composable("reminders") {
 			RemindersView()

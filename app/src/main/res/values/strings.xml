@@ -69,4 +69,5 @@
     <string name="notesHeading">Notes</string>
     <string name="editComment">Edit Comment</string>
     <string name="options_cancel_button">CANCEL</string>
+    <string name="nav_back">Navigate back to the previous screen.</string>
 </resources>

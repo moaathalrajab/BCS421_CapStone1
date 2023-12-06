@@ -252,7 +252,7 @@ fun MapContent(
 fun PreviewMapContent() {
 	val user = User(":", "", Uri.parse("https://google.com"))
 	MapContent(
-		modifier = Modifier,
+		PaddingValues(8.dp),
 		user,
 		latitude = 40.75175,
 		longitude = -73.42902,

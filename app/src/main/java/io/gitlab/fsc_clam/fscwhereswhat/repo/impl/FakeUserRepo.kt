@@ -18,10 +18,10 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.UserRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class FakeUserRepo: UserRepo {
+class FakeUserRepo: UserRepository {
 	override val user: StateFlow<User?> = MutableStateFlow(null)
 }

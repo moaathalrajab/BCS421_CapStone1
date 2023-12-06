@@ -61,7 +61,6 @@ dependencies {
 	implementation("androidx.compose.ui:ui-graphics")
 	implementation("androidx.compose.ui:ui-tooling-preview")
 	implementation("androidx.compose.material3:material3")
-	implementation("androidx.room:room-common:2.6.1")
 	implementation("com.google.firebase:firebase-database:20.3.0")
 	implementation("com.github.skydoves:colorpicker-compose:1.0.5")
 
@@ -74,7 +73,8 @@ dependencies {
 	debugImplementation("androidx.compose.ui:ui-test-manifest")
 	coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
-	val room_version = "2.6.0"
+	val room_version = "2.6.1"
+	implementation("androidx.room:room-common:$room_version")
 	implementation("androidx.room:room-runtime:$room_version")
 	implementation("androidx.room:room-ktx:$room_version")
 	annotationProcessor("androidx.room:room-compiler:$room_version")

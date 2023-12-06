@@ -204,6 +204,13 @@ fun MapContent(
 						setFocus(pinpoint)
 					}
 				}
+
+				Marker(
+					state = userMarker,
+					icon = context.getDrawable(R.drawable.baseline_navigation_24),
+				) {
+					setFocus(pinpoint)
+				}
 			}
 		}
 		//Creates the Map UI after map creation

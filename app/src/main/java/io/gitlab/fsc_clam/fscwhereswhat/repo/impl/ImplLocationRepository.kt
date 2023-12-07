@@ -21,6 +21,8 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
 import androidx.core.location.LocationManagerCompat
@@ -38,8 +40,16 @@ class ImplLocationRepository(application: Application) : LocationRepository {
 
 	@SuppressLint("MissingPermission")
 	val locations: Flow<Location> = callbackFlow {
+		val manager: LocationManager = application.getSystemService()!!
+		val provider =
+			if (SDK_INT >= VERSION_CODES.S) {
+				LocationManager.FUSED_PROVIDER
+			} else {
+				LocationManager.GPS_PROVIDER
+			}
+
 		// Get last known location to at least have the UI work quickly
-		val lastLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+		val lastLocation = manager.getLastKnownLocation(provider)
 
 		if (lastLocation != null)
 			send(lastLocation)
@@ -52,9 +62,9 @@ class ImplLocationRepository(application: Application) : LocationRepository {
 		// Start listening to location updates
 		LocationManagerCompat.requestLocationUpdates(
 			manager,
-			LocationManager.GPS_PROVIDER,
-			LocationRequestCompat.Builder(10000)
-				.setQuality(LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY)
+			provider,
+			LocationRequestCompat.Builder(500)
+				.setQuality(LocationRequestCompat.QUALITY_HIGH_ACCURACY)
 				.build(),
 			Dispatchers.Default.asExecutor(),
 			locationListener

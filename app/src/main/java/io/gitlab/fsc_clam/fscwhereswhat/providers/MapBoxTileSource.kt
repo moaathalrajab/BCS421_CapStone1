@@ -17,10 +17,15 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.providers
 
+import android.util.Log
 import io.gitlab.fsc_clam.fscwhereswhat.BuildConfig
+import okhttp3.HttpUrl
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
 import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.MapTileIndex
+import kotlin.math.atan
+import kotlin.math.pow
+import kotlin.math.sinh
 
 private const val style = "clpi9vo3b00n701o91pugfmeh"
 
@@ -40,15 +45,44 @@ object MapBoxXYTileSource : XYTileSource(
 }
 
 object MapBoxTileSource : OnlineTileSourceBase(
-	"MapBox", 13, 20, 256, ".png",
-	arrayOf("https://api.mapbox.com/styles/v1/arachas/$style/static/$-73.4295,40.7515,")
+	"MapBox",
+	13,
+	20,
+	256,
+	".png",
+	null
 ) {
 	override fun getTileURLString(tileIndex: Long): String {
-		return baseUrl +
-				"/${MapTileIndex.getZoom(tileIndex)}" +
-				",0" +
-				"/300x200" +
-				"?access_token=${BuildConfig.mapboxAPI}"
-	}
+		val zoom = MapTileIndex.getZoom(tileIndex)
+		val x = MapTileIndex.getX(tileIndex)
+		val y = MapTileIndex.getY(tileIndex)
 
+		val n = 2.0.pow(zoom.toDouble())
+		val lon_deg = x / n * 360.0 - 180.0
+		val lat_rad = atan(sinh(Math.PI * (1 - 2 * y / n)))
+		val lat_deg = lat_rad * 180.0 / Math.PI
+
+
+		val bearing = 0
+
+//https://api.mapbox.com/styles/v1/arachas/clpi9vo3b00n701o91pugfmeh/static/-73.4295,40.7515,17.55,0/300x200?
+		val tileURL = HttpUrl.Builder()
+			.scheme("https")
+			.host("api.mapbox.com")
+			.addPathSegments("styles/v1/")
+			.addPathSegment("arachas") // map profile
+			.addPathSegment(style) // style to work with
+			.addPathSegment("static")
+			// These have to be together
+			.addPathSegment("$lon_deg,$lat_deg,$zoom,$bearing")
+			.addPathSegment("${tileSizePixels}x$tileSizePixels")
+			.addPathSegment("$y")
+			.build()
+		Log.d("MapBox", tileURL.toString())
+
+		return tileURL.newBuilder()
+			.addQueryParameter("access_token", BuildConfig.mapboxAPI)
+			.build()
+			.toString()
+	}
 }

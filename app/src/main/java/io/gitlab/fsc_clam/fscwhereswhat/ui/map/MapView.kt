@@ -234,13 +234,6 @@ fun MapContent(
 @OsmAndroidComposable
 fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 	val context = LocalContext.current
-	//for each pinpoint create a marker
-	val point = rememberMarkerState(
-		geoPoint = GeoPoint(
-			pinpoint.latitude.toDouble(),
-			pinpoint.longitude.toDouble()
-		)
-	)
 	//the icon is chosen based on EntityType
 	val icon = when (pinpoint.type) {
 		EntityType.BUILDING -> context.getDrawable(R.drawable.map_building)
@@ -249,7 +242,12 @@ fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 	}
 
 	Marker(
-		state = point,
+		state = rememberMarkerState(
+			geoPoint = GeoPoint(
+				pinpoint.latitude.toDouble(),
+				pinpoint.longitude.toDouble()
+			)
+		),
 		icon = icon,
 	) {
 		setFocus(pinpoint)

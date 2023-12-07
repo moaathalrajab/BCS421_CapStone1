@@ -56,8 +56,8 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	override val pinpoints: StateFlow<List<Pinpoint>> = MutableStateFlow(
 		listOf(
 			Pinpoint(
-				40.75175f,
-				-73.42902f,
+				40.75175,
+				-73.42902,
 				0,
 				0,
 				EntityType.NODE,

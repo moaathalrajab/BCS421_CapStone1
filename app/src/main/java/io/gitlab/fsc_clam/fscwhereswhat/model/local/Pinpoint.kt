@@ -23,8 +23,8 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
  */
 
 data class Pinpoint(
-	val latitude: Float,
-	val longitude: Float,
+	val latitude: Double,
+	val longitude: Double,
 	val color: Int,
 	val id: Int,
 	val type: EntityType,

@@ -244,8 +244,8 @@ fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 	Marker(
 		state = rememberMarkerState(
 			geoPoint = GeoPoint(
-				pinpoint.latitude.toDouble(),
-				pinpoint.longitude.toDouble()
+				pinpoint.latitude,
+				pinpoint.longitude
 			)
 		),
 		icon = icon,
@@ -275,24 +275,24 @@ fun PreviewMapContent() {
 		longitude = -73.42902,
 		listOf(
 			Pinpoint(
-				40.75175f,
-				-73.42902f,
+				40.75175,
+				-73.42902,
 				0,
 				0,
 				EntityType.NODE,
 				false
 			),
 			Pinpoint(
-				40.751485f,
-				-73.428329f,
+				40.751485,
+				-73.428329,
 				0,
 				0,
 				EntityType.BUILDING,
 				false
 			),
 			Pinpoint(
-				40.751632f,
-				-73.428936f,
+				40.751632,
+				-73.428936,
 				0,
 				0,
 				EntityType.EVENT,

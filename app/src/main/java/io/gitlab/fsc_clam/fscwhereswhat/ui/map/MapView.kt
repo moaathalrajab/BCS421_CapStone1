@@ -49,8 +49,6 @@ import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
-import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
@@ -145,8 +143,8 @@ fun MapContent(
 	navigateToMore: () -> Unit
 ) {
 	val cameraState = rememberCameraState {
-		geoPoint = GeoPoint(FSC_LAT, FSC_LOG)
-		zoom = 18.0// optional, default is 5.0
+		geoPoint = GeoPoint(latitude, longitude)
+		zoom = 18.5// optional, default is 5.0
 	}
 
 	fun onRecenter() {

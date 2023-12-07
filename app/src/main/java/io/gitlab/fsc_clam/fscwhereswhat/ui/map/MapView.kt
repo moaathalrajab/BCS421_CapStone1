@@ -66,9 +66,13 @@ import org.osmdroid.util.GeoPoint
  * MapView contains the viewmodels and the MapContent
  */
 @Composable
-fun MapView() {
+fun MapView(
+	openSearch: () -> Unit,
+	navigateToMore: () -> Unit
+) {
 	val mapViewModel: MapViewModel = viewModel<ImplMapViewModel>()
 	val user by mapViewModel.user.collectAsState()
+	val query by mapViewModel.query.collectAsState()
 	val pinpoints by mapViewModel.pinpoints.collectAsState()
 	val latitude by mapViewModel.latitude.collectAsState()
 	val longitude by mapViewModel.longitude.collectAsState()
@@ -86,6 +90,7 @@ fun MapView() {
 		MapContent(
 			it,
 			user = user,
+			query = query,
 			latitude = latitude,
 			longitude = longitude,
 			pinPoints = pinpoints,
@@ -95,7 +100,9 @@ fun MapView() {
 			nodeColor = nodeColor,
 			focus = focus,
 			setActiveFilter = mapViewModel::setActiveFilter,
-			setFocus = mapViewModel::setFocus
+			setFocus = mapViewModel::setFocus,
+			openSearch = openSearch,
+			navigateToMore = navigateToMore
 		)
 	}
 
@@ -104,7 +111,10 @@ fun MapView() {
 @Preview
 @Composable
 fun PreviewMapView() {
-	MapView()
+	MapView(
+		openSearch = {},
+		navigateToMore = {}
+	)
 }
 
 /**
@@ -123,6 +133,7 @@ fun PreviewMapView() {
 fun MapContent(
 	padding: PaddingValues,
 	user: User?,
+	query: String?,
 	latitude: Double,
 	longitude: Double,
 	pinPoints: List<Pinpoint>,
@@ -132,7 +143,9 @@ fun MapContent(
 	nodeColor: Int,
 	focus: Pinpoint?,
 	setActiveFilter: (EntityType?) -> Unit,
-	setFocus: (Pinpoint?) -> Unit
+	setFocus: (Pinpoint?) -> Unit,
+	openSearch: () -> Unit,
+	navigateToMore: () -> Unit
 ) {
 	//@Deprecated("For testing purposes only)
 	//Remove this later, @Deprecated seems to only work for functions
@@ -199,7 +212,10 @@ fun MapContent(
 			eventColor = eventColor,
 			nodeColor = nodeColor,
 			setActiveFilter = setActiveFilter,
-			onRecenter = ::onRecenter
+			onRecenter = ::onRecenter,
+			query = query,
+			openSearch = openSearch,
+			navigateToMore = navigateToMore
 		)
 	}
 	//when pinpoint is clicked show entity detail
@@ -260,11 +276,12 @@ fun UserMarker(userMarker: MarkerState) {
 fun PreviewMapContent() {
 	val user = User(":", "", Uri.parse("https://google.com"))
 	MapContent(
-		PaddingValues(8.dp),
-		user,
+		padding = PaddingValues(8.dp),
+		user = user,
+		query = null,
 		latitude = 40.75175,
 		longitude = -73.42902,
-		listOf(
+		pinPoints = listOf(
 			Pinpoint(
 				40.75175,
 				-73.42902,
@@ -290,11 +307,14 @@ fun PreviewMapContent() {
 				false
 			)
 		),
-		null,
-		Color.Red.toArgb(),
-		Color.Red.toArgb(),
-		Color.Red.toArgb(),
-		null,
-		{}
-	) {}
+		activeFilter = null,
+		buildingColor = Color.Red.toArgb(),
+		eventColor = Color.Red.toArgb(),
+		nodeColor = Color.Red.toArgb(),
+		focus = null,
+		setActiveFilter = {},
+		setFocus = {},
+		openSearch = {},
+		navigateToMore = {}
+	)
 }

@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.utsman.osmandcompose.DefaultMapProperties
 import com.utsman.osmandcompose.Marker
+import com.utsman.osmandcompose.MarkerState
 import com.utsman.osmandcompose.OpenStreetMap
 import com.utsman.osmandcompose.OsmAndroidComposable
 import com.utsman.osmandcompose.ZoomButtonVisibility
@@ -138,7 +139,6 @@ fun MapContent(
 	var isEntityDetailVisible by remember { mutableStateOf(false) }
 	val sheetState = rememberModalBottomSheetState()
 
-	val context = LocalContext.current
 	val cameraState = rememberCameraState {
 		geoPoint = GeoPoint(FSC_LAT, FSC_LOG)
 		zoom = 18.0// optional, default is 5.0
@@ -148,7 +148,7 @@ fun MapContent(
 		cameraState.geoPoint = GeoPoint(latitude, longitude)
 	}
 
-	val userMarker = rememberMarkerState(
+	val userMarkerState = rememberMarkerState(
 		geoPoint = GeoPoint(
 			latitude,
 			longitude
@@ -157,7 +157,7 @@ fun MapContent(
 
 	LaunchedEffect(longitude, latitude) {
 		Log.d("compose", "Update camera")
-		userMarker.geoPoint = GeoPoint(latitude, longitude)
+		userMarkerState.geoPoint = GeoPoint(latitude, longitude)
 	}
 
 	// define properties with remember with default value
@@ -193,11 +193,7 @@ fun MapContent(
 				MapPinPoint(pinpoint, activeFilter, setFocus)
 			}
 
-			Marker(
-				state = userMarker,
-				icon = context.getDrawable(R.drawable.baseline_navigation_24),
-			) {
-			}
+			UserMarker(userMarkerState)
 		}
 		//Creates the Map UI after map creation
 		Box(
@@ -259,6 +255,16 @@ fun MapPinPoint(pinpoint: Pinpoint, activeFilter: EntityType?, setFocus: (Pinpoi
 		) {
 			setFocus(pinpoint)
 		}
+	}
+}
+
+@Composable
+fun UserMarker(userMarker: MarkerState) {
+	val context = LocalContext.current
+	Marker(
+		state = userMarker,
+		icon = context.getDrawable(R.drawable.baseline_navigation_24),
+	) {
 	}
 }
 

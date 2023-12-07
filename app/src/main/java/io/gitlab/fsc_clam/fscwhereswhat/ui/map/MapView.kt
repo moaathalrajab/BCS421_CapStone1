@@ -21,20 +21,17 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -47,10 +44,10 @@ import com.utsman.osmandcompose.Marker
 import com.utsman.osmandcompose.MarkerState
 import com.utsman.osmandcompose.OpenStreetMap
 import com.utsman.osmandcompose.OsmAndroidComposable
+import com.utsman.osmandcompose.OverlayManagerState
 import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
-import com.utsman.osmandcompose.rememberOverlayManagerState
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
 import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
@@ -179,7 +176,6 @@ fun MapContent(
 			)
 	}
 
-	val overlayManagerState = rememberOverlayManagerState()
 	Box(
 		modifier = Modifier
 			.padding(padding)
@@ -190,7 +186,16 @@ fun MapContent(
 			modifier = Modifier.fillMaxSize(),
 			cameraState = cameraState,
 			properties = mapProperties,
-			overlayManagerState = overlayManagerState,
+			overlayManagerState = rememberSaveable(key = null, saver = Saver(
+				save = {
+					   null
+				},
+				restore = {
+					OverlayManagerState(null)
+				}
+			)) {
+				OverlayManagerState(null)
+			}
 		) {
 			pinPoints.forEach { pinpoint ->
 				MapPinPoint(pinpoint, setFocus)

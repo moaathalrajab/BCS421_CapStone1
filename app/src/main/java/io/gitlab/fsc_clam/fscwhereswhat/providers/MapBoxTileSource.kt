@@ -19,9 +19,25 @@ package io.gitlab.fsc_clam.fscwhereswhat.providers
 
 import io.gitlab.fsc_clam.fscwhereswhat.BuildConfig
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase
+import org.osmdroid.tileprovider.tilesource.XYTileSource
 import org.osmdroid.util.MapTileIndex
 
 private const val style = "clpi9vo3b00n701o91pugfmeh"
+
+object MapBoxXYTileSource : XYTileSource(
+	"FSCWheresWhatMap",
+	13,
+	20,
+	256,
+	"",
+	arrayOf("https://api.mapbox.com/styles/v1/arachas/clpi9vo3b00n701o91pugfmeh/tiles/")
+) {
+	override fun getTileURLString(pMapTileIndex: Long): String {
+		val source = super.getTileURLString(pMapTileIndex)
+		Log.d("MapBox", source)
+		return source + "?access_token=${BuildConfig.mapboxAPI}"
+	}
+}
 
 object MapBoxTileSource : OnlineTileSourceBase(
 	"MapBox", 13, 20, 256, ".png",

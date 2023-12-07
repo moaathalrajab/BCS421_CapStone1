@@ -55,7 +55,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
-import io.gitlab.fsc_clam.fscwhereswhat.providers.MapBoxTileSource
+import io.gitlab.fsc_clam.fscwhereswhat.providers.MapBoxXYTileSource
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMapViewModel
 import org.osmdroid.util.GeoPoint
@@ -164,7 +164,7 @@ fun MapContent(
 		DefaultMapProperties
 			.copy(
 				isTilesScaledToDpi = true,
-				tileSources = MapBoxTileSource,
+				tileSources =  MapBoxXYTileSource,
 				isEnableRotationGesture = true,
 				zoomButtonVisibility = ZoomButtonVisibility.NEVER,
 			)

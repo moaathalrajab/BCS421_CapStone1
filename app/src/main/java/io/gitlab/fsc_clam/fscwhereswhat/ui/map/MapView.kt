@@ -190,21 +190,17 @@ fun MapContent(
 
 			UserMarker(userMarkerState)
 		}
+
 		//Creates the Map UI after map creation
-		Box(
-			modifier = Modifier
-				.fillMaxSize()
-		) {
-			MapUI(
-				user = user,
-				activeFilter = activeFilter,
-				buildingColor = buildingColor,
-				eventColor = eventColor,
-				nodeColor = nodeColor,
-				setActiveFilter = setActiveFilter,
-				onRecenter = ::onRecenter
-			)
-		}
+		MapUI(
+			user = user,
+			activeFilter = activeFilter,
+			buildingColor = buildingColor,
+			eventColor = eventColor,
+			nodeColor = nodeColor,
+			setActiveFilter = setActiveFilter,
+			onRecenter = ::onRecenter
+		)
 	}
 	//when pinpoint is clicked show entity detail
 	if (isEntityDetailVisible) {

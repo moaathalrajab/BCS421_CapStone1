@@ -62,7 +62,6 @@ import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 
 /**
  * Creates the UI for Map Content
@@ -83,265 +82,262 @@ fun MapUI(
 	setActiveFilter: (EntityType?) -> Unit,
 	onRecenter: () -> Unit
 ) {
-	FSCWheresWhatTheme {
-		//holds the current user input
-		var userQuery by remember { mutableStateOf("") }
-		//state of showing search bar
-		var isSearchVisible by remember { mutableStateOf(false) }
-		Box(
-			modifier = Modifier.fillMaxSize()
+	//holds the current user input
+	var userQuery by remember { mutableStateOf("") }
+	//state of showing search bar
+	var isSearchVisible by remember { mutableStateOf(false) }
+	Box(
+		modifier = Modifier.fillMaxSize()
+	) {
+		//Icon of the Account
+		//WIP should include functionality to login
+		IconButton(
+			modifier = Modifier
+				.padding(12.dp)
+				.align(Alignment.TopStart),
+			onClick = { /*TODO*/ }
 		) {
-			//Icon of the Account
-			//WIP should include functionality to login
-			IconButton(
-				modifier = Modifier
-					.padding(12.dp)
-					.align(Alignment.TopStart),
-				onClick = { /*TODO*/ }
-			) {
-				if (user != null) {
-					AsyncImage(
-						model = user.image,
-						contentDescription = stringResource(id = R.string.account_icon)
-					)
-				} else {
-					Icon(
-						Icons.Filled.AccountCircle,
-						contentDescription = stringResource(id = R.string.account_icon),
-						modifier = Modifier.size(50.dp)
-					)
-				}
-			}
-
-			IconButton(
-				modifier = Modifier
-					.padding(12.dp)
-					.align(Alignment.TopEnd),
-				onClick = onRecenter
-			) {
+			if (user != null) {
+				AsyncImage(
+					model = user.image,
+					contentDescription = stringResource(id = R.string.account_icon)
+				)
+			} else {
 				Icon(
-					Icons.Filled.LocationOn,
-					contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
+					Icons.Filled.AccountCircle,
+					contentDescription = stringResource(id = R.string.account_icon),
 					modifier = Modifier.size(50.dp)
 				)
 			}
-			//Holds the search bar and filter buttons
-			Column(
-				modifier = Modifier
-					.fillMaxWidth()
-					.align(Alignment.BottomStart),
-				verticalArrangement = Arrangement.Bottom,
-				horizontalAlignment = Alignment.Start
-			) {
+		}
 
-				//Creates the filter buttons
-				Row(
-					modifier = Modifier
-						.padding(horizontal = 12.dp)
-						.fillMaxWidth(),
-					horizontalArrangement = Arrangement.spacedBy(8.dp),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					when (activeFilter) {
-						//if activeFilter is building, the only selected filterButton is building
-						EntityType.BUILDING -> {
-							FilterButtons(
-								filter = EntityType.BUILDING,
-								img = Image.Drawable(R.drawable.building_icon),
-								pinPointColor = buildingColor,
-								isSelected = true,
-								onSelected = {
-									setActiveFilter(it)
-								}
-							)
-							FilterButtons(
-								filter = EntityType.EVENT,
-								img = Image.Drawable(R.drawable.flag_icon),
-								pinPointColor = eventColor,
-								false,
-								onSelected = { setActiveFilter(it) }
-							)
-							FilterButtons(
-								filter = EntityType.NODE,
-								img = Image.Drawable(R.drawable.node_icon),
-								pinPointColor = nodeColor,
-								false,
-								onSelected = { setActiveFilter(it) }
-							)
-						}
-						//if activeFilter is event, the only selected filterButton is event
-						EntityType.EVENT -> {
-							FilterButtons(
-								filter = EntityType.BUILDING,
-								img = Image.Drawable(R.drawable.building_icon),
-								pinPointColor = buildingColor,
-								isSelected = false,
-								onSelected = {
-									setActiveFilter(it)
-								}
-							)
-							FilterButtons(
-								filter = EntityType.EVENT,
-								img = Image.Drawable(R.drawable.flag_icon),
-								pinPointColor = eventColor,
-								isSelected = true,
-								onSelected = { setActiveFilter(it) }
-							)
-							FilterButtons(
-								filter = EntityType.NODE,
-								img = Image.Drawable(R.drawable.node_icon),
-								pinPointColor = nodeColor,
-								isSelected = false,
-								onSelected = { setActiveFilter(it) }
-							)
-						}
-						//if activeFilter is node, the only selected filterButton is node
-						EntityType.NODE -> {
-							FilterButtons(
-								filter = EntityType.BUILDING,
-								img = Image.Drawable(R.drawable.building_icon),
-								pinPointColor = buildingColor,
-								isSelected = false,
-								onSelected = {
-									setActiveFilter(it)
-								}
-							)
-							FilterButtons(
-								filter = EntityType.EVENT,
-								img = Image.Drawable(R.drawable.flag_icon),
-								pinPointColor = eventColor,
-								isSelected = false,
-								onSelected = { setActiveFilter(it) }
-							)
-							FilterButtons(
-								filter = EntityType.NODE,
-								img = Image.Drawable(R.drawable.node_icon),
-								pinPointColor = nodeColor,
-								isSelected = true,
-								onSelected = { setActiveFilter(it) }
-							)
-						}
-						//if activeFilter is null, the  selected filterButton is all the filterButtons
-						else -> {
-							FilterButtons(
-								filter = EntityType.BUILDING,
-								img = Image.Drawable(R.drawable.building_icon),
-								pinPointColor = buildingColor,
-								isSelected = true,
-								onSelected = { setActiveFilter(it) }
-							)
-							FilterButtons(
-								filter = EntityType.EVENT,
-								img = Image.Drawable(R.drawable.flag_icon),
-								pinPointColor = eventColor,
-								isSelected = true,
-								onSelected = { setActiveFilter(it) }
-							)
-							FilterButtons(
-								filter = EntityType.NODE,
-								img = Image.Drawable(R.drawable.node_icon),
-								pinPointColor = nodeColor,
-								isSelected = true,
-								onSelected = { setActiveFilter(it) }
-							)
-						}
+		IconButton(
+			modifier = Modifier
+				.padding(12.dp)
+				.align(Alignment.TopEnd),
+			onClick = onRecenter
+		) {
+			Icon(
+				Icons.Filled.LocationOn,
+				contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
+				modifier = Modifier.size(50.dp)
+			)
+		}
+		//Holds the search bar and filter buttons
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.align(Alignment.BottomStart),
+			verticalArrangement = Arrangement.Bottom,
+			horizontalAlignment = Alignment.Start
+		) {
+
+			//Creates the filter buttons
+			Row(
+				modifier = Modifier
+					.padding(horizontal = 12.dp)
+					.fillMaxWidth(),
+				horizontalArrangement = Arrangement.spacedBy(8.dp),
+				verticalAlignment = Alignment.CenterVertically
+			) {
+				when (activeFilter) {
+					//if activeFilter is building, the only selected filterButton is building
+					EntityType.BUILDING -> {
+						FilterButtons(
+							filter = EntityType.BUILDING,
+							img = Image.Drawable(R.drawable.building_icon),
+							pinPointColor = buildingColor,
+							isSelected = true,
+							onSelected = {
+								setActiveFilter(it)
+							}
+						)
+						FilterButtons(
+							filter = EntityType.EVENT,
+							img = Image.Drawable(R.drawable.flag_icon),
+							pinPointColor = eventColor,
+							false,
+							onSelected = { setActiveFilter(it) }
+						)
+						FilterButtons(
+							filter = EntityType.NODE,
+							img = Image.Drawable(R.drawable.node_icon),
+							pinPointColor = nodeColor,
+							false,
+							onSelected = { setActiveFilter(it) }
+						)
+					}
+					//if activeFilter is event, the only selected filterButton is event
+					EntityType.EVENT -> {
+						FilterButtons(
+							filter = EntityType.BUILDING,
+							img = Image.Drawable(R.drawable.building_icon),
+							pinPointColor = buildingColor,
+							isSelected = false,
+							onSelected = {
+								setActiveFilter(it)
+							}
+						)
+						FilterButtons(
+							filter = EntityType.EVENT,
+							img = Image.Drawable(R.drawable.flag_icon),
+							pinPointColor = eventColor,
+							isSelected = true,
+							onSelected = { setActiveFilter(it) }
+						)
+						FilterButtons(
+							filter = EntityType.NODE,
+							img = Image.Drawable(R.drawable.node_icon),
+							pinPointColor = nodeColor,
+							isSelected = false,
+							onSelected = { setActiveFilter(it) }
+						)
+					}
+					//if activeFilter is node, the only selected filterButton is node
+					EntityType.NODE -> {
+						FilterButtons(
+							filter = EntityType.BUILDING,
+							img = Image.Drawable(R.drawable.building_icon),
+							pinPointColor = buildingColor,
+							isSelected = false,
+							onSelected = {
+								setActiveFilter(it)
+							}
+						)
+						FilterButtons(
+							filter = EntityType.EVENT,
+							img = Image.Drawable(R.drawable.flag_icon),
+							pinPointColor = eventColor,
+							isSelected = false,
+							onSelected = { setActiveFilter(it) }
+						)
+						FilterButtons(
+							filter = EntityType.NODE,
+							img = Image.Drawable(R.drawable.node_icon),
+							pinPointColor = nodeColor,
+							isSelected = true,
+							onSelected = { setActiveFilter(it) }
+						)
+					}
+					//if activeFilter is null, the  selected filterButton is all the filterButtons
+					else -> {
+						FilterButtons(
+							filter = EntityType.BUILDING,
+							img = Image.Drawable(R.drawable.building_icon),
+							pinPointColor = buildingColor,
+							isSelected = true,
+							onSelected = { setActiveFilter(it) }
+						)
+						FilterButtons(
+							filter = EntityType.EVENT,
+							img = Image.Drawable(R.drawable.flag_icon),
+							pinPointColor = eventColor,
+							isSelected = true,
+							onSelected = { setActiveFilter(it) }
+						)
+						FilterButtons(
+							filter = EntityType.NODE,
+							img = Image.Drawable(R.drawable.node_icon),
+							pinPointColor = nodeColor,
+							isSelected = true,
+							onSelected = { setActiveFilter(it) }
+						)
 					}
 				}
-				//bottom bar holds search and more button
-				Row(
+			}
+			//bottom bar holds search and more button
+			Row(
+				modifier = Modifier
+					.padding(8.dp)
+					.fillMaxWidth(),
+				horizontalArrangement = Arrangement.SpaceAround,
+				verticalAlignment = Alignment.CenterVertically
+			) {
+				//search bar on click expands to show search view
+				Card(
+					shape = CircleShape,
 					modifier = Modifier
-						.padding(8.dp)
-						.fillMaxWidth(),
-					horizontalArrangement = Arrangement.SpaceAround,
-					verticalAlignment = Alignment.CenterVertically
+						.fillMaxWidth(.8f)
+						.requiredHeight(35.dp)
+						.clickable {
+							isSearchVisible = true
+						},
+					elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
 				) {
-					//search bar on click expands to show search view
+					Row(
+						modifier = Modifier
+							.fillMaxSize(),
+						verticalAlignment = Alignment.CenterVertically,
+					) {
+						Icon(
+							Icons.Default.Search,
+							stringResource(id = R.string.search_bar_label),
+							modifier = Modifier.padding(horizontal = 8.dp)
+						)
+						Text(text = let {
+							if (userQuery.isNotEmpty())
+								userQuery
+							else
+								stringResource(id = R.string.search_bar_label)
+						}
+						)
+					}
+				}
+				//The more button
+				Card {
+					IconButton(
+						onClick = { /*TODO*/ },
+						modifier = Modifier
+							.size(35.dp)
+					) {
+						Icon(
+							painter = painterResource(id = R.drawable.baseline_more_horiz_24),
+							contentDescription = stringResource(id = R.string.more_button_desc),
+						)
+					}
+				}
+			}
+		}
+	}
+	//placeholder for search view
+	if (isSearchVisible) {
+		ModalBottomSheet(onDismissRequest = { isSearchVisible = false }) {
+			Card {
+				Column(
+					modifier = Modifier
+						.padding(12.dp)
+						.fillMaxSize(),
+					verticalArrangement = Arrangement.spacedBy(8.dp),
+					horizontalAlignment = Alignment.CenterHorizontally
+				) {
+					//The Search Bar
 					Card(
 						shape = CircleShape,
 						modifier = Modifier
 							.fillMaxWidth(.8f)
-							.requiredHeight(35.dp)
-							.clickable {
-								isSearchVisible = true
-							},
+							.border(2.dp, Color.Black, CircleShape),
 						elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
 					) {
 						Row(
-							modifier = Modifier
-								.fillMaxSize(),
-							verticalAlignment = Alignment.CenterVertically,
+							verticalAlignment = Alignment.CenterVertically
 						) {
 							Icon(
 								Icons.Default.Search,
 								stringResource(id = R.string.search_bar_label),
 								modifier = Modifier.padding(horizontal = 8.dp)
 							)
-							Text(text = let {
-								if (userQuery.isNotEmpty())
-									userQuery
-								else
-									stringResource(id = R.string.search_bar_label)
-							}
+							TextField(
+								value = userQuery,
+								onValueChange = { userQuery = it },
+								label = { Text(text = stringResource(id = R.string.search_bar_label)) }
 							)
-						}
-					}
-					//The more button
-					Card {
-						IconButton(
-							onClick = { /*TODO*/ },
-							modifier = Modifier
-								.size(35.dp)
-						) {
-							Icon(
-								painter = painterResource(id = R.drawable.baseline_more_horiz_24),
-								contentDescription = stringResource(id = R.string.more_button_desc),
-							)
-						}
-					}
-				}
-			}
-		}
-		//placeholder for search view
-		if (isSearchVisible) {
-			ModalBottomSheet(onDismissRequest = { isSearchVisible = false }) {
-				Card {
-					Column(
-						modifier = Modifier
-							.padding(12.dp)
-							.fillMaxSize(),
-						verticalArrangement = Arrangement.spacedBy(8.dp),
-						horizontalAlignment = Alignment.CenterHorizontally
-					) {
-						//The Search Bar
-						Card(
-							shape = CircleShape,
-							modifier = Modifier
-								.fillMaxWidth(.8f)
-								.border(2.dp, Color.Black, CircleShape),
-							elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-						) {
-							Row(
-								verticalAlignment = Alignment.CenterVertically
-							) {
-								Icon(
-									Icons.Default.Search,
-									stringResource(id = R.string.search_bar_label),
-									modifier = Modifier.padding(horizontal = 8.dp)
-								)
-								TextField(
-									value = userQuery,
-									onValueChange = { userQuery = it },
-									label = { Text(text = stringResource(id = R.string.search_bar_label)) }
-								)
 
-							}
 						}
 					}
 				}
 			}
 		}
 	}
-
 }
 
 @Preview

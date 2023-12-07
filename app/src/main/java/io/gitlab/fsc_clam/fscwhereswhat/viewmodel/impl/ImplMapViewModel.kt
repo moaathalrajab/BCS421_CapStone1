@@ -17,28 +17,32 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
+import android.app.Application
 import android.graphics.Color
 import androidx.lifecycle.viewModelScope
+import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
+import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeLocationRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeOSMRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakePrefRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeUserRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplLocationRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
-class ImplMapViewModel() : MapViewModel() {
+class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val userRepo = FakeUserRepo()
 	private val prefRepo = FakePrefRepo()
 	private val osmRepo = FakeOSMRepo()
 	private val ramCentralRepo = FakeRamCentralRepo()
-	private val locationRepo = FakeLocationRepo()
+	private val locationRepo = LocationRepository.get(application)
 
 	override val user: StateFlow<User?> by lazy {
 		userRepo.user
@@ -61,26 +65,30 @@ class ImplMapViewModel() : MapViewModel() {
 		)
 	)
 
-	override val longitude: StateFlow<Double> by lazy {
-		locationRepo.longitude
-	}
+	override val longitude: StateFlow<Double> =
+		locationRepo.longitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LOG)
 
-	override val latitude: StateFlow<Double> by lazy {
-		locationRepo.latitude
-	}
+	override val latitude: StateFlow<Double> =
+		locationRepo.latitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LAT)
 
 	override val buildingColor: StateFlow<Int> by lazy {
-		prefRepo.getColor(EntityType.BUILDING).stateIn(viewModelScope,
-			SharingStarted.Eagerly, Color.BLACK)
+		prefRepo.getColor(EntityType.BUILDING).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK
+		)
 	}
 	override val eventColor: StateFlow<Int> by lazy {
-		prefRepo.getColor(EntityType.EVENT).stateIn(viewModelScope,
-			SharingStarted.Eagerly, Color.BLACK)
+		prefRepo.getColor(EntityType.EVENT).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK
+		)
 	}
 
 	override val nodeColor: StateFlow<Int> by lazy {
-		prefRepo.getColor(EntityType.NODE).stateIn(viewModelScope,
-			SharingStarted.Eagerly, Color.BLACK)
+		prefRepo.getColor(EntityType.NODE).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK
+		)
 	}
 
 	override val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)

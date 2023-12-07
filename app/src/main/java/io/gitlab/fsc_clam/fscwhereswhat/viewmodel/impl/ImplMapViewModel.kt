@@ -53,6 +53,8 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 
 	override val activeFilter: MutableStateFlow<EntityType?> = MutableStateFlow(null)
 
+	override val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)
+
 	override val pinpoints: StateFlow<List<Pinpoint>> = MutableStateFlow(
 		listOf(
 			Pinpoint(
@@ -68,6 +70,11 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		if (filter == null)
 			list
 		else list.filter { it.type == filter }
+	}.combine(focus) { list, focus ->
+		// Don't display other pin points if we have a focus
+		if (focus == null)
+			list
+		else list.filter { it.id == focus.id }
 	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
 	override val longitude: StateFlow<Double> =
@@ -96,7 +103,6 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		)
 	}
 
-	override val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)
 	override fun setActiveFilter(filter: EntityType?) {
 		activeFilter.value = filter
 	}

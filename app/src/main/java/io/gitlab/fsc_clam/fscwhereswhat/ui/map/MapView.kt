@@ -184,12 +184,7 @@ fun MapContent(
 			properties = mapProperties,
 			overlayManagerState = overlayManagerState,
 		) {
-			pinPoints.filter {
-				// Don't display other pin points if we have a focus
-				if (focus != null)
-					it == focus
-				else true
-			}.forEach { pinpoint ->
+			pinPoints.forEach { pinpoint ->
 				MapPinPoint(pinpoint, setFocus)
 			}
 

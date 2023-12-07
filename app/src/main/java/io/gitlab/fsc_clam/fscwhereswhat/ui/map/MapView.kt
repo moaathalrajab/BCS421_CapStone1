@@ -50,6 +50,8 @@ import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
 import com.utsman.osmandcompose.rememberOverlayManagerState
 import io.gitlab.fsc_clam.fscwhereswhat.R
+import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
+import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
@@ -137,12 +139,12 @@ fun MapContent(
 
 	val context = LocalContext.current
 	val cameraState = rememberCameraState {
-		geoPoint = GeoPoint(longitude, latitude)
+		geoPoint = GeoPoint(FSC_LAT, FSC_LOG)
 		zoom = 18.0// optional, default is 5.0
 	}
 
 	fun onRecenter() {
-		cameraState.geoPoint = GeoPoint(longitude, latitude)
+		cameraState.geoPoint = GeoPoint(latitude, longitude)
 	}
 
 	val userMarker = rememberMarkerState(
@@ -154,7 +156,7 @@ fun MapContent(
 
 	LaunchedEffect(longitude, latitude) {
 		Log.d("compose", "Update camera")
-		userMarker.geoPoint = GeoPoint(longitude, latitude)
+		userMarker.geoPoint = GeoPoint(latitude, longitude)
 	}
 
 	// define properties with remember with default value

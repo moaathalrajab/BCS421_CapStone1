@@ -147,11 +147,6 @@ fun MapContent(
 	openSearch: () -> Unit,
 	navigateToMore: () -> Unit
 ) {
-	//@Deprecated("For testing purposes only)
-	//Remove this later, @Deprecated seems to only work for functions
-	var isEntityDetailVisible by remember { mutableStateOf(false) }
-	val sheetState = rememberModalBottomSheetState()
-
 	val cameraState = rememberCameraState {
 		geoPoint = GeoPoint(FSC_LAT, FSC_LOG)
 		zoom = 18.0// optional, default is 5.0
@@ -217,23 +212,6 @@ fun MapContent(
 			openSearch = openSearch,
 			navigateToMore = navigateToMore
 		)
-	}
-	//when pinpoint is clicked show entity detail
-	if (isEntityDetailVisible) {
-		ModalBottomSheet(
-			onDismissRequest = {
-				setFocus(null)
-			},
-			sheetState = sheetState
-		) {
-			Box(
-				modifier = Modifier
-					.padding(8.dp)
-					.fillMaxHeight(.7f)
-			) {
-				EntityDetail()
-			}
-		}
 	}
 }
 

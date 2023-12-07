@@ -35,6 +35,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 class ImplMapViewModel(application: Application) : MapViewModel(application) {
@@ -63,7 +64,11 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 				false
 			)
 		)
-	)
+	).combine(activeFilter) { list, filter ->
+		if (filter == null)
+			list
+		else list.filter { it.type == filter }
+	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
 	override val longitude: StateFlow<Double> =
 		locationRepo.longitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LOG)

@@ -190,7 +190,7 @@ fun MapContent(
 					it == focus
 				else true
 			}.forEach { pinpoint ->
-				MapPinPoint(pinpoint, activeFilter, setFocus)
+				MapPinPoint(pinpoint, setFocus)
 			}
 
 			UserMarker(userMarkerState)
@@ -232,29 +232,27 @@ fun MapContent(
 
 @Composable
 @OsmAndroidComposable
-fun MapPinPoint(pinpoint: Pinpoint, activeFilter: EntityType?, setFocus: (Pinpoint) -> Unit) {
+fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 	val context = LocalContext.current
 	//for each pinpoint create a marker
-	if (pinpoint.type == activeFilter || activeFilter == null) {
-		val point = rememberMarkerState(
-			geoPoint = GeoPoint(
-				pinpoint.latitude.toDouble(),
-				pinpoint.longitude.toDouble()
-			)
+	val point = rememberMarkerState(
+		geoPoint = GeoPoint(
+			pinpoint.latitude.toDouble(),
+			pinpoint.longitude.toDouble()
 		)
-		//the icon is chosen based on EntityType
-		val icon = when (pinpoint.type) {
-			EntityType.BUILDING -> context.getDrawable(R.drawable.map_building)
-			EntityType.EVENT -> context.getDrawable(R.drawable.map_event)
-			EntityType.NODE -> context.getDrawable(R.drawable.map_node)
-		}
+	)
+	//the icon is chosen based on EntityType
+	val icon = when (pinpoint.type) {
+		EntityType.BUILDING -> context.getDrawable(R.drawable.map_building)
+		EntityType.EVENT -> context.getDrawable(R.drawable.map_event)
+		EntityType.NODE -> context.getDrawable(R.drawable.map_node)
+	}
 
-		Marker(
-			state = point,
-			icon = icon,
-		) {
-			setFocus(pinpoint)
-		}
+	Marker(
+		state = point,
+		icon = icon,
+	) {
+		setFocus(pinpoint)
 	}
 }
 

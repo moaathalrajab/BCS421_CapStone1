@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * For Map View
  */
-abstract class MapViewModel : ViewModel() {
+abstract class MapViewModel(application: Application) : AndroidViewModel(application) {
 	/**
 	 * If user has logged in, stores user data
 	 */

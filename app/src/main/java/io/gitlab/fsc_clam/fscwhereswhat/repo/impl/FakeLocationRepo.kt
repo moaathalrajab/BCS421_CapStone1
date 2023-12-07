@@ -17,20 +17,17 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
-import android.util.Log
-import androidx.compose.runtime.remember
+import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
+import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 class FakeLocationRepo : LocationRepository {
 
-	override val longitude: MutableStateFlow<Double> = MutableStateFlow(40.7515)
+	override val longitude: MutableStateFlow<Double> = MutableStateFlow(FSC_LOG)
 
-	override val latitude: MutableStateFlow<Double> = MutableStateFlow(-73.4295)
+	override val latitude: MutableStateFlow<Double> = MutableStateFlow(FSC_LAT)
 
 	override val bearing: Flow<Float> = MutableStateFlow(0f)
 

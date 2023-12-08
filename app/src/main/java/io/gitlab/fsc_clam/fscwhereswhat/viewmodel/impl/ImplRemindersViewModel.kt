@@ -51,7 +51,8 @@ class ImplRemindersViewModel(
 	override val reminders: StateFlow<List<ReminderItem>> =
 		repo.getAllReminders().map { reminderItems ->
 			reminderItems.map { reminder ->
-				val event = ramCentralRepo.getEvent(reminder.eventId)
+				// event cannot be null, as the entities are attached
+				val event = ramCentralRepo.getEvent(reminder.eventId)!!
 				ReminderItem(
 					eventId = event.id,
 					eventName = event.name,

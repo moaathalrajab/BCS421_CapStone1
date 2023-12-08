@@ -22,6 +22,8 @@ import io.gitlab.fsc_clam.fscwhereswhat.database.AppDatabase
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.net.URL
 
 class ImplRamCentralRepository(
@@ -55,18 +57,26 @@ class ImplRamCentralRepository(
 		)
 
 	override suspend fun getEvent(id: Long): Event? =
-		database.getById(id)?.toModel()
+		withContext(Dispatchers.IO) {
+			database.getById(id)?.toModel()
+		}
 
 	override suspend fun addEvent(event: Event) {
-		database.insert(event.toDB())
+		withContext(Dispatchers.IO) {
+			database.insert(event.toDB())
+		}
 	}
 
 	override suspend fun updateEvent(event: Event) {
-		database.update(event.toDB())
+		withContext(Dispatchers.IO) {
+			database.update(event.toDB())
+		}
 	}
 
 	override suspend fun deleteEvent(event: Event) {
-		database.delete(event.toDB())
+		withContext(Dispatchers.IO) {
+			database.delete(event.toDB())
+		}
 	}
 
 	companion object {

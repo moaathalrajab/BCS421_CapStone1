@@ -20,6 +20,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
+import android.graphics.Color
 import com.google.firebase.auth.FirebaseAuth
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.FBPreferences
@@ -47,9 +48,10 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 	/**
 	 * Connection to Preferences in SharedPreferences
 	 */
-	private val sharedPref = application.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
+	private val sharedPref =
+		application.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
 
-	override fun getColor(type: EntityType): Flow<String> {
+	override fun getColor(type: EntityType): Flow<Int> {
 
 		// First check if current user is logged in
 		if (firebaseAuth.currentUser != null) {
@@ -58,7 +60,7 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 			val fbColors = fbp.getColor(user.toString())
 
 			return fbColors.map {
-				(it[type.toString()]!!)
+				(it[type.name]!!)
 			}
 
 		}
@@ -68,13 +70,13 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 			return callbackFlow {
 
 				val listener = OnSharedPreferenceChangeListener { sp, _ ->
-					val color = sp.getString(type.toString(), "#fc0303")
-					trySend(color!!)
+					val color = sp.getInt(type.name, type.defaultColor)
+					trySend(color)
 				}
 
 				sharedPref.registerOnSharedPreferenceChangeListener(listener)
 
-				awaitClose() {
+				awaitClose {
 					sharedPref.unregisterOnSharedPreferenceChangeListener(listener)
 				}
 			}
@@ -83,7 +85,7 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 
 	override suspend fun setColor(type: EntityType, color: Int) {
 		val user = firebaseAuth.currentUser!!.displayName
-		fbp.setColor(user!!, type.toString(), color.toString())
+		fbp.setColor(user!!, type.name, color)
 	}
 
 	companion object {

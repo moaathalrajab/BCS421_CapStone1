@@ -30,7 +30,7 @@ interface PreferencesRepository {
 	 *
 	 * @param type is the EntityType in which the related color is being requested
 	 */
-	fun getColor(type: EntityType): Flow<String>
+	fun getColor(type: EntityType): Flow<Int>
 
 	/**
 	 * Set a color in the preferences repository

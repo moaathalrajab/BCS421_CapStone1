@@ -18,6 +18,7 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.more
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,10 +30,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -47,6 +52,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
@@ -62,7 +68,6 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding.PinpointColorItem
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MoreViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMoreViewModel
-
 
 @Composable
 fun MoreView(
@@ -124,7 +129,10 @@ fun MoreContent(
 		})
 	}, snackbarHost = { SnackbarHost(snackbarHostState) }
 	) {
-		Column(modifier = Modifier.padding(it)) {
+		val scroll = rememberScrollState()
+		Column(modifier = Modifier
+			.padding(it)
+			.verticalScroll(scroll)) {
 			// Reminder Card
 			Card(
 				onClick = {
@@ -230,7 +238,7 @@ fun MoreContent(
 			}
 
 			OptionsUI(Color.Black.toArgb(), Color.Black.toArgb(), Color.Black.toArgb())
-			Spacer(modifier = Modifier.height(100.dp))
+			Spacer(modifier = Modifier.height(10.dp))
 			ProfileCard()
 			ClearCacheCard(clearCacheLogic)
 		}
@@ -413,8 +421,7 @@ fun ProfileCard() {
 		modifier = Modifier
 			.fillMaxWidth()
 			.height(175.dp)
-			.padding(10.dp)
-			.padding(8.dp),
+			.padding(10.dp),
 	) {
 		Row(
 			modifier = Modifier.padding(5.dp), verticalAlignment = Alignment.Top
@@ -430,12 +437,12 @@ fun ProfileCard() {
 			}
 		}
 		Row(
-			modifier = Modifier.padding(5.dp), verticalAlignment = Alignment.Bottom
+			modifier = Modifier, verticalAlignment = Alignment.Bottom
 		) {
 			Column(
 				modifier = Modifier
-					.weight(1f)
-					.height(60.dp)
+					// .weight(1f)
+					// .height(70.dp)
 					.fillMaxWidth(),
 				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.CenterHorizontally,
@@ -452,7 +459,27 @@ fun ProfileCard() {
 						// Text underneath
 
 						Text(
-							text = "Rahim Ahkter", fontSize = 8.sp, textAlign = TextAlign.Center
+							text = "Rahim Ahkter", style = MaterialTheme.typography.labelSmall,
+							textAlign = TextAlign.Center
+						)
+					}
+
+					Column(
+						horizontalAlignment = Alignment.CenterHorizontally,
+						verticalArrangement = Arrangement.spacedBy(4.dp)
+					) {
+
+						Image(
+							painter = painterResource(id = R.mipmap.harvey_pfp_front),
+							contentDescription = "",
+							modifier = Modifier
+								.clip(CircleShape)
+								.size(50.dp)
+						)
+
+						Text(
+							text = "Harvey Tseng", style = MaterialTheme.typography.labelSmall,
+							textAlign = TextAlign.Center
 						)
 					}
 
@@ -461,16 +488,8 @@ fun ProfileCard() {
 						// Text underneath
 
 						Text(
-							text = "Harvey Tseng", fontSize = 8.sp, textAlign = TextAlign.Center
-						)
-					}
-
-					Column(horizontalAlignment = Alignment.CenterHorizontally) {
-						// Image or Icon composable
-						// Text underneath
-
-						Text(
-							text = "Aaron Tabuteau", fontSize = 8.sp, textAlign = TextAlign.Center
+							text = "Aaron Tabuteau", style = MaterialTheme.typography.labelSmall,
+							textAlign = TextAlign.Center
 						)
 					}
 
@@ -481,7 +500,7 @@ fun ProfileCard() {
 
 						Text(
 							text = "Olivia Sanfilippo",
-							fontSize = 8.sp,
+							style = MaterialTheme.typography.labelSmall,
 							textAlign = TextAlign.Center
 						)
 					}
@@ -492,12 +511,12 @@ fun ProfileCard() {
 			modifier = Modifier.padding(5.dp), verticalAlignment = Alignment.Bottom
 		) {
 			Column(
-				modifier = Modifier.weight(1f),
+				modifier = Modifier.fillMaxWidth(),
 				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.CenterHorizontally,
 			) {
 				Text(
-					text = "Team CLAM \nVersion #1.0", fontSize = 8.sp, fontWeight = FontWeight.Bold
+					text = "Team CLAM \nVersion #1.0", fontSize = 12.sp, fontWeight = FontWeight.Bold
 				)
 			}
 		}

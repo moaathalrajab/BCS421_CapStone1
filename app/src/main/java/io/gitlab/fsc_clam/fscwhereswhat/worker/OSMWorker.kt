@@ -29,6 +29,8 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.remote.OSMType
 import io.gitlab.fsc_clam.fscwhereswhat.providers.base.OpenStreetMapAPI
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.OkHttpOpenStreetMapAPI
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 
 /**
@@ -38,7 +40,14 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 	CoroutineWorker(appContext, params) {
 	private val repo = OSMRepository
 
-	private val client = OkHttpClient.Builder().build()
+	private val client = OkHttpClient.Builder().addInterceptor {
+		val request = it.request()
+		Log.d("OKHttpClient", request.url.toString())
+		runBlocking {
+			delay(100)
+		}
+		it.proceed(request)
+	}.build()
 
 	private val api: OpenStreetMapAPI = OkHttpOpenStreetMapAPI(client)
 	private val entities = ArrayList<OSMEntity>()
@@ -49,22 +58,27 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 			process(element)
 		}
 
-		println(entities)
+		repo
 
 		return Result.success()
 	}
 
 	private suspend fun process(element: OSMElement) {
 		Log.d(LOG, "Processing OSMElement(${element.id})")
+		when (element.type) {
+			OSMType.WAY -> {
+				Log.d(LOG, "OSMElement(${element.id}) is a way")
+				parseWay(element)
+			}
 
-		if (element.lat != null && element.lon != null) {
-			// If lat and lon are not null, then [element] is a node
-			Log.d(LOG, "OSMElement(${element.id}) is a node")
-			parseNode(element)
-		} else if (element.nodes.isNotEmpty()) {
-			// If nodes are not empty, then [element] is a way
-			Log.d(LOG, "OSMElement(${element.id}) is a way")
-			parseWay(element)
+			OSMType.RELATION -> {
+				Log.d(LOG, "OSMElement(${element.id}) is a relation, ignoring")
+			}
+
+			OSMType.NODE -> {
+				Log.d(LOG, "OSMElement(${element.id}) is a node")
+				parseNode(element)
+			}
 		}
 	}
 
@@ -123,11 +137,23 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 			Log.d(LOG, "OSMElement(${element.id}) is not a building")
 		} else {
 			Log.d(LOG, "OSMElement(${element.id}) is a building")
+			entities.add(
+				OSMEntity.Building(
+					id = element.id,
+					lat = 0.0,
+					long = 0.0,
+					name = element.tags.name?:"Building ${element.id}",
+					description = "",
+					hours = OpeningHours.everyDay,
+					hasWater = true,
+					hasFood = true
+				)
+			)
 		}
 
 		Log.d(LOG, "Parsing OSMElement(${element.id}) nodes")
 		element.nodes.forEach {
-			process(api.getFullElement(OSMType.NODE, it).elements.first())
+			process(api.getElement(OSMType.NODE, it).elements.first())
 		}
 	}
 
@@ -135,7 +161,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 		/**
 		 * Relation ID for the entirety of FSC
 		 */
-		private const val FSC_RELATION: Long = 13076771
+		private const val FSC_RELATION: Long = 8288536
 
 		private const val LOG = "OSMWorker"
 	}

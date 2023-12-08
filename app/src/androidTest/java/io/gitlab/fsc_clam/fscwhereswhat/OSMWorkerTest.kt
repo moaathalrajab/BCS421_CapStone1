@@ -18,21 +18,26 @@
 package io.gitlab.fsc_clam.fscwhereswhat
 
 import android.content.Context
-import androidx.compose.animation.core.updateTransition
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.WorkRequest
+import androidx.work.WorkerFactory
+import androidx.work.WorkerParameters
 import androidx.work.await
+import androidx.work.impl.utils.taskexecutor.WorkManagerTaskExecutor
+import com.google.common.util.concurrent.ListenableFuture
 import io.gitlab.fsc_clam.fscwhereswhat.worker.OSMWorker
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import java.util.UUID
+import java.util.concurrent.Executor
+import java.util.concurrent.TimeUnit
 
 class OSMWorkerTest {
 	lateinit var instrumentationContext: Context
@@ -48,15 +53,41 @@ class OSMWorkerTest {
 			OneTimeWorkRequestBuilder<OSMWorker>()
 				.setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
 				.build()
+		val ls = object : ListenableFuture<Void> {
+			override fun cancel(mayInterruptIfRunning: Boolean): Boolean = true
+
+			override fun isCancelled(): Boolean = false
+
+			override fun isDone(): Boolean = false
+
+			override fun get(): Nothing? = null
+
+			override fun get(timeout: Long, unit: TimeUnit?): Nothing? = null
+
+			override fun addListener(listener: Runnable, executor: Executor) {
+			}
+
+		}
+		val worker = OSMWorker(
+			instrumentationContext,
+			WorkerParameters(
+				UUID.randomUUID(),
+				Data.EMPTY,
+				emptyList(),
+				WorkerParameters.RuntimeExtras(),
+				0,
+				0,
+				{ },
+				WorkManagerTaskExecutor(Dispatchers.IO.asExecutor()),
+				WorkerFactory.getDefaultWorkerFactory(),
+				{ context, id, data -> ls },
+				{ context, id, foregroundInfo -> ls }
+			)
+		)
+
 
 		runBlocking {
-			val manager = WorkManager
-				.getInstance(instrumentationContext)
-
-			manager.enqueueUniqueWork("test", ExistingWorkPolicy.REPLACE, uploadWorkRequest).await()
-
-			// TODO await worker to finish
-			//manager.getWorkInfoByIdFlow(uploadWorkRequest.id).map {}.first { it == WorkInfo.State. }
+			worker.doWork()
 		}
 	}
 }

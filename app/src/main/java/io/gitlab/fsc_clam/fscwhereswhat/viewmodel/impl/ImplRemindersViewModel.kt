@@ -85,7 +85,7 @@ class ImplRemindersViewModel(
 	 * @param id The ID of the reminder to be updated.
 	 * @param time The new [ReminderTime] for the reminder.
 	 */
-	override fun updateReminderTime(id: Int, time: ReminderTime) {
+	override fun updateReminderTime(id: Long, time: ReminderTime) {
 		viewModelScope.launch {
 			repo.updateReminder(Reminder(id, time))
 		}

@@ -54,7 +54,7 @@ class ImplRamCentralRepository(
 			url = URL(url)
 		)
 
-	override suspend fun getEvent(id: Int): Event? =
+	override suspend fun getEvent(id: Long): Event? =
 		database.getById(id)?.toModel()
 
 	override suspend fun addEvent(event: Event) {

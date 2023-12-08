@@ -32,8 +32,8 @@ import androidx.room.*
  * @param url is the link to the event on RamCentral
  */
 @Entity(tableName = "event")
-data class DBEvent (
-	@PrimaryKey val id: Int,
+data class DBEvent(
+	@PrimaryKey val id: Long,
 	val name: String,
 	val image: String,
 	val description: String,

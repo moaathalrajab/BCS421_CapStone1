@@ -41,7 +41,7 @@ abstract class RemindersViewModel : ViewModel() {
 	 * Updates ReminderTime for Event
 	 * @param id is the event ID
 	 */
-	abstract fun updateReminderTime(id: Int, time: ReminderTime)
+	abstract fun updateReminderTime(id: Long, time: ReminderTime)
 
 
 }

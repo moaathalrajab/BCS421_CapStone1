@@ -45,7 +45,7 @@ interface EventDao {
 
 	/** Get specific item by Id **/
 	@Query("SELECT * FROM event WHERE id = :event")
-	suspend fun getById(event: Int): DBEvent?
+	suspend fun getById(event: Long): DBEvent?
 
 	/** Get a list of events by location id **/
 	@Query("SELECT * FROM event WHERE locationId = :id")

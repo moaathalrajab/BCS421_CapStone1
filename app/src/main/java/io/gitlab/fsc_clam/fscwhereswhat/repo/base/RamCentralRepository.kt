@@ -30,7 +30,7 @@ interface RamCentralRepository {
 	 * @param id The ID of the event to be retrieved.
 	 * @return The event with the given ID.
 	 */
-	suspend fun getEvent(id: Int): Event?
+	suspend fun getEvent(id: Long): Event?
 
 	/**
 	 * Adds a new event to the repository.

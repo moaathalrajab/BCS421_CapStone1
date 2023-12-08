@@ -42,6 +42,11 @@ abstract class MoreViewModel(application: Application) : AndroidViewModel(applic
 	abstract val eventColor: StateFlow<Color>
 
 	/**
+	 * Color of utility pinpoints
+	 */
+	abstract val utilityColor: StateFlow<Color>
+
+	/**
 	 * Sets color of Building pinpoints
 	 */
 	abstract fun setBuildingColor(color: Color)
@@ -50,6 +55,11 @@ abstract class MoreViewModel(application: Application) : AndroidViewModel(applic
 	 * Sets color of Event pinpoints
 	 */
 	abstract fun setEventColor(color: Color)
+
+	/**
+	 * Sets color of utility pinpoints
+	 */
+	abstract fun setUtilityColor(color: Color)
 
 	/**
 	 * Clear cache on app

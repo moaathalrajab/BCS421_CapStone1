@@ -47,6 +47,13 @@ class ImplMoreViewModel(application: Application) : MoreViewModel(application) {
 		get() = TODO("Not yet implemented")
 
 	/**
+	 * A [StateFlow] representing the color associated with utilities.
+	 * Not yet implemented.
+	 */
+	override val utilityColor: StateFlow<Color>
+		get() = TODO("Not yet implemented")
+
+	/**
 	 * Set the color associated with buildings.
 	 * @param color The color to be set.
 	 */
@@ -59,6 +66,14 @@ class ImplMoreViewModel(application: Application) : MoreViewModel(application) {
 	 * @param color The color to be set.
 	 */
 	override fun setEventColor(color: Color) {
+		TODO("Not yet implemented")
+	}
+
+	/**
+	 * Set the color associated with utilities.
+	 * @param color The color to be set.
+	 */
+	override fun setUtilityColor(color: Color) {
 		TODO("Not yet implemented")
 	}
 

@@ -31,14 +31,14 @@ import kotlinx.coroutines.flow.callbackFlow
 /**
  * Implementation of Firebase Interface Functions
  */
-class FBPreferences: Firebase {
+class FBPreferences : Firebase {
 
 	/**
 	 * Set/Update the color in firebase
 	 * the KEY will be an index value associated with a node type
 	 * the VALUE will be the hex value for the color
 	 */
-	override suspend fun setColor(user: String, type: String, color: String) {
+	override suspend fun setColor(user: String, type: String, color: Int) {
 		val fb = FirebaseDatabase.getInstance().reference
 		val userDir: DatabaseReference = fb.child("userData/$user")
 
@@ -48,26 +48,25 @@ class FBPreferences: Firebase {
 	/**
 	 * Retrieve a flow list of the colors in firebase
 	 */
-	override fun getColor(user: String): Flow<Map<String, String>> {
+	override fun getColor(user: String): Flow<Map<String, Int>> {
 		return callbackFlow {
 			val fb = FirebaseDatabase.getInstance().reference
 			val userDir: DatabaseReference = fb.child("userData/$user")
 
-			val listener = userDir.addValueEventListener(object: ValueEventListener {
+			val listener = userDir.addValueEventListener(object : ValueEventListener {
 				override fun onDataChange(dataSnapshot: DataSnapshot) {
 					//val colors = dataSnapshot.getValue<Map<String, String>>()
-					val colors: MutableMap<String, String> = mutableMapOf()
+					val colors: MutableMap<String, Int> = mutableMapOf()
 
-					for (dataValue in dataSnapshot.children)
-					{
-						colors[dataValue.key.toString()] = dataValue.value.toString()
+					for (dataValue in dataSnapshot.children) {
+						colors[dataValue.key.toString()] = (dataValue.value as Long).toInt()
 					}
 
 					trySend(colors)
 				}
 
 				override fun onCancelled(databaseError: DatabaseError) {
-					Log.d( "getColor:onCancelled", databaseError.toException().toString() )
+					Log.d("getColor:onCancelled", databaseError.toException().toString())
 				}
 			})
 

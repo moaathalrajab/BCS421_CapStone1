@@ -29,12 +29,12 @@ interface Firebase {
 	 * the KEY will be an index value associated with a node type
 	 * the VALUE will be the hex value for the color
 	 */
-	suspend fun setColor(user: String, type: String, color: String)
+	suspend fun setColor(user: String, type: String, color: Int)
 
 	/**
 	 * Gets the color preferences from firebase
 	 * The function will take the map from the database,
 	 * and convert it into a flow list
 	 */
-	fun getColor(user: String): Flow<Map<String, String>>
+	fun getColor(user: String): Flow<Map<String, Int>>
 }

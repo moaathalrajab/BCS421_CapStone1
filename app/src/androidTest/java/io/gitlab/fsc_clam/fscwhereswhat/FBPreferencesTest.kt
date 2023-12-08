@@ -17,19 +17,23 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat
 
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.FBPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import java.util.UUID
 
 class FBPreferencesTest {
 	private lateinit var fbp: FBPreferences
+	private lateinit var userId: String
 
 	@Before
 	fun setUp() {
 		fbp = FBPreferences()
+		userId = UUID.randomUUID().toString()
 	}
 
 	/**
@@ -37,13 +41,11 @@ class FBPreferencesTest {
 	 */
 	@Test
 	fun setColorTest() {
-		val info = runBlocking {
-			fbp.setColor("Aaron", "0", "#c70000")
-			fbp.setColor("Aaron", "1", "#009c24")
-			fbp.setColor("Aaron", "2", "#4287f5")
+		runBlocking {
+			EntityType.entries.forEach { type ->
+				fbp.setColor(userId, type.name, type.defaultColor)
+			}
 		}
-
-		println(info)
 	}
 
 	/**
@@ -51,26 +53,30 @@ class FBPreferencesTest {
 	 */
 	@Test
 	fun getColorTest() {
-		val info = runBlocking {
-			val colors: Flow<Map<String, String>> = fbp.getColor("Aaron")
-			colors.first()
-		}
-
+		val colors: Flow<Map<String, Int>> = fbp.getColor(userId)
+		val info = runBlocking { colors.first() }
 		println(info)
 	}
 
 	@Test
 	fun colorIntegrationTest() {
-		val info = runBlocking {
-			val colors: Map<String, String> = mapOf("0" to "#c70000", "1" to "#009c24", "2" to "#4287f5")
-			fbp.setColor("Aaron", "0", "#c70000")
-			fbp.setColor("Aaron", "1", "#009c24")
-			fbp.setColor("Aaron", "2", "#4287f5")
-			val colorFlow: Flow<Map<String,String>> = fbp.getColor("Aaron")
+		// Expected values
+		val colors: Map<String, Int> =
+			EntityType.entries.associate { it.toString() to it.defaultColor }
 
-			colorFlow.first() == colors
+		// Set upstream with values
+		runBlocking {
+			colors.forEach { (type, color) ->
+				fbp.setColor(userId, type, color)
+			}
 		}
 
-		println(info)
+		// Get the values
+		val colorFlow: Flow<Map<String, Int>> = fbp.getColor(userId)
+
+		// Assert they are true
+		runBlocking {
+			assert(colorFlow.first() == colors)
+		}
 	}
 }

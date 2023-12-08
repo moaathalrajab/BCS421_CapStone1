@@ -17,8 +17,11 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.more
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -55,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -69,6 +73,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MoreViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMoreViewModel
 
+//@Preview
 @Composable
 fun MoreView(
 	navToNotes: () -> Unit, navToReminders: () -> Unit
@@ -417,6 +422,7 @@ fun Customize(eventColor: Int, buildingColor: Int, utilityColor: Int) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileCard() {
+	 val context = LocalContext.current
 	Card(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -470,11 +476,15 @@ fun ProfileCard() {
 					) {
 
 						Image(
-							painter = painterResource(id = R.mipmap.harvey_pfp_front),
+							painter = painterResource(id = R.drawable.harvey), // MUST BE SQUARE
 							contentDescription = "",
 							modifier = Modifier
 								.clip(CircleShape)
-								.size(50.dp)
+								.size(35.dp)
+								.clickable {
+									val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/harvey-tseng/"))
+									context.startActivity(intent)
+								}
 						)
 
 						Text(

@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -216,6 +217,11 @@ fun MapContent(
 			navigateToMore = navigateToMore
 		)
 	}
+	if(focus != null){
+		ModalBottomSheet(onDismissRequest = { setFocus(null) }) {
+			EntityDetail()
+		}
+	}
 }
 
 @Composable
@@ -238,7 +244,9 @@ fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 		),
 		icon = icon,
 	) {
-		setFocus(pinpoint)
+		LaunchedEffect(key1 = pinpoint){
+			setFocus(pinpoint)
+		}
 	}
 }
 

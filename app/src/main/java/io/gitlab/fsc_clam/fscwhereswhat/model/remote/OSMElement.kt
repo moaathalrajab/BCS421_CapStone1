@@ -32,6 +32,6 @@ data class OSMElement(
 	val id: Long,
 	val nodes: List<Long> = emptyList(),
 	val tags: OSMTags? = null,
-	val lat: Float? = null,
-	val lon: Float? = null
+	val lat: Double? = null,
+	val lon: Double? = null
 )

@@ -18,13 +18,13 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import java.net.URL
 
 /**
- * A fake implementation of [RamCentralRepo] for testing purposes.
+ * A fake implementation of [RamCentralRepository] for testing purposes.
  */
-class FakeRamCentralRepo : RamCentralRepo {
+class FakeRamCentralRepository : RamCentralRepository {
 
 	//Internal storage for events
 	private val events: MutableMap<Int, Event> = mutableMapOf(

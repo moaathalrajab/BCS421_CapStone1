@@ -21,9 +21,9 @@ import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepository
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeReminderRepo
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.RemindersViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -42,7 +42,7 @@ import java.net.URL
  */
 class ImplRemindersViewModel(
 	private val repo: ReminderRepository = FakeReminderRepo(),
-	private val ramCentralRepo: RamCentralRepo = FakeRamCentralRepo()
+	private val ramCentralRepo: RamCentralRepository = FakeRamCentralRepository()
 ) : RemindersViewModel() {
 
 	/**

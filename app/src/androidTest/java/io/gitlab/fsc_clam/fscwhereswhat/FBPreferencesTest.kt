@@ -19,9 +19,10 @@ package io.gitlab.fsc_clam.fscwhereswhat
 
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.FBPreferences
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.junit.*
+import org.junit.Before
+import org.junit.Test
 
 class FBPreferencesTest {
 	private lateinit var fbp: FBPreferences
@@ -36,10 +37,10 @@ class FBPreferencesTest {
 	 */
 	@Test
 	fun setColorTest() {
-		val colors: Map<String, String> = mapOf("0" to "#c70000", "1" to "#009c24", "2" to "#4287f5")
-
 		val info = runBlocking {
-			fbp.setColor("Aaron", colors)
+			fbp.setColor("Aaron", "0", "#c70000")
+			fbp.setColor("Aaron", "1", "#009c24")
+			fbp.setColor("Aaron", "2", "#4287f5")
 		}
 
 		println(info)
@@ -62,7 +63,9 @@ class FBPreferencesTest {
 	fun colorIntegrationTest() {
 		val info = runBlocking {
 			val colors: Map<String, String> = mapOf("0" to "#c70000", "1" to "#009c24", "2" to "#4287f5")
-			fbp.setColor("Aaron", colors)
+			fbp.setColor("Aaron", "0", "#c70000")
+			fbp.setColor("Aaron", "1", "#009c24")
+			fbp.setColor("Aaron", "2", "#4287f5")
 			val colorFlow: Flow<Map<String,String>> = fbp.getColor("Aaron")
 
 			colorFlow.first() == colors

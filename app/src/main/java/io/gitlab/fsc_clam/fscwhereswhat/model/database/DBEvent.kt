@@ -37,7 +37,7 @@ data class DBEvent (
 	val name: String,
 	val image: String,
 	val description: String,
-	val instructions: String,
+	val instructions: String?,
 	val locationName: String,
 	val locationId: Int,
 	val hasRSVP: Boolean,

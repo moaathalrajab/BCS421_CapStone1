@@ -18,10 +18,15 @@
 package io.gitlab.fsc_clam.fscwhereswhat.providers.impl
 
 import android.util.Log
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import io.gitlab.fsc_clam.fscwhereswhat.providers.base.Firebase
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * Implementation of Firebase Interface Functions
@@ -33,13 +38,11 @@ class FBPreferences: Firebase {
 	 * the KEY will be an index value associated with a node type
 	 * the VALUE will be the hex value for the color
 	 */
-	override suspend fun setColor(user: String, colorSet: Map<String, String>) {
+	override suspend fun setColor(user: String, type: String, color: String) {
 		val fb = FirebaseDatabase.getInstance().reference
 		val userDir: DatabaseReference = fb.child("userData/$user")
 
-		colorSet.forEach {item ->
-			userDir.child( item.key ).setValue( item.value )
-		}
+		userDir.child(type).setValue(color)
 	}
 
 	/**

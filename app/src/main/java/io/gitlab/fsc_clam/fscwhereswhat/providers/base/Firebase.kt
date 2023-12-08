@@ -29,7 +29,7 @@ interface Firebase {
 	 * the KEY will be an index value associated with a node type
 	 * the VALUE will be the hex value for the color
 	 */
-	suspend fun setColor(user: String, colorSet: Map<String, String>)
+	suspend fun setColor(user: String, type: String, color: String)
 
 	/**
 	 * Gets the color preferences from firebase

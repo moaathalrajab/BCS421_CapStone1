@@ -17,13 +17,27 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
-import android.graphics.Color
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import kotlinx.coroutines.flow.Flow
 
-interface PreferencesRepo {
-	fun getColor(type: EntityType): Flow<Int>
+/**
+ * Interface defining operations for interacting with the color preferences repository
+ */
+interface PreferencesRepository {
 
+	/**
+	 * Get a color from the preferences repository
+	 *
+	 * @param type is the EntityType in which the related color is being requested
+	 */
+	fun getColor(type: EntityType): Flow<String>
+
+	/**
+	 * Set a color in the preferences repository
+	 *
+	 * @param type is the particular EntityType being changed
+	 * @param color is the new color for the EntityType
+	 */
 	suspend fun setColor(type: EntityType, color: Int)
 
 	/**

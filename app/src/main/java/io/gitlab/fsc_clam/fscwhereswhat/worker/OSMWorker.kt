@@ -28,10 +28,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.remote.OSMElement
 import io.gitlab.fsc_clam.fscwhereswhat.model.remote.OSMType
 import io.gitlab.fsc_clam.fscwhereswhat.providers.base.OpenStreetMapAPI
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.OkHttpOpenStreetMapAPI
+import io.gitlab.fsc_clam.fscwhereswhat.providers.okHttpClient
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
 
 /**
  * Downloads latest OSM data and updates database with the new data
@@ -40,16 +39,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 	CoroutineWorker(appContext, params) {
 	private val repo = OSMRepository
 
-	private val client = OkHttpClient.Builder().addInterceptor {
-		val request = it.request()
-		Log.d("OKHttpClient", request.url.toString())
-		runBlocking {
-			delay(100)
-		}
-		it.proceed(request)
-	}.build()
-
-	private val api: OpenStreetMapAPI = OkHttpOpenStreetMapAPI(client)
+	private val api: OpenStreetMapAPI = OkHttpOpenStreetMapAPI(okHttpClient)
 	private val entities = ArrayList<OSMEntity>()
 	override suspend fun doWork(): Result {
 		val relation = api.getFullElement(OSMType.RELATION, FSC_RELATION)
@@ -142,7 +132,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 					id = element.id,
 					lat = 0.0,
 					long = 0.0,
-					name = element.tags.name?:"Building ${element.id}",
+					name = element.tags.name ?: "Building ${element.id}",
 					description = "",
 					hours = OpeningHours.everyDay,
 					hasWater = true,
@@ -154,6 +144,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 		Log.d(LOG, "Parsing OSMElement(${element.id}) nodes")
 		element.nodes.forEach {
 			process(api.getElement(OSMType.NODE, it).elements.first())
+			delay(100)
 		}
 	}
 

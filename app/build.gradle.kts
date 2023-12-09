@@ -11,6 +11,16 @@ val properties = Properties()
 properties.load(File(projectDir, "secrets.properties").reader())
 
 android {
+	signingConfigs {
+		// https://developer.android.com/studio/publish/app-signing#sign-auto
+		all {
+			keyAlias = "clam"
+			// No Quotations in props
+			storeFile = file(properties.getProperty("keystore-path"))
+			storePassword = properties.getProperty("keystore-password")
+			keyPassword = properties.getProperty("keystore-password")
+		}
+	}
 	namespace = "io.gitlab.fsc_clam.fscwhereswhat"
 	compileSdk = 34
 

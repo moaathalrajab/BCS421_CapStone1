@@ -40,7 +40,7 @@ class FakeReminderRepo : ReminderRepository {
 	 * @param eventId The ID of the event associated with the reminder.
 	 * @return A [Flow] emitting the reminder with the given event ID, or null if not found.
 	 */
-	override fun getReminder(eventId: Int): Flow<Reminder?> =
+	override fun getReminder(eventId: Long): Flow<Reminder?> =
 		reminderState.map { reminderList -> reminderList.find { it.eventId == eventId } } // eventId matches eventID of argument
 
 	/**

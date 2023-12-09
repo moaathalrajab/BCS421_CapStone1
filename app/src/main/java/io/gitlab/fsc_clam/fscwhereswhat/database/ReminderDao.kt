@@ -45,7 +45,7 @@ interface ReminderDao {
 
 	/** Get reminder by id **/
 	@Query("SELECT * FROM reminder WHERE eventId = :id")
-	fun getById(id: Int): Flow<DBReminder?>
+	fun getById(id: Long): Flow<DBReminder?>
 
 	/** Returns all reminders with Flow **/
 	@Query("SELECT * FROM reminder")

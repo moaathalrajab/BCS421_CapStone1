@@ -31,7 +31,7 @@ interface ReminderRepository {
 	 * @param eventId The ID of the event associated with the reminder.
 	 * @return A [Flow] emitting the reminder with the given event ID, or null if not found.
 	 */
-	fun getReminder(eventId: Int): Flow<Reminder?>
+	fun getReminder(eventId: Long): Flow<Reminder?>
 
 	/**
 	 * Retrieves all reminders stored in the repository.

@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 class ImplReminderRepository(application: Application) : ReminderRepository {
 	private val db = AppDatabase.get(application).reminderDao
 
-	override fun getReminder(eventId: Int): Flow<Reminder?> =
+	override fun getReminder(eventId: Long): Flow<Reminder?> =
 		db.getById(eventId)
 			.map { it?.toModel() }
 			.flowOn(Dispatchers.IO)

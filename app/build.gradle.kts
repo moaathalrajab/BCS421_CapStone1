@@ -5,6 +5,7 @@ plugins {
 	id("org.jetbrains.kotlin.android")
 	kotlin("plugin.serialization")
 	id("com.google.gms.google-services")
+	id("com.google.devtools.ksp")
 }
 
 val properties = Properties()
@@ -102,7 +103,7 @@ dependencies {
 	implementation("androidx.room:room-common:$room_version")
 	implementation("androidx.room:room-runtime:$room_version")
 	implementation("androidx.room:room-ktx:$room_version")
-	annotationProcessor("androidx.room:room-compiler:$room_version")
+	ksp("androidx.room:room-compiler:$room_version")
 
 	val lifecycle_version = "2.6.2"
 	// ViewModel

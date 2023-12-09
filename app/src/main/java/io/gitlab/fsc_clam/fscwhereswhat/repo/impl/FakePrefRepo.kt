@@ -20,11 +20,11 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class FakePrefRepo : PreferencesRepo {
+class FakePrefRepo : PreferencesRepository {
 
 	private val colors: MutableMap<EntityType, Int> = mutableMapOf(
 		EntityType.BUILDING to Color.Black.toArgb(),

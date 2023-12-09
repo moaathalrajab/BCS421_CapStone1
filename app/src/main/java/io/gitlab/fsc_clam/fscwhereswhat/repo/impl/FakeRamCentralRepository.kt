@@ -19,6 +19,8 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.net.URL
 
 /**
@@ -40,6 +42,10 @@ class FakeRamCentralRepository : RamCentralRepository {
 			URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api")
 		)
 	)
+
+	override suspend fun getAll(): Flow<List<Event>> = flow {
+		emit(events.values.toList())
+	}
 
 	/**
 	 * Retrieves an event with the specified ID from the fake repository.

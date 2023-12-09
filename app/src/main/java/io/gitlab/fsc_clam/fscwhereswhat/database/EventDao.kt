@@ -19,6 +19,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import androidx.room.*
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
+import kotlinx.coroutines.flow.Flow
 
 /**
  * The dao for events from RamCentral held in the room database
@@ -41,7 +42,7 @@ interface EventDao {
 	suspend fun delete(event: DBEvent)
 
 	@Query("SELECT * FROM event")
-	suspend fun getAll(): List<DBEvent>
+	suspend fun getAll(): Flow<List<DBEvent>>
 
 	/** Get specific item by Id **/
 	@Query("SELECT * FROM event WHERE id = :event")

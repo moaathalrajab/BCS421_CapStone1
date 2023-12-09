@@ -30,6 +30,6 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 	foreignKeys = [ForeignKey(DBEvent::class, ["id"], ["eventId"], ForeignKey.CASCADE)]
 )
 data class DBReminder(
-	@PrimaryKey val eventId: Int,
+	@PrimaryKey val eventId: Long,
 	val remind: ReminderTime
 )

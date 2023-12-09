@@ -24,8 +24,8 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepository
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeReminderRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplReminderRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.RemindersViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -42,7 +42,7 @@ import java.net.URL
  * @param ramCentralRepo The repository for handling central data (e.g., events).
  */
 class ImplRemindersViewModel(application: Application) : RemindersViewModel(application) {
-	private val repo: ReminderRepository = FakeReminderRepo()
+	private val repo: ReminderRepository = ReminderRepository.get(application)
 	private val ramCentralRepo: RamCentralRepository = RamCentralRepository.get(application)
 
 	/**

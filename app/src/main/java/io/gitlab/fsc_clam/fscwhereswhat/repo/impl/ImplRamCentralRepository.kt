@@ -23,6 +23,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.net.URL
 
@@ -55,6 +58,11 @@ class ImplRamCentralRepository(
 			hasRSVP = hasRSVP,
 			url = URL(url)
 		)
+
+	override suspend fun getAll(): Flow<List<Event>> =
+		database.getAll()
+			.map { list -> list.map { it.toModel() } }
+			.flowOn(Dispatchers.IO)
 
 	override suspend fun getEvent(id: Long): Event? =
 		withContext(Dispatchers.IO) {

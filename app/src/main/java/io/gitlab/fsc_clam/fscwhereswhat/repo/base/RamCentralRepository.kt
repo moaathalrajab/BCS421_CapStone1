@@ -18,11 +18,17 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface defining operations for interacting with events from Ram Central.
  */
 interface RamCentralRepository {
+
+	/**
+	 * Get all events
+	 */
+	suspend fun getAll(): Flow<List<Event>>
 
 	/**
 	 * Retrieves an event with the specified eventID.

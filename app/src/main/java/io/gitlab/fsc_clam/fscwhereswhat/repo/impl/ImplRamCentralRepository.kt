@@ -59,7 +59,7 @@ class ImplRamCentralRepository(
 			url = URL(url)
 		)
 
-	override suspend fun getAll(): Flow<List<Event>> =
+	override fun getAll(): Flow<List<Event>> =
 		database.getAll()
 			.map { list -> list.map { it.toModel() } }
 			.flowOn(Dispatchers.IO)

@@ -42,7 +42,7 @@ interface EventDao {
 	suspend fun delete(event: DBEvent)
 
 	@Query("SELECT * FROM event")
-	suspend fun getAll(): Flow<List<DBEvent>>
+	fun getAll(): Flow<List<DBEvent>>
 
 	/** Get specific item by Id **/
 	@Query("SELECT * FROM event WHERE id = :event")

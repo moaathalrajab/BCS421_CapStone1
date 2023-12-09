@@ -17,11 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
+import android.app.Application
 import android.graphics.Color
 import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakePrefRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplPreferencesRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.OptionsViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -31,8 +32,8 @@ import kotlinx.coroutines.launch
 /**
  * Sets colors for the pinpoints of Buildings and Events from the Explanation Screen in Onboarding View
  */
-class ImplOptionsViewModel: OptionsViewModel() {
-	private val repo: PreferencesRepository = FakePrefRepo()
+class ImplOptionsViewModel(application: Application) : OptionsViewModel(application) {
+	private val repo = PreferencesRepository.get(application)
 
 	override val buildingColor: StateFlow<Int> by lazy {
 		repo.getColor(EntityType.BUILDING).stateIn(

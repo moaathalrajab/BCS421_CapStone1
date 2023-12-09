@@ -28,7 +28,7 @@ interface RamCentralRepository {
 	/**
 	 * Get all events
 	 */
-	suspend fun getAll(): Flow<List<Event>>
+	fun getAll(): Flow<List<Event>>
 
 	/**
 	 * Retrieves an event with the specified eventID.

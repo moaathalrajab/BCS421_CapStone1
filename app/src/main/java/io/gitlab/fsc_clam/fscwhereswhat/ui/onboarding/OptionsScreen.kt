@@ -60,8 +60,8 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplOptionsViewModel
 fun OptionsScreen() {
 	val optionsViewModel: OptionsViewModel = viewModel<ImplOptionsViewModel>()
 	val eventColor by optionsViewModel.eventColor.collectAsState()
-	val buildingColor by optionsViewModel.eventColor.collectAsState()
-	val utilityColor by optionsViewModel.eventColor.collectAsState()
+	val buildingColor by optionsViewModel.buildingColor.collectAsState()
+	val utilityColor by optionsViewModel.utilityColor.collectAsState()
 	OptionsContent(
 		eventColor = eventColor,
 		buildingColor = buildingColor,

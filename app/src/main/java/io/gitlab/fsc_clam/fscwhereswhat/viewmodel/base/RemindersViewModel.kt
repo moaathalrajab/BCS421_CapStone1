@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * For Reminders View
  */
-abstract class RemindersViewModel : ViewModel() {
+abstract class RemindersViewModel(application: Application) : AndroidViewModel(application) {
 	/**
 	 * Holds list of ReminderItems which contain data on reminder for entity
 	 * @see ReminderItem

@@ -22,7 +22,6 @@ import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.NoteRepository

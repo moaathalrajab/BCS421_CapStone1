@@ -67,9 +67,11 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 			// Current user is null; check SharedPreferences
 			return callbackFlow {
 
-				val listener = OnSharedPreferenceChangeListener { sp, _ ->
-					val color = sp.getInt(type.name, type.defaultColor)
-					trySend(color)
+				val listener = OnSharedPreferenceChangeListener { sp, key ->
+					if (key == type.name) { // Ensure the key that updated is ours
+						val color = sp.getInt(type.name, type.defaultColor)
+						trySend(color)
+					}
 				}
 
 				sharedPref.registerOnSharedPreferenceChangeListener(listener)

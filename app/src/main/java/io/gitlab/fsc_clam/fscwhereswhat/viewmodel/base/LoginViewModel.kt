@@ -17,17 +17,29 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
+import androidx.activity.result.ActivityResult
 import androidx.lifecycle.ViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * For login view in onboarding
  */
-abstract class LoginViewModel: ViewModel() {
+abstract class LoginViewModel : ViewModel() {
+
 	/**
 	 * Used to display user information when login successful
 	 */
 	abstract val user: StateFlow<User?>
 
+	/**
+	 * Displays any errors to the user safely
+	 */
+	abstract val exception: Flow<Throwable>
+
+	/**
+	 * Handle a sign in result
+	 */
+	abstract fun handleSignInResult(result: ActivityResult)
 }

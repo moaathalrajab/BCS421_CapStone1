@@ -38,7 +38,10 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,6 +70,7 @@ fun OnboardingView(
 	) {
 		5
 	}
+	val snackbarState = remember { SnackbarHostState() }
 	val state = rememberCoroutineScope()
 	Scaffold(
 		bottomBar = {
@@ -147,6 +151,9 @@ fun OnboardingView(
 				}
 
 			)
+		},
+		snackbarHost = {
+			SnackbarHost(snackbarState)
 		}
 	) {
 		//Allows users to swap to each screen when horizontally swiped
@@ -164,7 +171,9 @@ fun OnboardingView(
 			when (page) {
 				0 -> WelcomeScreen()
 				1 -> ExplanationScreen()
-				2 -> LoginScreen()
+				2 -> LoginScreen(
+					showSnackBar = snackbarState::showSnackbar
+				)
 				3 -> OptionsScreen()
 				4 -> ThanksScreen(onFinish)
 			}

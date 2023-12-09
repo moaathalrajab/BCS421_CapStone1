@@ -17,7 +17,6 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -66,8 +65,6 @@ fun ExplanationScreen() {
 			.fillMaxSize()
 			.background(Color.White)
 	) {
-		Log.d("Height", maxHeight.value.toString())
-		Log.d("Width", maxWidth.value.toString())
 		Column(
 			modifier = Modifier
 				.fillMaxSize()

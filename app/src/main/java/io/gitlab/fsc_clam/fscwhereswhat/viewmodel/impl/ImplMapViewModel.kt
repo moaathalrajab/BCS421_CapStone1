@@ -26,11 +26,12 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeOSMRepo
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakePrefRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeUserRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplLocationRepository.Companion.get
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplPreferencesRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,7 +41,7 @@ import kotlinx.coroutines.flow.stateIn
 
 class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val userRepo = FakeUserRepo()
-	private val prefRepo = FakePrefRepo()
+	private val prefRepo = PreferencesRepository.get(application)
 	private val osmRepo = FakeOSMRepo()
 	private val ramCentralRepo = FakeRamCentralRepository()
 	private val locationRepo = LocationRepository.get(application)

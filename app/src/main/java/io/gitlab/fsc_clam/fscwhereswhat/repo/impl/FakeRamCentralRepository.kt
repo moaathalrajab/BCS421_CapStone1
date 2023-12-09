@@ -18,18 +18,18 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import java.net.URL
 
 /**
- * A fake implementation of [RamCentralRepo] for testing purposes.
+ * A fake implementation of [RamCentralRepository] for testing purposes.
  */
-class FakeRamCentralRepo : RamCentralRepo {
+class FakeRamCentralRepository : RamCentralRepository {
 
 	//Internal storage for events
-	private val events: MutableMap<Int, Event> = mutableMapOf(
-		0 to Event(
-			0,
+	private val events: MutableMap<Long, Event> = mutableMapOf(
+		0L to Event(
+			0L,
 			"Basketball",
 			URL("https://tse1.mm.bing.net/th?id=OIP.OZQP0Ud2cFFmyo6yphrd1QAAAA&pid=Api"),
 			"Basketball Competition",
@@ -48,7 +48,7 @@ class FakeRamCentralRepo : RamCentralRepo {
 	 * @return The event with the given ID.
 	 * @throws NoSuchElementException if no event with the specified ID is found.
 	 */
-	override suspend fun getEvent(id: Int): Event {
+	override suspend fun getEvent(id: Long): Event {
 		return events[id] ?: throw NoSuchElementException("Event with id $id not found")
 	}
 

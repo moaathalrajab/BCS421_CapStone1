@@ -15,22 +15,36 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.local
+package io.gitlab.fsc_clam.fscwhereswhat.providers
 
-import java.net.URL
+import android.util.Log
+import io.gitlab.fsc_clam.fscwhereswhat.BuildConfig
+import okhttp3.OkHttpClient
+
+private var _okHttpClient: OkHttpClient? = null
 
 /**
- * ReminderItem holds data for the UI Reminder
- * @param eventId is the id of the RamCentral Event
- * @param eventName name for the event
- * @param imageURL the link to the organization profile pic
- * @param remind time of the reminder
- * @param date of the event
+ * OkHttpClient to use in the application
  */
-data class ReminderItem(
-	val eventId: Long,
-	val eventName: String,
-	val imageURL: URL,
-	val remind: ReminderTime,
-	val date: String
-)
+val okHttpClient: OkHttpClient
+	@Synchronized
+	get() {
+		if (_okHttpClient == null) {
+			_okHttpClient = OkHttpClient.Builder()
+				.addInterceptor { chain ->
+					// Get the request
+					val request = chain.request()
+
+					// Log the request URL
+					if (BuildConfig.DEBUG) {
+						Log.v("OkHTTPClient", request.url.toString())
+					}
+
+					// proceed on the chain (returns as last line)
+					chain.proceed(request)
+				}
+				.build()
+		}
+
+		return _okHttpClient!!
+	}

@@ -22,7 +22,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 /**
  * Interface defining operations for interacting with events from Ram Central.
  */
-interface RamCentralRepo {
+interface RamCentralRepository {
 
 	/**
 	 * Retrieves an event with the specified eventID.
@@ -30,7 +30,7 @@ interface RamCentralRepo {
 	 * @param id The ID of the event to be retrieved.
 	 * @return The event with the given ID.
 	 */
-	suspend fun getEvent(id: Int): Event
+	suspend fun getEvent(id: Long): Event?
 
 	/**
 	 * Adds a new event to the repository.

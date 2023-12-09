@@ -20,9 +20,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeNotesRepo
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

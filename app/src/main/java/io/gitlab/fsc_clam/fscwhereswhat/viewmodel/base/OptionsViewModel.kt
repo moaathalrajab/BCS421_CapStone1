@@ -17,13 +17,15 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * For Options Screen in Onboarding Process
  */
-abstract class OptionsViewModel : ViewModel() {
+abstract class OptionsViewModel(application: Application) : AndroidViewModel(application) {
 	/**
 	 * Color of Building pinpoints
 	 */

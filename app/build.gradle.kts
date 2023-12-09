@@ -1,9 +1,14 @@
+import java.util.Properties
+
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
 	kotlin("plugin.serialization")
 	id("com.google.gms.google-services")
 }
+
+val properties = Properties()
+properties.load(File(projectDir, "secrets.properties").reader())
 
 android {
 	namespace = "io.gitlab.fsc_clam.fscwhereswhat"
@@ -20,6 +25,12 @@ android {
 		vectorDrawables {
 			useSupportLibrary = true
 		}
+		buildConfigField(
+			"String",
+			"mapboxAPI",
+			properties.getProperty("mapboxAPI")
+
+		)
 	}
 
 	buildTypes {
@@ -29,6 +40,7 @@ android {
 				getDefaultProguardFile("proguard-android-optimize.txt"),
 				"proguard-rules.pro"
 			)
+
 		}
 	}
 	compileOptions {
@@ -39,6 +51,7 @@ android {
 		jvmTarget = "17"
 	}
 	buildFeatures {
+		buildConfig = true
 		compose = true
 	}
 	composeOptions {
@@ -99,4 +112,8 @@ dependencies {
 	val nav_version = "2.7.5"
 
 	implementation("androidx.navigation:navigation-compose:$nav_version")
+	//OSM
+	implementation("org.osmdroid:osmdroid-android:6.1.17")
+	implementation("tech.utsmankece:osm-androd-compose:+")
+
 }

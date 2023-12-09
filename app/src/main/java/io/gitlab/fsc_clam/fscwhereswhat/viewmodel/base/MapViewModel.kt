@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
@@ -26,7 +27,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * For Map View
  */
-abstract class MapViewModel : ViewModel() {
+abstract class MapViewModel(application: Application) : AndroidViewModel(application) {
 	/**
 	 * If user has logged in, stores user data
 	 */
@@ -50,12 +51,32 @@ abstract class MapViewModel : ViewModel() {
 	/**
 	 * The current longitude of user
 	 */
-	abstract val longitude: StateFlow<Float>
+	abstract val longitude: StateFlow<Double>
 
 	/**
 	 * The current latitude of user
 	 */
-	abstract val latitude: StateFlow<Float>
+	abstract val latitude: StateFlow<Double>
+
+	/**
+	 * If user clicks a pinpoint, that pinpoint is zoomed in to focus
+	 */
+	abstract val focus: StateFlow<Pinpoint?>
+
+	/**
+	 * Building color of pinpoints
+	 */
+	abstract val buildingColor: StateFlow<Int>
+
+	/**
+	 * Event color of pinpoints
+	 */
+	abstract val eventColor: StateFlow<Int>
+
+	/**
+	 * Node color of pinpoints
+	 */
+	abstract val nodeColor: StateFlow<Int>
 
 	/**
 	 * Sets active filter when user clicks filter button
@@ -65,7 +86,6 @@ abstract class MapViewModel : ViewModel() {
 	/**
 	 * When user clicks pinpoint, zoom in to the point
 	 */
-	abstract fun setFocus(pinpoint: Pinpoint)
-
+	abstract fun setFocus(pinpoint: Pinpoint?)
 
 }

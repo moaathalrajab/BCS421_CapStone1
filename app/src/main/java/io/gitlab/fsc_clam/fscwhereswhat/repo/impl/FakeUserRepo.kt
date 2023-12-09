@@ -15,19 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.common
+package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
-import okhttp3.HttpUrl.Companion.toHttpUrl
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.UserRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-/**
- * URL to OSM API
- */
-const val OSM_API_URL = "https://openstreetmap.org/api/0.6/"
-
-/**
- * URL to FSC API
- */
-val RC_API_URL = "https://farmingdale.campuslabs.com/engage/api/".toHttpUrl()
-
-const val FSC_LAT = 40.7515
-const val FSC_LOG = -73.4295
+class FakeUserRepo: UserRepository {
+	override val user: StateFlow<User?> = MutableStateFlow(null)
+}

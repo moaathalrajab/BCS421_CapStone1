@@ -28,7 +28,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeOSMRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakePrefRepo
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeUserRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplLocationRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
@@ -42,7 +42,7 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val userRepo = FakeUserRepo()
 	private val prefRepo = FakePrefRepo()
 	private val osmRepo = FakeOSMRepo()
-	private val ramCentralRepo = FakeRamCentralRepo()
+	private val ramCentralRepo = FakeRamCentralRepository()
 	private val locationRepo = LocationRepository.get(application)
 
 	override val user: StateFlow<User?> by lazy {

@@ -18,15 +18,18 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -92,15 +95,23 @@ fun OptionsContent(
 	setUtilityColor: (Int) -> Unit
 ) {
 	//Creates the white background to hold content
-	Surface(
+	BoxWithConstraints(
 		modifier = Modifier
 			.padding(16.dp)
+			.background(Color.White)
 			.fillMaxSize()
 	)
 	{
 		Column(
 			modifier = Modifier
-				.fillMaxSize(),
+				.fillMaxSize()
+				.let {
+					if (maxHeight < 480.dp) {
+						it.verticalScroll(rememberScrollState())
+					} else {
+						it
+					}
+				},
 			verticalArrangement = Arrangement.spacedBy(
 				16.dp,
 				alignment = Alignment.CenterVertically

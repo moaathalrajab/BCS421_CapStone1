@@ -17,6 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * For Notes View
  */
-abstract class NotesViewModel: ViewModel() {
+abstract class NotesViewModel(application: Application) : AndroidViewModel(application) {
 	/**
 	 * List of user comments about an entity
 	 */

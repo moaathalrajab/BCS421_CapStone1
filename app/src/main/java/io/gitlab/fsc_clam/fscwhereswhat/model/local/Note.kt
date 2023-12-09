@@ -25,6 +25,6 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
  */
 data class Note(
 	val comment: String,
-	val reference: Int,
+	val reference: Long,
 	val type: EntityType
 )

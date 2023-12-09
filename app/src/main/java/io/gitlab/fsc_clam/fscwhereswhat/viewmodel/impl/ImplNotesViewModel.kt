@@ -17,46 +17,87 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
+import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NoteItem
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.NoteRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeOSMRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplNoteRepository.Companion.get
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.net.URL
 
 /**
  * Fake ViewModel for NotesView
  */
-class ImplNotesViewModel: NotesViewModel() {
-	//private lateinit var repo: FakeNotesRepo
-	override val notes: MutableStateFlow<List<NoteItem>> = MutableStateFlow(arrayListOf(
-		NoteItem(
-			"This is a comment", 3, EntityType.EVENT,
-			Image.Drawable(3), "Event Name"
-		)
-	))
+class ImplNotesViewModel(application: Application) : NotesViewModel(application) {
+	private val repo = NoteRepository.get(application)
+	private val osmRepo: OSMRepository = FakeOSMRepo()
+	private val ramRepo = RamCentralRepository.get(application)
+
+	override val notes = repo.getAllNotes().map { list ->
+		list.map { note ->
+			val refName: String
+			val refImage: Image
+
+			when (note.type) {
+				EntityType.EVENT -> {
+					val event = ramRepo.getEvent(note.reference)
+					refName = event?.name ?: "Unknown event"
+					if (event == null) {
+						refImage = Image.Drawable(R.drawable.baseline_error_24)
+					} else {
+						refImage = Image.Asset(event.image)
+					}
+				}
+
+				else -> {
+					val entity = osmRepo.get(note.reference)
+
+					refName = entity?.name ?: " Unknown location"
+
+					if (entity == null) {
+						refImage = Image.Drawable(R.drawable.baseline_error_24)
+					} else {
+						refImage = Image.Drawable(
+							when (entity) {
+								is OSMEntity.Building -> R.drawable.building_icon
+								is OSMEntity.Node -> R.drawable.node_icon
+							}
+						)
+					}
+				}
+			}
+
+			NoteItem(
+				note.comment,
+				note.reference,
+				note.type,
+				refImage,
+				refName
+			)
+		}
+	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
 	override fun updateNote(note: NoteItem) {
 		viewModelScope.launch {
-			val noteList = ArrayList(notes.value)
-			var pos = noteList.indexOfFirst {
-				it.reference == note.reference
-			}
-			if(pos != -1) {
-				noteList[pos] = note
-				notes.value = noteList
-			}
-			//repo.updateNote(Note(note.comment, note.reference, note.type))
+			repo.updateNote(Note(note.comment, note.reference, note.type))
 		}
 	}
 
 	override fun deleteNote(note: NoteItem) {
 		viewModelScope.launch {
-			val noteList = ArrayList(notes.value)
-			noteList.remove(note)
-			notes.value = noteList
-			//repo.deleteNote(Note(note.comment, note.reference, note.type))
+			repo.deleteNote(Note(note.comment, note.reference, note.type))
 		}
 	}
 }

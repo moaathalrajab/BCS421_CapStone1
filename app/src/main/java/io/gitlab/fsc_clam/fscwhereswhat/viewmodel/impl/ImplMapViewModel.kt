@@ -48,9 +48,9 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val ramCentralRepo = RamCentralRepository.get(application)
 	private val locationRepo = LocationRepository.get(application)
 
-	override val user: StateFlow<User?> =
-		userRepo.user
-			.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+	override val user: StateFlow<User?> = userRepo.user.stateIn(
+		viewModelScope, SharingStarted.Eagerly, null
+	)
 
 	override val query: MutableStateFlow<String?> = MutableStateFlow(null)
 

@@ -20,15 +20,17 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.graphics.Color
+import androidx.core.content.edit
 import com.google.firebase.auth.FirebaseAuth
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.FBPreferences
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -84,8 +86,16 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 	}
 
 	override suspend fun setColor(type: EntityType, color: Int) {
-		val user = firebaseAuth.currentUser!!.displayName
-		fbp.setColor(user!!, type.name, color)
+		withContext(Dispatchers.IO) {
+			val userId = firebaseAuth.currentUser?.uid
+			if (userId != null) {
+				fbp.setColor(userId, type.name, color)
+			} else {
+				sharedPref.edit(true) {
+					putInt(type.name, color)
+				}
+			}
+		}
 	}
 
 	companion object {

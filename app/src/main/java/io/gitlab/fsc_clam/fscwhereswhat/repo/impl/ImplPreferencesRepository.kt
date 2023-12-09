@@ -54,21 +54,17 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 		application.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
 
 	override fun getColor(type: EntityType): Flow<Int> {
+		val fUID = firebaseAuth.currentUser?.uid
 
 		// First check if current user is logged in
-		if (firebaseAuth.currentUser != null) {
-
-			val user = firebaseAuth.currentUser!!.displayName
-			val fbColors = fbp.getColor(user.toString())
+		if (fUID != null) {
+			val fbColors = fbp.getColor(fUID)
 
 			return fbColors.map {
 				(it[type.name]!!)
 			}
-
-		}
-
-		// Current user is null; check SharedPreferences
-		else {
+		} else {
+			// Current user is null; check SharedPreferences
 			return callbackFlow {
 
 				val listener = OnSharedPreferenceChangeListener { sp, _ ->

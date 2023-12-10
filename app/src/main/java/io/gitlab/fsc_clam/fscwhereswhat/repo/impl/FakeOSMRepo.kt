@@ -23,6 +23,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
 
@@ -32,8 +33,8 @@ class FakeOSMRepo: OSMRepository {
 		listOf<OSMEntity>(
 			OSMEntity.Node(
 				id =0,
-				lat = 43.0f,
-				long = -73.0f,
+				lat = 43.0,
+				long = -73.0,
 				name = "Example",
 				description = "Description",
 				hours = OpeningHours(true, true, true, true, true, true, true, 0, 0 ,0, 0),
@@ -41,23 +42,12 @@ class FakeOSMRepo: OSMRepository {
 			)
 		)
 	)
-	override suspend fun query(token: Token): List<OSMEntity> {
-		return entities.value
+	override suspend fun query(token: Token): Flow<List<OSMEntity>> {
+		return entities
 	}
 
-	override suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity> {
-		val randomList = listOf(
-			OSMEntity.Node(
-				id = 0,
-				lat = latitude,
-				long = longitude,
-				name = "Example",
-				description = "Description",
-				hours = OpeningHours(true, true, true, true, true, true, true, 0, 0 ,0, 0),
-				nodeType = NodeType.SOS
-			)
-		)
-		return randomList
+	override suspend fun queryNearby(latitude: Double, longitude: Double): Flow<List<OSMEntity>> {
+		return entities
 	}
 
 	override suspend fun get(id: Long): OSMEntity {
@@ -65,11 +55,11 @@ class FakeOSMRepo: OSMRepository {
 	}
 
 
-	override suspend fun update(entites: List<OSMEntity>) {
+	override suspend fun update(entities: List<OSMEntity>) {
 		withContext(Dispatchers.IO){
-			val entityList = ArrayList(entities.value)
-			entityList.addAll(entityList.size - 1, entites)
-			entities.value = entityList
+			val entityList = ArrayList(this@FakeOSMRepo.entities.value)
+			entityList.addAll(entityList.size - 1, entities)
+			this@FakeOSMRepo.entities.value = entityList
 		}
 	}
 }

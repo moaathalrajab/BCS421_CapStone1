@@ -23,8 +23,8 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
 sealed interface OSMEntity {
 
 	val id: Long
-	val lat: Float
-	val long: Float
+	val lat: Double
+	val long: Double
 	val name: String
 	val description: String
 	val hours: OpeningHours
@@ -34,8 +34,8 @@ sealed interface OSMEntity {
 	 */
 	data class Building(
 		override val id: Long,
-		override val lat: Float,
-		override val long: Float,
+		override val lat: Double,
+		override val long: Double,
 		override val name: String,
 		override val description: String,
 		override val hours: OpeningHours,
@@ -45,8 +45,8 @@ sealed interface OSMEntity {
 
 	data class Node(
 		override val id: Long,
-		override val lat: Float,
-		override val long: Float,
+		override val lat: Double,
+		override val long: Double,
 		override val name: String,
 		override val description: String,
 		override val hours: OpeningHours,

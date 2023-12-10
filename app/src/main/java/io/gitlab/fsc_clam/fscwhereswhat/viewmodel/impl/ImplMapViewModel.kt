@@ -69,6 +69,24 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	override val latitude: StateFlow<Double> =
 		locationRepo.latitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LAT)
 
+	override val buildingColor: StateFlow<Int> =
+		prefRepo.getColor(EntityType.BUILDING).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK
+		)
+
+	override val eventColor: StateFlow<Int> =
+		prefRepo.getColor(EntityType.EVENT).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK
+		)
+
+	override val nodeColor: StateFlow<Int> =
+		prefRepo.getColor(EntityType.NODE).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.BLACK
+		)
+
 	private val coordinates: Flow<Pair<Double, Double>> = latitude.combine(longitude){ lat, long ->
 		lat to long
 	}
@@ -127,26 +145,6 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 			list
 		else list.filter { it.id == focus.id }
 	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
-
-	override val buildingColor: StateFlow<Int> by lazy {
-		prefRepo.getColor(EntityType.BUILDING).stateIn(
-			viewModelScope,
-			SharingStarted.Eagerly, Color.BLACK
-		)
-	}
-	override val eventColor: StateFlow<Int> by lazy {
-		prefRepo.getColor(EntityType.EVENT).stateIn(
-			viewModelScope,
-			SharingStarted.Eagerly, Color.BLACK
-		)
-	}
-
-	override val nodeColor: StateFlow<Int> by lazy {
-		prefRepo.getColor(EntityType.NODE).stateIn(
-			viewModelScope,
-			SharingStarted.Eagerly, Color.BLACK
-		)
-	}
 
 	override fun setActiveFilter(filter: EntityType?) {
 		activeFilter.value = filter

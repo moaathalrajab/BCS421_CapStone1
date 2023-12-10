@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.gitlab.fsc_clam.fscwhereswhat.ui.main.MainView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.map.MapView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 
@@ -36,45 +37,5 @@ class MainActivity : ComponentActivity() {
 		setContent {
 			MainView()
 		}
-	}
-}
-
-@Composable
-fun MainView() {
-	FSCWheresWhatTheme {
-		MainContent()
-	}
-}
-
-@Preview
-@Composable
-fun PreviewMainContent() {
-	MainContent()
-}
-
-@Composable
-fun MainContent() {
-	// A surface container using the 'background' color from the theme
-	Surface(
-		modifier = Modifier.fillMaxSize(),
-		color = MaterialTheme.colorScheme.background
-	) {
-		Greeting("Android")
-	}
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-	Text(
-		text = "Hello $name!",
-		modifier = modifier
-	)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewGreeting() {
-	FSCWheresWhatTheme {
-		Greeting("Android")
 	}
 }

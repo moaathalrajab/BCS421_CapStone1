@@ -69,12 +69,6 @@
     <string name="notesHeading">Notes</string>
     <string name="editComment">Edit Comment</string>
     <string name="options_cancel_button">CANCEL</string>
-    <string name="search_bar_label">Search</string>
-    <string name="more_button_desc">Go to more view</string>
-    <string name="account_icon">User account</string>
-    <string name="search_bar_label">Search</string>
-    <string name="more_button_desc">Go to more view</string>
-    <string name="account_icon">User account</string>
     <string name="nav_back">Navigate back to the previous screen.</string>
     <string name="search_bar_label">Search</string>
     <string name="more_button_desc">Go to more view</string>

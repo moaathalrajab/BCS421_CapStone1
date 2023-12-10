@@ -113,18 +113,28 @@ fun MapUI(
 			}
 		}
 
-		IconButton(
+		Card(
 			modifier = Modifier
-				.padding(12.dp)
+				.padding(8.dp)
 				.align(Alignment.TopEnd),
-			onClick = onRecenter
-		) {
-			Icon(
-				Icons.Filled.LocationOn,
-				contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
-				modifier = Modifier.size(50.dp)
-			)
+			border = BorderStroke(2.dp, Color.LightGray),
+			shape = CircleShape,
+			colors = CardDefaults.cardColors(containerColor = Color.White)
+		){
+			IconButton(
+				modifier = Modifier
+					.padding(12.dp),
+				onClick = onRecenter
+			) {
+				Icon(
+					Icons.Filled.LocationOn,
+					contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
+					modifier = Modifier.size(50.dp),
+					tint = Color.Red
+				)
+			}
 		}
+
 		//Holds the search bar and filter buttons
 		Column(
 			modifier = Modifier

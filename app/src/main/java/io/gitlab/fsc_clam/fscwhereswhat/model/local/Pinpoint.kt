@@ -26,6 +26,6 @@ data class Pinpoint(
 	val latitude: Double,
 	val longitude: Double,
 	val color: Int,
-	val id: Int,
+	val id: Long,
 	val type: EntityType,
 )

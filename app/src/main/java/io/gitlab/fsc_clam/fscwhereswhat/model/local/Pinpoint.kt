@@ -28,5 +28,4 @@ data class Pinpoint(
 	val color: Int,
 	val id: Int,
 	val type: EntityType,
-	val isFocused: Boolean
 )

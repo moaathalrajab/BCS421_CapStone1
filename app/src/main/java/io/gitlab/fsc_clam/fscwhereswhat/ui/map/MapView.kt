@@ -277,7 +277,6 @@ fun PreviewMapContent() {
 				0,
 				0,
 				EntityType.NODE,
-				false
 			),
 			Pinpoint(
 				40.751485,
@@ -285,7 +284,6 @@ fun PreviewMapContent() {
 				0,
 				0,
 				EntityType.BUILDING,
-				false
 			),
 			Pinpoint(
 				40.751632,
@@ -293,7 +291,6 @@ fun PreviewMapContent() {
 				0,
 				0,
 				EntityType.EVENT,
-				false
 			)
 		),
 		activeFilter = null,

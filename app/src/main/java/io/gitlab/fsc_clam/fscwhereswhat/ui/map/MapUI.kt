@@ -17,6 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -82,23 +84,32 @@ fun MapUI(
 	) {
 		//Icon of the Account
 		//WIP should include functionality to login
-		IconButton(
+		Card(
 			modifier = Modifier
-				.padding(12.dp)
+				.padding(8.dp)
 				.align(Alignment.TopStart),
-			onClick = { /*TODO*/ }
+			shape = CircleShape,
+			border = BorderStroke(2.dp, Color.LightGray),
+			colors = CardDefaults.cardColors(containerColor = Color.White)
 		) {
-			if (user != null) {
-				AsyncImage(
-					model = user.image,
-					contentDescription = stringResource(id = R.string.account_icon)
-				)
-			} else {
-				Icon(
-					Icons.Filled.AccountCircle,
-					contentDescription = stringResource(id = R.string.account_icon),
-					modifier = Modifier.size(50.dp)
-				)
+			IconButton(
+				modifier = Modifier
+					.padding(12.dp),
+				onClick = { TODO("Add Login functionality") }
+			) {
+				if (user != null) {
+					AsyncImage(
+						model = user.image,
+						contentDescription = stringResource(id = R.string.account_icon),
+						modifier = Modifier.size(50.dp)
+					)
+				} else {
+					Icon(
+						Icons.Filled.AccountCircle,
+						contentDescription = stringResource(id = R.string.account_icon),
+						modifier = Modifier.size(50.dp)
+					)
+				}
 			}
 		}
 

@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
 import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
@@ -35,11 +36,15 @@ import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplPreferencesRepository.Comp
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplUserRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transform
 
 class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val userRepo = UserRepository.get()
@@ -58,18 +63,61 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 
 	override val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)
 
-	override val pinpoints: StateFlow<List<Pinpoint>> = MutableStateFlow(
-		listOf(
-			Pinpoint(
-				40.75175,
-				-73.42902,
-				0,
-				0,
-				EntityType.NODE,
-				false
-			)
+	override val longitude: StateFlow<Double> =
+		locationRepo.longitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LOG)
+
+	override val latitude: StateFlow<Double> =
+		locationRepo.latitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LAT)
+
+	private val coordinates: Flow<Pair<Double, Double>> = latitude.combine(longitude){ lat, long ->
+		lat to long
+	}
+
+	private val osmPinpoint: StateFlow<List<Pinpoint>> = coordinates.transform { (lat, long) ->
+		emitAll(
+			osmRepo.queryNearby(lat, long).map{ entities ->
+				entities.map {entity ->
+					when(osmRepo.get(entity.id)){
+						is OSMEntity.Building -> {
+							Pinpoint(
+								latitude = entity.lat,
+								longitude = entity.long,
+								color = buildingColor.value,
+								id = entity.id,
+								type = EntityType.BUILDING,
+							)
+						}
+						is OSMEntity.Node -> {
+							Pinpoint(
+								latitude = entity.lat,
+								longitude = entity.long,
+								color = nodeColor.value,
+								id = entity.id,
+								type = EntityType.NODE,
+							)
+						}
+					}
+				}
+			}
 		)
-	).combine(activeFilter) { list, filter ->
+	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+	private val eventPinpoint: StateFlow<List<Pinpoint>> = ramCentralRepo.getAll().map { events ->
+		events.map { event ->
+			val osmEvent = osmRepo.get(event.id)
+			Pinpoint(
+				latitude = osmEvent.lat,
+				longitude = osmEvent.long,
+				color = eventColor.value,
+				id = event.id,
+				type = EntityType.EVENT
+			)
+		}
+	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+
+	override val pinpoints: StateFlow<List<Pinpoint>> = osmPinpoint.combine(eventPinpoint){ osm, event ->
+		osm + event
+	}.combine(activeFilter) { list, filter ->
 		if (filter == null)
 			list
 		else list.filter { it.type == filter }
@@ -79,12 +127,6 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 			list
 		else list.filter { it.id == focus.id }
 	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
-
-	override val longitude: StateFlow<Double> =
-		locationRepo.longitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LOG)
-
-	override val latitude: StateFlow<Double> =
-		locationRepo.latitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LAT)
 
 	override val buildingColor: StateFlow<Int> by lazy {
 		prefRepo.getColor(EntityType.BUILDING).stateIn(

@@ -20,10 +20,15 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 import android.app.Application
 import android.graphics.Color
 import androidx.lifecycle.viewModelScope
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplPreferencesRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MoreViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
@@ -33,49 +38,50 @@ class ImplMoreViewModel(application: Application) : MoreViewModel(application) {
 	override val exceptions = MutableSharedFlow<Throwable>()
 	override val cacheStatus = MutableSharedFlow<Boolean>()
 
-	/**
-	 * A [StateFlow] representing the color associated with buildings.
-	 */
-	override val buildingColor: StateFlow<Color>
-		get() = TODO("Not yet implemented")
+	private val repo = PreferencesRepository.get(application)
 
-	/**
-	 * A [StateFlow] representing the color associated with events.
-	 * Not yet implemented.
-	 */
-	override val eventColor: StateFlow<Color>
-		get() = TODO("Not yet implemented")
+	override val buildingColor: StateFlow<Int> by lazy {
+		repo.getColor(EntityType.BUILDING).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.RED
+		)
+	}
 
-	/**
-	 * A [StateFlow] representing the color associated with utilities.
-	 * Not yet implemented.
-	 */
-	override val utilityColor: StateFlow<Color>
-		get() = TODO("Not yet implemented")
+	override val eventColor: StateFlow<Int> by lazy {
+		repo.getColor(EntityType.EVENT).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.RED
+		)
+	}
 
-	/**
-	 * Set the color associated with buildings.
-	 * @param color The color to be set.
-	 */
-	override fun setBuildingColor(color: Color) {
-		TODO("Not yet implemented")
+	override val utilityColor: StateFlow<Int> by lazy {
+		repo.getColor(EntityType.NODE).stateIn(
+			viewModelScope,
+			SharingStarted.Eagerly, Color.RED
+		)
+	}
+
+	override fun setBuildingColor(color: Int) {
+		viewModelScope.launch {
+			repo.setColor(EntityType.BUILDING, color)
+		}
+	}
+
+	override fun setEventColor(color: Int) {
+		viewModelScope.launch {
+			repo.setColor(EntityType.EVENT, color)
+		}
+	}
+
+	override fun setUtilityColor(color: Int) {
+		viewModelScope.launch {
+			repo.setColor(EntityType.NODE, color)
+		}
 	}
 
 	/**
-	 * Set the color associated with events.
-	 * @param color The color to be set.
+	 * Clearing the cache
 	 */
-	override fun setEventColor(color: Color) {
-		TODO("Not yet implemented")
-	}
-
-	/**
-	 * Set the color associated with utilities.
-	 * @param color The color to be set.
-	 */
-	override fun setUtilityColor(color: Color) {
-		TODO("Not yet implemented")
-	}
 
 	override fun clearCache() {
 		viewModelScope.launch(Dispatchers.IO) {

@@ -29,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.gitlab.fsc_clam.fscwhereswhat.ui.map.MapView
+import io.gitlab.fsc_clam.fscwhereswhat.ui.more.MoreView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.notes.NotesView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding.OnboardingView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.reminders.RemindersView
@@ -96,6 +97,10 @@ fun MainContent(
 		}
 
 		composable("more") {
+			MoreView(
+				navToNotes = { navController.navigate("notes") },
+				navToReminders = { navController.navigate("reminders") }
+			)
 		}
 	}
 }

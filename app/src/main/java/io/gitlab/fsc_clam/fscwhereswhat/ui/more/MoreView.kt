@@ -135,14 +135,15 @@ fun MoreContent(
 	}, snackbarHost = { SnackbarHost(snackbarHostState) }
 	) {
 		val scroll = rememberScrollState()
-		Column(modifier = Modifier
-			.padding(it)
-			.verticalScroll(scroll)) {
+		Column(
+			modifier = Modifier
+				.padding(it)
+				.verticalScroll(scroll)
+		) {
 			// Reminder Card
 			Card(
-				onClick = {
-					navToReminders
-				}, modifier = Modifier
+				onClick = navToReminders,
+				modifier = Modifier
 					.padding(8.dp)
 					.fillMaxWidth()
 			) {
@@ -192,9 +193,8 @@ fun MoreContent(
 
 			//  NOTES VIEW
 			Card(
-				onClick = {
-					navToNotes
-				}, modifier = Modifier
+				onClick = navToNotes,
+				modifier = Modifier
 					.padding(8.dp)
 					.fillMaxWidth()
 			) {
@@ -422,7 +422,7 @@ fun Customize(eventColor: Int, buildingColor: Int, utilityColor: Int) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileCard() {
-	 val context = LocalContext.current
+	val context = LocalContext.current
 	Card(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -482,7 +482,10 @@ fun ProfileCard() {
 								.clip(CircleShape)
 								.size(35.dp)
 								.clickable {
-									val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.linkedin.com/in/harvey-tseng/"))
+									val intent = Intent(
+										Intent.ACTION_VIEW,
+										Uri.parse("https://www.linkedin.com/in/harvey-tseng/")
+									)
 									context.startActivity(intent)
 								}
 						)
@@ -526,7 +529,9 @@ fun ProfileCard() {
 				horizontalAlignment = Alignment.CenterHorizontally,
 			) {
 				Text(
-					text = "Team CLAM \nVersion #1.0", fontSize = 12.sp, fontWeight = FontWeight.Bold
+					text = "Team CLAM \nVersion #1.0",
+					fontSize = 12.sp,
+					fontWeight = FontWeight.Bold
 				)
 			}
 		}

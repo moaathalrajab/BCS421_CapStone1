@@ -20,6 +20,10 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 import android.app.Application
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.QueryRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplQueryRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.SearchViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,8 +34,16 @@ import kotlinx.coroutines.flow.StateFlow
  * It manages the user input query, active filter, and the list of entities for search results.
  *
  * @param application The application context.
+ * @param QueryRepository The repository for managing queries and entities.
  */
-class ImplSearchViewModel(application: Application) : SearchViewModel(application) {
+class ImplSearchViewModel(
+	application: Application,
+	private val queryRepository: QueryRepository
+) : SearchViewModel(application) {
+
+	private val QueryRepo: QueryRepository = QueryRepository.get()
+	private lateinit var OSMRepo: OSMRepository
+	private lateinit var RamCentralRepo: RamCentralRepository
 
 	/**
 	 * Holds the user input from the search bar.
@@ -69,18 +81,7 @@ class ImplSearchViewModel(application: Application) : SearchViewModel(applicatio
 	 * @param filter The entity type being filtered.
 	 */
 	override fun setActiveFilter(filter: EntityType?) {
-		_activeFilter.value = filter
-		// update the entities based on the new filter
-		updateEntities()
-	}
-
-	/**
-	 * Fetches and updates the list of entities based on the current query and active filter.
-	 * Uses ______ repository
-	 */
-	private fun updateEntities() {
-		// fetch and update the list of entities based on the current query and active filter.
-		// Use repo here
-		// _entities.value =
+		_activeFilter.value = filter // update the entities based on the new filter
+		queryRepository.setActiveFilter(filter)
 	}
 }

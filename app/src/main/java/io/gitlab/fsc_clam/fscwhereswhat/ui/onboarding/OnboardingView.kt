@@ -19,7 +19,6 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
 import android.Manifest
 import android.app.Activity
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -83,21 +82,7 @@ fun OnboardingView(
 		permissions = listOf(
 			Manifest.permission.ACCESS_COARSE_LOCATION,
 			Manifest.permission.ACCESS_FINE_LOCATION,
-		),
-		onPermissionsResult = {
-			if (it[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
-				//when user has fine location
-
-			} else if (
-				it[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-			) {
-				//when user only has coarse location
-
-
-			} else {
-				//when user has granted no permissions
-			}
-		}
+		)
 	)
 	val allPermissionsRevoked =
 		locationPermissionsState.permissions.size == locationPermissionsState.revokedPermissions.size

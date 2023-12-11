@@ -137,110 +137,26 @@ fun MapUI(
 				horizontalArrangement = Arrangement.spacedBy(8.dp),
 				verticalAlignment = Alignment.CenterVertically
 			) {
-				when (activeFilter) {
-					//if activeFilter is building, the only selected filterButton is building
-					EntityType.BUILDING -> {
-						FilterButtons(
-							filter = EntityType.BUILDING,
-							img = Image.Drawable(R.drawable.building_icon),
-							pinPointColor = buildingColor,
-							isSelected = true,
-							onSelected = {
-								setActiveFilter(it)
-							}
-						)
-						FilterButtons(
-							filter = EntityType.EVENT,
-							img = Image.Drawable(R.drawable.flag_icon),
-							pinPointColor = eventColor,
-							false,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.NODE,
-							img = Image.Drawable(R.drawable.node_icon),
-							pinPointColor = nodeColor,
-							false,
-							onSelected = { setActiveFilter(it) }
-						)
+				FilterButtons(
+					filter = EntityType.BUILDING,
+					img = Image.Drawable(R.drawable.building_icon),
+					isSelected = activeFilter == EntityType.BUILDING,
+					onSelected = {
+						setActiveFilter(it)
 					}
-					//if activeFilter is event, the only selected filterButton is event
-					EntityType.EVENT -> {
-						FilterButtons(
-							filter = EntityType.BUILDING,
-							img = Image.Drawable(R.drawable.building_icon),
-							pinPointColor = buildingColor,
-							isSelected = false,
-							onSelected = {
-								setActiveFilter(it)
-							}
-						)
-						FilterButtons(
-							filter = EntityType.EVENT,
-							img = Image.Drawable(R.drawable.flag_icon),
-							pinPointColor = eventColor,
-							isSelected = true,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.NODE,
-							img = Image.Drawable(R.drawable.node_icon),
-							pinPointColor = nodeColor,
-							isSelected = false,
-							onSelected = { setActiveFilter(it) }
-						)
-					}
-					//if activeFilter is node, the only selected filterButton is node
-					EntityType.NODE -> {
-						FilterButtons(
-							filter = EntityType.BUILDING,
-							img = Image.Drawable(R.drawable.building_icon),
-							pinPointColor = buildingColor,
-							isSelected = false,
-							onSelected = {
-								setActiveFilter(it)
-							}
-						)
-						FilterButtons(
-							filter = EntityType.EVENT,
-							img = Image.Drawable(R.drawable.flag_icon),
-							pinPointColor = eventColor,
-							isSelected = false,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.NODE,
-							img = Image.Drawable(R.drawable.node_icon),
-							pinPointColor = nodeColor,
-							isSelected = true,
-							onSelected = { setActiveFilter(it) }
-						)
-					}
-					//if activeFilter is null, the  selected filterButton is all the filterButtons
-					else -> {
-						FilterButtons(
-							filter = EntityType.BUILDING,
-							img = Image.Drawable(R.drawable.building_icon),
-							pinPointColor = buildingColor,
-							isSelected = true,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.EVENT,
-							img = Image.Drawable(R.drawable.flag_icon),
-							pinPointColor = eventColor,
-							isSelected = true,
-							onSelected = { setActiveFilter(it) }
-						)
-						FilterButtons(
-							filter = EntityType.NODE,
-							img = Image.Drawable(R.drawable.node_icon),
-							pinPointColor = nodeColor,
-							isSelected = true,
-							onSelected = { setActiveFilter(it) }
-						)
-					}
-				}
+				)
+				FilterButtons(
+					filter = EntityType.EVENT,
+					img = Image.Drawable(R.drawable.flag_icon),
+					isSelected = activeFilter == EntityType.EVENT,
+					onSelected = { setActiveFilter(it) }
+				)
+				FilterButtons(
+					filter = EntityType.NODE,
+					img = Image.Drawable(R.drawable.node_icon),
+					isSelected = activeFilter == EntityType.NODE,
+					onSelected = { setActiveFilter(it) }
+				)
 			}
 			//bottom bar holds search and more button
 			Row(
@@ -328,7 +244,6 @@ fun PreviewMapUI() {
 fun FilterButtons(
 	filter: EntityType,
 	img: Image.Drawable,
-	pinPointColor: Int,
 	isSelected: Boolean,
 	onSelected: (EntityType?) -> Unit
 ) {
@@ -345,9 +260,7 @@ fun FilterButtons(
 		leadingIcon = {
 			Icon(
 				painter = painterResource(id = img.drawable),
-				contentDescription = "",
-				tint = Color(pinPointColor),
-				modifier = Modifier.size(25.dp)
+				contentDescription = filter.name
 			)
 		}
 	)
@@ -361,14 +274,12 @@ fun PreviewFilterButtons() {
 		FilterButtons(
 			filter = EntityType.BUILDING,
 			img = Image.Drawable(R.drawable.building_icon),
-			Color.Red.toArgb(),
 			true,
 			{}
 		)
 		FilterButtons(
 			filter = EntityType.EVENT,
 			img = Image.Drawable(R.drawable.flag_icon),
-			Color.Red.toArgb(),
 			false,
 			{}
 		)

@@ -43,7 +43,7 @@ data class RamCentralDiscoveryEventSearchResult(
 		val startsOn: String,
 		val endsOn: String,
 		val imagePath: String?,
-		val latitude: String?,
-		val longitude: String?,
+		val latitude: Double?,
+		val longitude: Double?,
 	)
 }

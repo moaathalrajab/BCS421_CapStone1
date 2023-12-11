@@ -58,24 +58,12 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
  */
 @Composable
 fun ExplanationScreen() {
-	//Creates white box content container
-	BoxWithConstraints(
-		modifier = Modifier
-			.padding(16.dp)
-			.fillMaxSize()
-			.background(Color.White)
-	) {
 		Column(
 			modifier = Modifier
+				.padding(12.dp)
+				.background(Color.White)
 				.fillMaxSize()
-				.let {
-					if (maxHeight < 480.dp) {
-						it.verticalScroll(rememberScrollState())
-					} else {
-						it
-					}
-				},
-			verticalArrangement = Arrangement.Center,
+				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			//App Logo
@@ -138,7 +126,6 @@ fun ExplanationScreen() {
 			}
 		}
 	}
-}
 
 @Preview
 @Composable

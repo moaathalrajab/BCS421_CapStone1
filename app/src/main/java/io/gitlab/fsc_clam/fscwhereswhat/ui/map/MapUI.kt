@@ -37,6 +37,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -149,19 +150,25 @@ fun MapUI(
 				SearchBar(openSearch, query)
 
 				//The more button
-				Card {
-					IconButton(
-						onClick = navigateToMore,
-						modifier = Modifier
-							.size(35.dp)
-					) {
-						Icon(
-							painter = painterResource(id = R.drawable.baseline_more_horiz_24),
-							contentDescription = stringResource(id = R.string.more_button_desc),
-						)
-					}
-				}
+				MoreButton(navigateToMore)
 			}
+		}
+	}
+}
+
+@Composable
+fun MoreButton(navigateToMore: () -> Unit) {
+	Card(
+		shape = CircleShape
+	) {
+		IconButton(
+			onClick = navigateToMore,
+			modifier = Modifier
+		) {
+			Icon(
+				painter = painterResource(id = R.drawable.baseline_more_horiz_24),
+				contentDescription = stringResource(id = R.string.more_button_desc),
+			)
 		}
 	}
 }
@@ -177,7 +184,9 @@ fun SearchBar(openSearch: () -> Unit, query: String?) {
 		elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
 	) {
 		Row(
-			modifier = Modifier.fillMaxWidth().padding(8.dp),
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(8.dp),
 			verticalAlignment = Alignment.CenterVertically,
 			horizontalArrangement = Arrangement.spacedBy(4.dp)
 		) {

@@ -23,6 +23,7 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import org.junit.Before
 import org.junit.Test
+import java.util.Date
 
 /**
  * Test the [RamCentralAPI]
@@ -60,7 +61,7 @@ class RamCentralAPITest {
 		 */
 		val api = runBlocking {
 			api.search(
-				endsAfter = "2023-11-10T16:27:26-05:00",
+				endsAfter = RamCentralAPI.dateTimeFormat.format(Date()),
 				orderByField = RamCentralAPI.OrderByField.ENDS_ON,
 				orderByDirection = RamCentralAPI.OrderByDirection.ASCENDING,
 				status = RamCentralAPI.Status.APPROVED,

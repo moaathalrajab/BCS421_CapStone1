@@ -37,4 +37,20 @@ data class OpeningHours(
 	val startMinute: Int,
 	val endHour: Int,
 	val endMinute: Int
-)
+) {
+	companion object {
+		val everyDay = OpeningHours(
+			monday = true,
+			tuesday = true,
+			wednesday = true,
+			thursday = true,
+			friday = true,
+			saturday = true,
+			sunday = true,
+			startHour = 0,
+			startMinute = 0,
+			endHour = 24,
+			endMinute = 0
+		)
+	}
+}

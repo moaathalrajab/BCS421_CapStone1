@@ -67,7 +67,7 @@ class OkHttpOpenStreetMapAPI(
 
 	@OptIn(ExperimentalSerializationApi::class)
 	override suspend fun getFullElement(type: OSMType, id: Long): OSMResponse {
-		if (type == OSMType.NODE) throw IllegalArgumentException("Only supports nodes and relations")
+		if (type == OSMType.NODE) throw IllegalArgumentException("Only supports ways and relations")
 
 		return parser.decodeFromStream(
 			getByteStream("$OSM_API_URL/$type/${id}/full")

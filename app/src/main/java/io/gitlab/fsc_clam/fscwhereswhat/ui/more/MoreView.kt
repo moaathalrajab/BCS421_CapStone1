@@ -36,12 +36,9 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -374,7 +371,7 @@ fun Customize(eventColor: Int, buildingColor: Int, utilityColor: Int) {
 			) {
 				//Lets users set colors for events
 				PinpointColorItem(name = stringResource(id = R.string.options_events_label),
-					img = painterResource(id = R.drawable.flag_icon),
+					img = painterResource(id = R.drawable.event),
 					imgDescription = stringResource(
 						id = R.string.explanation_event_img,
 					),
@@ -408,7 +405,7 @@ fun Customize(eventColor: Int, buildingColor: Int, utilityColor: Int) {
 			) {
 				//Lets users set colors for utilities
 				PinpointColorItem(name = stringResource(id = R.string.options_utilities_label),
-					img = painterResource(id = R.drawable.node_icon),
+					img = painterResource(id = R.drawable.node),
 					imgDescription = stringResource(
 						id = R.string.explanation_node_img
 					),

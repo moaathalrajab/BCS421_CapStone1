@@ -88,6 +88,7 @@ dependencies {
 	implementation("com.google.firebase:firebase-database:20.3.0")
 	implementation("com.github.skydoves:colorpicker-compose:1.0.5")
 	implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
+	implementation("androidx.work:work-runtime-ktx:2.9.0")
 	implementation("com.google.android.gms:play-services-auth:20.7.0")
 
 	testImplementation("junit:junit:4.13.2")

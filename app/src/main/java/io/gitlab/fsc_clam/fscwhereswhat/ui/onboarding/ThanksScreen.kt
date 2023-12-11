@@ -17,6 +17,14 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
+import android.content.Intent
+import android.content.Intent.CATEGORY_DEFAULT
+import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
+import android.net.Uri
+import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,27 +38,42 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.primaryColor
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
+
 
 /**
  * Screen to thank users
@@ -59,113 +82,52 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
 fun ThanksScreen(
 	onFinish: () -> Unit
 ) {
-	BoxWithConstraints(Modifier.fillMaxSize()) {
-		if(maxHeight > 480.dp)
-		//Creates white box for content
-		Box(
-			modifier = Modifier
-				.align(Alignment.Center)
-				.fillMaxWidth(.8f)
-				.fillMaxHeight(.7f)
-				.background(Color.White)
+	Column(
+		modifier = Modifier
+			.padding(16.dp)
+			.fillMaxSize()
+			.background(Color.White)
+			.verticalScroll(rememberScrollState()),
+		verticalArrangement = Arrangement.Top,
+		horizontalAlignment = Alignment.CenterHorizontally
+	) {
+		Text(
+			text = stringResource(id = R.string.thanks_heading),
+			fontFamily = titleFont,
+			fontWeight = FontWeight.Bold,
+			fontStyle = FontStyle.Normal,
+			fontSize = 46.sp,
 		)
-		{
-			Column(
-				modifier = Modifier
-					.fillMaxWidth()
-					.wrapContentSize(),
-				verticalArrangement = Arrangement.Top,
-				horizontalAlignment = Alignment.CenterHorizontally
-			) {
-				//Developer logo
-				Image(
-					painter = painterResource(id = R.drawable.team_clam_logo),
-					contentDescription = stringResource(id = R.string.thanks_developers_logo),
-					contentScale = ContentScale.Crop,
-					modifier = Modifier
-						.padding(top = 5.dp, bottom = 15.dp)
-						.size(280.dp)
-						.clip(RoundedCornerShape(25))
-				)
-				Text(
-					text = stringResource(id = R.string.thanks_heading),
-					fontFamily = titleFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Normal,
-					fontSize = 46.sp,
-				)
-				Text(
-					text = stringResource(id = R.string.thanks_body),
-					fontFamily = titleFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Normal,
-					fontSize = 38.sp,
-					modifier = Modifier.padding(top = 15.dp, bottom = 25.dp)
-				)
-				//Button to navigate to MapView
-				Button(
-					onClick = onFinish,
-					colors = ButtonDefaults.buttonColors(primaryColor),
-				) {
-					Text(
-						text = stringResource(id = R.string.thanks_continue_button),
-						color = Color.Black
-					)
+		//Developer logo
+		Image(
+			painter = painterResource(id = R.drawable.team_clam_logo),
+			contentDescription = stringResource(id = R.string.thanks_developers_logo),
+			contentScale = ContentScale.Crop,
+			modifier = Modifier
+				.padding(top = 5.dp, bottom = 15.dp)
+				.size(280.dp)
+				.clip(RoundedCornerShape(25))
+		)
+		Text(
+			text = stringResource(id = R.string.thanks_body),
+			fontFamily = titleFont,
+			fontWeight = FontWeight.Bold,
+			fontStyle = FontStyle.Normal,
+			fontSize = 38.sp,
+			modifier = Modifier.padding(top = 15.dp, bottom = 25.dp)
+		)
+		//Button to navigate to MapView
+		Button(
+			onClick = {
+				onFinish()
+			},
+			colors = ButtonDefaults.buttonColors(primaryColor),
+		) {
+			Text(
+				text = stringResource(id = R.string.thanks_continue_button),
+				color = Color.Black
+			)
 
-				}
-			}
-		}
-		else{
-			Row(
-				modifier = Modifier
-					.fillMaxSize(.9f)
-					.background(Color.White)
-					.align(Alignment.Center),
-				horizontalArrangement = Arrangement.SpaceBetween
-			) {
-				//Developer logo
-				Image(
-					painter = painterResource(id = R.drawable.team_clam_logo),
-					contentDescription = stringResource(id = R.string.thanks_developers_logo),
-					contentScale = ContentScale.Crop,
-					modifier = Modifier
-						.padding(top = 5.dp, bottom = 15.dp)
-						.size(280.dp)
-						.clip(RoundedCornerShape(25))
-				)
-				Column(
-					modifier = Modifier.fillMaxSize(),
-					horizontalAlignment = Alignment.CenterHorizontally,
-					verticalArrangement = Arrangement.spacedBy(8.dp)
-				) {
-					Text(
-						text = stringResource(id = R.string.thanks_heading),
-						fontFamily = titleFont,
-						fontWeight = FontWeight.Bold,
-						fontStyle = FontStyle.Normal,
-						fontSize = 46.sp,
-					)
-					Text(
-						text = stringResource(id = R.string.thanks_body),
-						fontFamily = titleFont,
-						fontWeight = FontWeight.Bold,
-						fontStyle = FontStyle.Normal,
-						fontSize = 38.sp,
-						modifier = Modifier.padding(top = 15.dp, bottom = 25.dp)
-					)
-					//Button to navigate to MapView
-					Button(
-						onClick = onFinish,
-						colors = ButtonDefaults.buttonColors(primaryColor),
-					) {
-						Text(
-							text = stringResource(id = R.string.thanks_continue_button),
-							color = Color.Black
-						)
-
-					}
-				}
-			}
 		}
 	}
 }

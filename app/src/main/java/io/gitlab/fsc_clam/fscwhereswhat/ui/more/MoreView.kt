@@ -36,9 +36,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -461,8 +464,20 @@ fun ProfileCard() {
 					verticalAlignment = Alignment.Bottom
 				) {
 					Column(horizontalAlignment = Alignment.CenterHorizontally) {
-						// Image or Icon
-						// Text underneath
+						Image(
+							painter = painterResource(id = R.drawable.rahim_pfp),
+							contentDescription = "",
+							modifier = Modifier
+								.clip(CircleShape)
+								.size(35.dp)
+								.clickable {
+									val intent = Intent(
+										Intent.ACTION_VIEW,
+										Uri.parse("https://www.linkedin.com/in/rahim-akhter-2002")
+									)
+									context.startActivity(intent)
+								}
+						)
 
 						Text(
 							text = "Rahim Ahkter", style = MaterialTheme.typography.labelSmall,
@@ -476,7 +491,7 @@ fun ProfileCard() {
 					) {
 
 						Image(
-							painter = painterResource(id = R.drawable.harvey), // MUST BE SQUARE
+							painter = painterResource(id = R.drawable.harvey_pfp),
 							contentDescription = "",
 							modifier = Modifier
 								.clip(CircleShape)
@@ -497,8 +512,20 @@ fun ProfileCard() {
 					}
 
 					Column(horizontalAlignment = Alignment.CenterHorizontally) {
-						// Image or Icon composable
-						// Text underneath
+						Image(
+							painter = painterResource(id = R.drawable.aaron_pfp),
+							contentDescription = "",
+							modifier = Modifier
+								.clip(CircleShape)
+								.size(35.dp)
+								.clickable {
+									val intent = Intent(
+										Intent.ACTION_VIEW,
+										Uri.parse("https://www.linkedin.com/in/atabuteau/")
+									)
+									context.startActivity(intent)
+								}
+						)
 
 						Text(
 							text = "Aaron Tabuteau", style = MaterialTheme.typography.labelSmall,
@@ -507,9 +534,20 @@ fun ProfileCard() {
 					}
 
 					Column(horizontalAlignment = Alignment.CenterHorizontally) {
-						// Icon 4
-						// Image or Icon composable
-						// Text underneath
+						Image(
+							painter = painterResource(id = R.drawable.olivia_pfp),
+							contentDescription = "",
+							modifier = Modifier
+								.clip(CircleShape)
+								.size(35.dp)
+								.clickable {
+									val intent = Intent(
+										Intent.ACTION_VIEW,
+										Uri.parse("https://www.linkedin.com/in/olivia-sanfilippo/")
+									)
+									context.startActivity(intent)
+								}
+						)
 
 						Text(
 							text = "Olivia Sanfilippo",
@@ -537,6 +575,7 @@ fun ProfileCard() {
 		}
 	}
 }
+
 
 
 

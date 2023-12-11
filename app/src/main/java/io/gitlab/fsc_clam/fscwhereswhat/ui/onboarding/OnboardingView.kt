@@ -18,7 +18,6 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
 import android.Manifest
-import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +49,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,7 +72,6 @@ fun OnboardingView(
 	) {
 		6
 	}
-	val activity = (LocalContext.current as? Activity)
 	val snackbarState = remember { SnackbarHostState() }
 	val state = rememberCoroutineScope()
 
@@ -137,7 +134,7 @@ fun OnboardingView(
 								state.launch {
 									//if on last page should navigate to MapView
 									if (pagerState.currentPage == pagerState.pageCount - 1) {
-										activity?.finish()
+										onFinish()
 									}
 									//else move to next screen on OnboardingView
 									else {

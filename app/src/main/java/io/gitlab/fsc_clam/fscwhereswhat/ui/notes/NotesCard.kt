@@ -96,21 +96,21 @@ fun NotesCard(note: NoteItem, onUpdate: (NoteItem) -> Unit, onDelete: (NoteItem)
 							//Creates corresponding Image for EntityType
 							when (note.type) {
 								EntityType.EVENT -> Image(
-									painter = painterResource(id = R.drawable.flag_icon),
+									painter = painterResource(id = note.type.drawable),
 									contentDescription = stringResource(
 										id = R.string.explanation_event_img
 									),
 								)
 
 								EntityType.BUILDING -> Image(
-									painter = painterResource(id = R.drawable.building_icon),
+									painter = painterResource(id = note.type.drawable),
 									contentDescription = stringResource(
 										id = R.string.explanation_building_img
 									),
 								)
 
 								EntityType.NODE -> Image(
-									painter = painterResource(id = R.drawable.node_icon),
+									painter = painterResource(id = note.type.drawable),
 									contentDescription = stringResource(
 										id = R.string.explanation_node_img
 									)
@@ -234,7 +234,7 @@ fun PreviewDialogButtons(){
 @Preview
 @Composable
 fun PreviewNotesCard() {
-	val img = Image.Drawable(R.drawable.flag_icon)
+	val img = Image.Drawable(R.drawable.event)
 	val notes = listOf(
 		NoteItem("This is a comment", 0, EntityType.EVENT, img, "Event Name"),
 		NoteItem("This is a comment", 0, EntityType.BUILDING, img, "Building Name"),

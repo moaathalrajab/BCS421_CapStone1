@@ -187,7 +187,7 @@ fun MapContent(
 			properties = mapProperties,
 			overlayManagerState = rememberSaveable(key = null, saver = Saver(
 				save = {
-					   null
+					null
 				},
 				restore = {
 					OverlayManagerState(null)
@@ -217,7 +217,7 @@ fun MapContent(
 			navigateToMore = navigateToMore
 		)
 	}
-	if(focus != null){
+	if (focus != null) {
 		ModalBottomSheet(onDismissRequest = { setFocus(null) }) {
 			EntityDetail()
 		}
@@ -229,11 +229,7 @@ fun MapContent(
 fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 	val context = LocalContext.current
 	//the icon is chosen based on EntityType
-	val icon = when (pinpoint.type) {
-		EntityType.BUILDING -> context.getDrawable(R.drawable.map_building)
-		EntityType.EVENT -> context.getDrawable(R.drawable.map_event)
-		EntityType.NODE -> context.getDrawable(R.drawable.map_node)
-	}
+	val icon = context.getDrawable(pinpoint.type.drawable)
 
 	Marker(
 		state = rememberMarkerState(
@@ -244,7 +240,7 @@ fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 		),
 		icon = icon,
 	) {
-		LaunchedEffect(key1 = pinpoint){
+		LaunchedEffect(key1 = pinpoint) {
 			setFocus(pinpoint)
 		}
 	}

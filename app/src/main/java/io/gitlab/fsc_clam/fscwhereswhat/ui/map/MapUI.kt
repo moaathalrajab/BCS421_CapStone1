@@ -147,13 +147,13 @@ fun MapUI(
 				)
 				FilterButtons(
 					filter = EntityType.EVENT,
-					img = Image.Drawable(R.drawable.flag_icon),
+					img = Image.Drawable(R.drawable.event),
 					isSelected = activeFilter == EntityType.EVENT,
 					onSelected = { setActiveFilter(it) }
 				)
 				FilterButtons(
 					filter = EntityType.NODE,
-					img = Image.Drawable(R.drawable.node_icon),
+					img = Image.Drawable(R.drawable.node),
 					isSelected = activeFilter == EntityType.NODE,
 					onSelected = { setActiveFilter(it) }
 				)
@@ -279,7 +279,7 @@ fun PreviewFilterButtons() {
 		)
 		FilterButtons(
 			filter = EntityType.EVENT,
-			img = Image.Drawable(R.drawable.flag_icon),
+			img = Image.Drawable(R.drawable.event),
 			false,
 			{}
 		)

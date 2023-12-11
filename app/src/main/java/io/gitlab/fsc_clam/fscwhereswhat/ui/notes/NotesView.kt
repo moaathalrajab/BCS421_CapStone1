@@ -123,7 +123,7 @@ fun NotesContent(
 @Preview
 @Composable
 fun PreviewNotesContent() {
-	val img = Image.Drawable(R.drawable.flag_icon)
+	val img = Image.Drawable(R.drawable.node)
 	val notes = listOf(
 		NoteItem("This is a comment", 0, EntityType.EVENT, img, "Event Name"),
 		NoteItem("This is a comment", 0, EntityType.BUILDING, img, "Building Name"),

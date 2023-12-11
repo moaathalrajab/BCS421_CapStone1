@@ -102,7 +102,7 @@ fun ExplanationScreen() {
 				EntityExplanations(
 					explanationText = stringResource(id = R.string.explanation_event),
 					img = painterResource(
-						id = R.drawable.flag_icon
+						id = R.drawable.event
 					),
 					imgDescription = stringResource(id = R.string.explanation_event_img)
 				)
@@ -118,7 +118,7 @@ fun ExplanationScreen() {
 				EntityExplanations(
 					explanationText = stringResource(id = R.string.explanation_node),
 					img = painterResource(
-						id = R.drawable.node_icon
+						id = R.drawable.node
 					),
 					imgDescription = stringResource(id = R.string.explanation_node_img)
 				)
@@ -188,7 +188,7 @@ fun PreviewEntityExplanations() {
 		EntityExplanations(
 			explanationText = stringResource(id = R.string.explanation_event),
 			img = painterResource(
-				id = R.drawable.flag_icon
+				id = R.drawable.event
 			),
 			imgDescription = stringResource(id = R.string.explanation_event_img)
 		)

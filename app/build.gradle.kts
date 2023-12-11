@@ -127,4 +127,8 @@ dependencies {
 	implementation("org.osmdroid:osmdroid-android:6.1.17")
 	implementation("tech.utsmankece:osm-androd-compose:+")
 
+	val accompanist_version = "0.33.2-alpha"
+	//Accompanist
+	implementation("com.google.accompanist:accompanist-permissions:$accompanist_version")
+
 }

@@ -17,8 +17,6 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -89,27 +87,22 @@ fun MapUI(
 				.padding(8.dp)
 				.align(Alignment.TopStart),
 			shape = CircleShape,
-			border = BorderStroke(2.dp, Color.LightGray),
-			colors = CardDefaults.cardColors(containerColor = Color.White)
+			onClick = {
+				// TODO login functionality
+			}
 		) {
-			IconButton(
-				modifier = Modifier
-					.padding(12.dp),
-				onClick = { TODO("Add Login functionality") }
-			) {
-				if (user != null) {
-					AsyncImage(
-						model = user.image,
-						contentDescription = stringResource(id = R.string.account_icon),
-						modifier = Modifier.size(50.dp)
-					)
-				} else {
-					Icon(
-						Icons.Filled.AccountCircle,
-						contentDescription = stringResource(id = R.string.account_icon),
-						modifier = Modifier.size(50.dp)
-					)
-				}
+			if (user != null) {
+				AsyncImage(
+					model = user.image,
+					contentDescription = stringResource(id = R.string.account_icon),
+					modifier = Modifier.size(50.dp).padding(8.dp)
+				)
+			} else {
+				Icon(
+					Icons.Filled.AccountCircle,
+					contentDescription = stringResource(id = R.string.account_icon),
+					modifier = Modifier.size(50.dp).padding(8.dp)
+				)
 			}
 		}
 
@@ -117,22 +110,14 @@ fun MapUI(
 			modifier = Modifier
 				.padding(8.dp)
 				.align(Alignment.TopEnd),
-			border = BorderStroke(2.dp, Color.LightGray),
 			shape = CircleShape,
-			colors = CardDefaults.cardColors(containerColor = Color.White)
-		){
-			IconButton(
-				modifier = Modifier
-					.padding(12.dp),
-				onClick = onRecenter
-			) {
-				Icon(
-					Icons.Filled.LocationOn,
-					contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
-					modifier = Modifier.size(50.dp),
-					tint = Color.Red
-				)
-			}
+			onClick = onRecenter
+		) {
+			Icon(
+				Icons.Filled.LocationOn,
+				contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
+				modifier = Modifier.size(50.dp).padding(8.dp)
+			)
 		}
 
 		//Holds the search bar and filter buttons

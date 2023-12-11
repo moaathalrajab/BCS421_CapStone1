@@ -95,13 +95,17 @@ fun MapUI(
 				AsyncImage(
 					model = user.image,
 					contentDescription = stringResource(id = R.string.account_icon),
-					modifier = Modifier.size(50.dp).padding(8.dp)
+					modifier = Modifier
+						.size(50.dp)
+						.padding(8.dp)
 				)
 			} else {
 				Icon(
 					Icons.Filled.AccountCircle,
 					contentDescription = stringResource(id = R.string.account_icon),
-					modifier = Modifier.size(50.dp).padding(8.dp)
+					modifier = Modifier
+						.size(50.dp)
+						.padding(8.dp)
 				)
 			}
 		}
@@ -116,7 +120,9 @@ fun MapUI(
 			Icon(
 				Icons.Filled.LocationOn,
 				contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
-				modifier = Modifier.size(50.dp).padding(8.dp)
+				modifier = Modifier
+					.size(50.dp)
+					.padding(8.dp)
 			)
 		}
 
@@ -130,34 +136,8 @@ fun MapUI(
 		) {
 
 			//Creates the filter buttons
-			Row(
-				modifier = Modifier
-					.padding(horizontal = 12.dp)
-					.fillMaxWidth(),
-				horizontalArrangement = Arrangement.spacedBy(8.dp),
-				verticalAlignment = Alignment.CenterVertically
-			) {
-				FilterButtons(
-					filter = EntityType.BUILDING,
-					img = Image.Drawable(R.drawable.building_icon),
-					isSelected = activeFilter == EntityType.BUILDING,
-					onSelected = {
-						setActiveFilter(it)
-					}
-				)
-				FilterButtons(
-					filter = EntityType.EVENT,
-					img = Image.Drawable(R.drawable.event),
-					isSelected = activeFilter == EntityType.EVENT,
-					onSelected = { setActiveFilter(it) }
-				)
-				FilterButtons(
-					filter = EntityType.NODE,
-					img = Image.Drawable(R.drawable.node),
-					isSelected = activeFilter == EntityType.NODE,
-					onSelected = { setActiveFilter(it) }
-				)
-			}
+			FilterButtonRow(activeFilter, setActiveFilter)
+
 			//bottom bar holds search and more button
 			Row(
 				modifier = Modifier
@@ -212,6 +192,40 @@ fun MapUI(
 	}
 }
 
+@Composable
+fun FilterButtonRow(
+	activeFilter: EntityType?,
+	setActiveFilter: (EntityType?) -> Unit
+) {
+	Card(Modifier.padding(8.dp)) {
+		Row(
+			modifier = Modifier
+				.fillMaxWidth(),
+			horizontalArrangement = Arrangement.SpaceEvenly,
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			FilterButton(
+				filter = EntityType.BUILDING,
+				img = Image.Drawable(R.drawable.building_icon),
+				isSelected = activeFilter == EntityType.BUILDING,
+				onSelected = { setActiveFilter(it) }
+			)
+			FilterButton(
+				filter = EntityType.EVENT,
+				img = Image.Drawable(R.drawable.event),
+				isSelected = activeFilter == EntityType.EVENT,
+				onSelected = { setActiveFilter(it) }
+			)
+			FilterButton(
+				filter = EntityType.NODE,
+				img = Image.Drawable(R.drawable.node),
+				isSelected = activeFilter == EntityType.NODE,
+				onSelected = { setActiveFilter(it) }
+			)
+		}
+	}
+}
+
 @Preview
 @Composable
 fun PreviewMapUI() {
@@ -241,7 +255,7 @@ fun PreviewMapUI() {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterButtons(
+fun FilterButton(
 	filter: EntityType,
 	img: Image.Drawable,
 	isSelected: Boolean,
@@ -264,24 +278,12 @@ fun FilterButtons(
 			)
 		}
 	)
-
 }
 
 @Preview
 @Composable
 fun PreviewFilterButtons() {
-	Row {
-		FilterButtons(
-			filter = EntityType.BUILDING,
-			img = Image.Drawable(R.drawable.building_icon),
-			true,
-			{}
-		)
-		FilterButtons(
-			filter = EntityType.EVENT,
-			img = Image.Drawable(R.drawable.event),
-			false,
-			{}
-		)
+	Surface {
+		FilterButtonRow(activeFilter = null, setActiveFilter = {})
 	}
 }

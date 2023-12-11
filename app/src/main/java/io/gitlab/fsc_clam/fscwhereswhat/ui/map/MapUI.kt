@@ -74,7 +74,8 @@ fun MapUI(
 	setActiveFilter: (EntityType?) -> Unit,
 	onRecenter: () -> Unit,
 	openSearch: () -> Unit,
-	navigateToMore: () -> Unit
+	navigateToMore: () -> Unit,
+	login: () -> Unit
 ) {
 	Box(
 		modifier = Modifier.fillMaxSize()
@@ -86,9 +87,7 @@ fun MapUI(
 				.padding(8.dp)
 				.align(Alignment.TopStart),
 			shape = CircleShape,
-			onClick = {
-				// TODO login functionality
-			}
+			onClick = login
 		) {
 			if (user != null) {
 				AsyncImage(
@@ -255,7 +254,8 @@ fun PreviewMapUI() {
 			setActiveFilter = {},
 			onRecenter = {},
 			openSearch = {},
-			navigateToMore = {}
+			navigateToMore = {},
+			login = {}
 		)
 	}
 }

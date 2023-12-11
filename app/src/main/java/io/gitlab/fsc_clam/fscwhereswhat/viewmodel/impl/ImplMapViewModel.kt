@@ -19,7 +19,12 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
 import android.app.Application
 import android.graphics.Color
+import androidx.activity.result.ActivityResult
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
 import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
@@ -37,6 +42,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Compa
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplUserRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -45,6 +51,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.launch
 
 class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val userRepo = UserRepository.get()
@@ -152,5 +159,28 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 
 	override fun setFocus(pinpoint: Pinpoint?) {
 		focus.value = pinpoint
+	}
+
+	private val firebaseAuth = FirebaseAuth.getInstance()
+
+	override val exception = MutableSharedFlow<Throwable>()
+
+	override fun handleSignInResult(result: ActivityResult) {
+		GoogleSignIn.getSignedInAccountFromIntent(result.data)
+			.addOnSuccessListener(::login)
+			.addOnFailureListener(::sendException)
+	}
+
+	private fun login(googleSignInAccount: GoogleSignInAccount) {
+		firebaseAuth.signInWithCredential(
+			GoogleAuthProvider.getCredential(googleSignInAccount.idToken, null)
+		).addOnFailureListener(::sendException)
+	}
+
+	private fun sendException(e: Exception) {
+		e.printStackTrace()
+		viewModelScope.launch {
+			exception.emit(e)
+		}
 	}
 }

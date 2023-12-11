@@ -17,16 +17,15 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
-import android.graphics.Color
 
 /**
  * This is a data class for the UI as a pin on the map
  */
 
 data class Pinpoint(
-	val latitude: Float,
-	val longitude: Float,
-	val color: Color,
+	val latitude: Double,
+	val longitude: Double,
+	val color: Int,
 	val id: Int,
 	val type: EntityType,
 	val isFocused: Boolean

@@ -1,11 +1,27 @@
+import java.util.Properties
+
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
 	kotlin("plugin.serialization")
 	id("com.google.gms.google-services")
+	id("com.google.devtools.ksp")
 }
 
+val properties = Properties()
+properties.load(File(projectDir, "secrets.properties").reader())
+
 android {
+	signingConfigs {
+		// https://developer.android.com/studio/publish/app-signing#sign-auto
+		all {
+			keyAlias = "clam"
+			// No Quotations in props
+			storeFile = file(properties.getProperty("keystore-path"))
+			storePassword = properties.getProperty("keystore-password")
+			keyPassword = properties.getProperty("keystore-password")
+		}
+	}
 	namespace = "io.gitlab.fsc_clam.fscwhereswhat"
 	compileSdk = 34
 
@@ -20,6 +36,12 @@ android {
 		vectorDrawables {
 			useSupportLibrary = true
 		}
+		buildConfigField(
+			"String",
+			"mapboxAPI",
+			properties.getProperty("mapboxAPI")
+
+		)
 	}
 
 	buildTypes {
@@ -29,6 +51,7 @@ android {
 				getDefaultProguardFile("proguard-android-optimize.txt"),
 				"proguard-rules.pro"
 			)
+
 		}
 	}
 	compileOptions {
@@ -39,6 +62,7 @@ android {
 		jvmTarget = "17"
 	}
 	buildFeatures {
+		buildConfig = true
 		compose = true
 	}
 	composeOptions {
@@ -65,6 +89,7 @@ dependencies {
 	implementation("com.github.skydoves:colorpicker-compose:1.0.5")
 	implementation("com.google.firebase:firebase-auth-ktx:22.3.0")
 	implementation("androidx.work:work-runtime-ktx:2.9.0")
+	implementation("com.google.android.gms:play-services-auth:20.7.0")
 
 	testImplementation("junit:junit:4.13.2")
 	androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -79,7 +104,7 @@ dependencies {
 	implementation("androidx.room:room-common:$room_version")
 	implementation("androidx.room:room-runtime:$room_version")
 	implementation("androidx.room:room-ktx:$room_version")
-	annotationProcessor("androidx.room:room-compiler:$room_version")
+	ksp("androidx.room:room-compiler:$room_version")
 
 	val lifecycle_version = "2.6.2"
 	// ViewModel
@@ -99,4 +124,12 @@ dependencies {
 	val nav_version = "2.7.5"
 
 	implementation("androidx.navigation:navigation-compose:$nav_version")
+	//OSM
+	implementation("org.osmdroid:osmdroid-android:6.1.17")
+	implementation("tech.utsmankece:osm-androd-compose:+")
+
+	val accompanist_version = "0.33.2-alpha"
+	//Accompanist
+	implementation("com.google.accompanist:accompanist-permissions:$accompanist_version")
+
 }

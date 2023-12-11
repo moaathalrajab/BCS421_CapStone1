@@ -20,15 +20,17 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.graphics.Color
+import androidx.core.content.edit
 import com.google.firebase.auth.FirebaseAuth
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.FBPreferences
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -52,26 +54,24 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 		application.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
 
 	override fun getColor(type: EntityType): Flow<Int> {
+		val fUID = firebaseAuth.currentUser?.uid
 
 		// First check if current user is logged in
-		if (firebaseAuth.currentUser != null) {
-
-			val user = firebaseAuth.currentUser!!.displayName
-			val fbColors = fbp.getColor(user.toString())
+		if (fUID != null) {
+			val fbColors = fbp.getColor(fUID)
 
 			return fbColors.map {
 				(it[type.name]!!)
 			}
-
-		}
-
-		// Current user is null; check SharedPreferences
-		else {
+		} else {
+			// Current user is null; check SharedPreferences
 			return callbackFlow {
 
-				val listener = OnSharedPreferenceChangeListener { sp, _ ->
-					val color = sp.getInt(type.name, type.defaultColor)
-					trySend(color)
+				val listener = OnSharedPreferenceChangeListener { sp, key ->
+					if (key == type.name) { // Ensure the key that updated is ours
+						val color = sp.getInt(type.name, type.defaultColor)
+						trySend(color)
+					}
 				}
 
 				sharedPref.registerOnSharedPreferenceChangeListener(listener)
@@ -84,8 +84,16 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 	}
 
 	override suspend fun setColor(type: EntityType, color: Int) {
-		val user = firebaseAuth.currentUser!!.displayName
-		fbp.setColor(user!!, type.name, color)
+		withContext(Dispatchers.IO) {
+			val userId = firebaseAuth.currentUser?.uid
+			if (userId != null) {
+				fbp.setColor(userId, type.name, color)
+			} else {
+				sharedPref.edit(true) {
+					putInt(type.name, color)
+				}
+			}
+		}
 	}
 
 	companion object {

@@ -59,7 +59,7 @@ class ImplNoteRepository(application: Application) : NoteRepository {
 	/**
 	 * Convert model to db
 	 */
-	private fun Note.toDB() = DBNote(comment, reference, type)
+	private fun Note.toDB() = DBNote(reference, comment, type)
 
 	/**
 	 * Convert db to model

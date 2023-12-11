@@ -19,15 +19,38 @@ package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
+import kotlinx.coroutines.flow.Flow
 
+/**
+ * Source of truth for OpenStreetMap entities.
+ */
 interface OSMRepository {
-	suspend fun query(token: Token): List<OSMEntity>
 
-	suspend fun queryNearby(latitude: Float, longitude: Float): List<OSMEntity>
+	/**
+	 * Query for entities matching [token].
+	 *
+	 * Is a flow to observe changes.
+	 */
+	suspend fun query(token: Token): Flow<List<OSMEntity>>
 
-	suspend fun get(id: Long): OSMEntity
+	/**
+	 * Query for entities nearby a given point
+	 *
+	 * Is a flow to observe changes.
+	 */
+	suspend fun queryNearby(latitude: Double, longitude: Double): Flow<List<OSMEntity>>
 
-	suspend fun update(entites: List<OSMEntity>)
+	/**
+	 * Get an entity by its given entity id.
+	 *
+	 * May not exist.
+	 */
+	suspend fun get(id: Long): OSMEntity?
+
+	/**
+	 * Update with new info on entities
+	 */
+	suspend fun update(entities: List<OSMEntity>)
 
 	/**
 	 * Binding point for Implementation getter

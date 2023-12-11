@@ -78,7 +78,7 @@ fun RemindersView(
 fun RemindersContent(
 	reminders: List<ReminderItem>,
 	onDelete: (ReminderItem) -> Unit,
-	onUpdate: (Int, ReminderTime) -> Unit,
+	onUpdate: (Long, ReminderTime) -> Unit,
 	onBack: () -> Unit
 ) {
 	Scaffold(

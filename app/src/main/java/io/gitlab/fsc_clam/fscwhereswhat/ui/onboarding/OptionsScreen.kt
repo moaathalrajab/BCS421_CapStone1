@@ -18,6 +18,7 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,8 +26,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -60,8 +62,8 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplOptionsViewModel
 fun OptionsScreen() {
 	val optionsViewModel: OptionsViewModel = viewModel<ImplOptionsViewModel>()
 	val eventColor by optionsViewModel.eventColor.collectAsState()
-	val buildingColor by optionsViewModel.eventColor.collectAsState()
-	val utilityColor by optionsViewModel.eventColor.collectAsState()
+	val buildingColor by optionsViewModel.buildingColor.collectAsState()
+	val utilityColor by optionsViewModel.utilityColor.collectAsState()
 	OptionsContent(
 		eventColor = eventColor,
 		buildingColor = buildingColor,
@@ -91,104 +93,99 @@ fun OptionsContent(
 	setBuildingColor: (Int) -> Unit,
 	setUtilityColor: (Int) -> Unit
 ) {
-	//Creates the white background to hold content
-	Surface(
+	Column(
 		modifier = Modifier
 			.padding(16.dp)
 			.fillMaxSize()
-	)
-	{
+			.background(Color.White)
+			.verticalScroll(rememberScrollState()),
+		verticalArrangement = Arrangement.spacedBy(
+			16.dp,
+			alignment = Alignment.CenterVertically
+		),
+		horizontalAlignment = Alignment.CenterHorizontally
+	) {
+		//This column only contains the headings
 		Column(
+			modifier = Modifier.fillMaxWidth(),
+			horizontalAlignment = Alignment.CenterHorizontally
+
+		) {
+			//Heading
+			Text(
+				text = stringResource(id = R.string.options_heading),
+				fontFamily = headFont,
+				fontWeight = FontWeight.Bold,
+				fontStyle = FontStyle.Normal,
+				fontSize = 48.sp,
+				textAlign = TextAlign.Center
+			)
+			//Subheading
+			Text(
+				text = stringResource(id = R.string.options_subheading),
+				fontFamily = bodyFont,
+				fontWeight = FontWeight.Normal,
+				fontStyle = FontStyle.Normal,
+				fontSize = 16.sp,
+				textAlign = TextAlign.Center
+			)
+		}
+		//App logo
+		Image(
+			painter = painterResource(id = R.drawable.wheres_what_logo),
+			contentDescription = stringResource(id = R.string.app_logo_description),
+			contentScale = ContentScale.Crop,
 			modifier = Modifier
-				.fillMaxSize(),
+				.padding(vertical = 15.dp)
+				.size(280.dp)
+				.clip(RoundedCornerShape(25))
+		)
+		//This column contains the three color setters for each EntityType
+		Column(
+			modifier = Modifier.fillMaxWidth(),
 			verticalArrangement = Arrangement.spacedBy(
 				16.dp,
 				alignment = Alignment.CenterVertically
-			),
-			horizontalAlignment = Alignment.CenterHorizontally
-		) {
-			//This column only contains the headings
-			Column(
-				modifier = Modifier.fillMaxWidth(),
-				horizontalAlignment = Alignment.CenterHorizontally
-
-			) {
-				//Heading
-				Text(
-					text = stringResource(id = R.string.options_heading),
-					fontFamily = headFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Normal,
-					fontSize = 48.sp,
-					textAlign = TextAlign.Center
-				)
-				//Subheading
-				Text(
-					text = stringResource(id = R.string.options_subheading),
-					fontFamily = bodyFont,
-					fontWeight = FontWeight.Normal,
-					fontStyle = FontStyle.Normal,
-					fontSize = 16.sp,
-					textAlign = TextAlign.Center
-				)
-			}
-			//App logo
-			Image(
-				painter = painterResource(id = R.drawable.wheres_what_logo),
-				contentDescription = stringResource(id = R.string.app_logo_description),
-				contentScale = ContentScale.Crop,
-				modifier = Modifier
-					.padding(vertical = 15.dp)
-					.size(280.dp)
-					.clip(RoundedCornerShape(25))
 			)
-			//This column contains the three color setters for each EntityType
-			Column(
-				modifier = Modifier.fillMaxWidth(),
-				verticalArrangement = Arrangement.spacedBy(
-					16.dp,
-					alignment = Alignment.CenterVertically
-				)
-			) {
-				//Lets users set colors for events
-				PinpointColorItem(
-					name = stringResource(id = R.string.options_events_label),
-					img = painterResource(id = R.drawable.flag_icon),
-					imgDescription = stringResource(
-						id = R.string.explanation_event_img,
-					),
-					Color(eventColor),
-					onColorSelected = {
-						setEventColor(it.toArgb())
-					}
-				)
-				//Lets users set colors for buildings
-				PinpointColorItem(
-					name = stringResource(id = R.string.options_buildings_label),
-					img = painterResource(id = R.drawable.building_icon),
-					imgDescription = stringResource(
-						id = R.string.explanation_building_img
-					),
-					Color(buildingColor),
-					onColorSelected = {
-						setBuildingColor(it.toArgb())
-					}
-				)
-				//Lets users set colors for utilities
-				PinpointColorItem(
-					name = stringResource(id = R.string.options_utilities_label),
-					img = painterResource(id = R.drawable.node_icon),
-					imgDescription = stringResource(
-						id = R.string.explanation_node_img
-					),
-					Color(utilityColor),
-					onColorSelected = {
-						setUtilityColor(it.toArgb())
-					}
-				)
-			}
-
+		) {
+			//Lets users set colors for events
+			PinpointColorItem(
+				name = stringResource(id = R.string.options_events_label),
+				img = painterResource(id = R.drawable.flag_icon),
+				imgDescription = stringResource(
+					id = R.string.explanation_event_img,
+				),
+				Color(eventColor),
+				onColorSelected = {
+					setEventColor(it.toArgb())
+				}
+			)
+			//Lets users set colors for buildings
+			PinpointColorItem(
+				name = stringResource(id = R.string.options_buildings_label),
+				img = painterResource(id = R.drawable.building_icon),
+				imgDescription = stringResource(
+					id = R.string.explanation_building_img
+				),
+				Color(buildingColor),
+				onColorSelected = {
+					setBuildingColor(it.toArgb())
+				}
+			)
+			//Lets users set colors for utilities
+			PinpointColorItem(
+				name = stringResource(id = R.string.options_utilities_label),
+				img = painterResource(id = R.drawable.node_icon),
+				imgDescription = stringResource(
+					id = R.string.explanation_node_img
+				),
+				Color(utilityColor),
+				onColorSelected = {
+					setUtilityColor(it.toArgb())
+				}
+			)
 		}
+
 	}
 }
 

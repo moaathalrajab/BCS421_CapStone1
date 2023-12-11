@@ -27,7 +27,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,17 +57,12 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
  */
 @Composable
 fun ExplanationScreen() {
-	//Creates white box content container
-	Box(
-		modifier = Modifier
-			.padding(16.dp)
-			.fillMaxSize()
-			.background(Color.White)
-	) {
 		Column(
 			modifier = Modifier
-				.fillMaxSize(),
-			verticalArrangement = Arrangement.Center,
+				.padding(12.dp)
+				.background(Color.White)
+				.fillMaxSize()
+				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			//App Logo
@@ -128,7 +125,6 @@ fun ExplanationScreen() {
 			}
 		}
 	}
-}
 
 @Preview
 @Composable

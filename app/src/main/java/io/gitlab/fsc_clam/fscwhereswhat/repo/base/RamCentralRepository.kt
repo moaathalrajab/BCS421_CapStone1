@@ -18,11 +18,18 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface defining operations for interacting with events from Ram Central.
  */
-interface RamCentralRepo {
+interface RamCentralRepository {
+
+	/**
+	 * Get all events
+	 */
+	fun getAll(): Flow<List<Event>>
 
 	/**
 	 * Retrieves an event with the specified eventID.
@@ -30,7 +37,7 @@ interface RamCentralRepo {
 	 * @param id The ID of the event to be retrieved.
 	 * @return The event with the given ID.
 	 */
-	suspend fun getEvent(id: Int): Event
+	suspend fun getEvent(id: Long): Event?
 
 	/**
 	 * Adds a new event to the repository.
@@ -52,6 +59,13 @@ interface RamCentralRepo {
 	 * @param event The event to be deleted.
 	 */
 	suspend fun deleteEvent(event: Event)
+
+	/**
+	 * Searches for events matching a given token
+	 *
+	 * @param take how many events to return
+	 */
+	suspend fun search(token: Token, take: Int = 10): Flow<List<Event>>
 
 	/**
 	 * Binding point for Implementation getter

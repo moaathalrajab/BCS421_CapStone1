@@ -17,14 +17,15 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
-import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.ReminderRepository
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeRamCentralRepo
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeReminderRepo
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplReminderRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.RemindersViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -40,10 +41,9 @@ import java.net.URL
  * @param repo The repository for handling reminders.
  * @param ramCentralRepo The repository for handling central data (e.g., events).
  */
-class ImplRemindersViewModel(
-	private val repo: ReminderRepository = FakeReminderRepo(),
-	private val ramCentralRepo: RamCentralRepo = FakeRamCentralRepo()
-) : RemindersViewModel() {
+class ImplRemindersViewModel(application: Application) : RemindersViewModel(application) {
+	private val repo: ReminderRepository = ReminderRepository.get(application)
+	private val ramCentralRepo: RamCentralRepository = RamCentralRepository.get(application)
 
 	/**
 	 * A [StateFlow] emitting a list of [ReminderItem]s derived from reminders in the repository.
@@ -51,7 +51,8 @@ class ImplRemindersViewModel(
 	override val reminders: StateFlow<List<ReminderItem>> =
 		repo.getAllReminders().map { reminderItems ->
 			reminderItems.map { reminder ->
-				val event = ramCentralRepo.getEvent(reminder.eventId)
+				// event cannot be null, as the entities are attached
+				val event = ramCentralRepo.getEvent(reminder.eventId)!!
 				ReminderItem(
 					eventId = event.id,
 					eventName = event.name,
@@ -84,7 +85,7 @@ class ImplRemindersViewModel(
 	 * @param id The ID of the reminder to be updated.
 	 * @param time The new [ReminderTime] for the reminder.
 	 */
-	override fun updateReminderTime(id: Int, time: ReminderTime) {
+	override fun updateReminderTime(id: Long, time: ReminderTime) {
 		viewModelScope.launch {
 			repo.updateReminder(Reminder(id, time))
 		}

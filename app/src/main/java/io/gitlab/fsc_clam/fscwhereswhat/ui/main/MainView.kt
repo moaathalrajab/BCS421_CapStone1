@@ -17,26 +17,54 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.main
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import io.gitlab.fsc_clam.fscwhereswhat.ui.map.MapView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.notes.NotesView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding.OnboardingView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.reminders.RemindersView
+import io.gitlab.fsc_clam.fscwhereswhat.ui.search.SearchView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun MainView() {
+	// TODO move to view model
+	//state of showing search bar
+	var isSearchVisible by remember { mutableStateOf(false) }
+
 	FSCWheresWhatTheme {
-		MainContent()
+		MainContent(
+			openSearch = {
+				isSearchVisible = true
+			}
+		)
+	}
+
+	//placeholder for search view
+	if (isSearchVisible) {
+		ModalBottomSheet(onDismissRequest = { isSearchVisible = false }) {
+			SearchView()
+		}
 	}
 }
 
 @Composable
-fun MainContent() {
+fun MainContent(
+	openSearch: () -> Unit
+) {
 	val navController = rememberNavController()
 
 	NavHost(
@@ -61,6 +89,29 @@ fun MainContent() {
 			)
 		}
 		composable("map") {
+			MapView(
+				openSearch = openSearch,
+				navigateToMore = {
+					navController.navigate("more")
+				}
+			)
+		}
+
+		composable(
+			"more",
+			enterTransition = {
+				slideIntoContainer(
+					towards = AnimatedContentTransitionScope.SlideDirection.Left,
+					animationSpec = tween(700)
+				)
+			},
+			exitTransition = {
+				slideOutOfContainer(
+					towards = AnimatedContentTransitionScope.SlideDirection.Right,
+					animationSpec = tween(700)
+				)
+			},
+		) {
 		}
 	}
 }

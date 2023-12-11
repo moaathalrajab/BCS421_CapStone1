@@ -28,7 +28,8 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
  */
 @Entity(tableName = "note")
 data class DBNote(
+	@PrimaryKey
+	val reference: Long,
 	val comment: String,
-	@PrimaryKey val reference: Int,
 	val type: EntityType
 )

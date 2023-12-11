@@ -23,6 +23,6 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
  * @param remind is the time of the reminder
  */
 data class Reminder(
-	val eventId: Int,
+	val eventId: Long,
 	val remind: ReminderTime,
 )

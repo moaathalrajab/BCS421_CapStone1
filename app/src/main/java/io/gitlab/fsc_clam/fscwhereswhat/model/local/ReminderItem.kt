@@ -28,7 +28,7 @@ import java.net.URL
  * @param date of the event
  */
 data class ReminderItem(
-	val eventId: Int,
+	val eventId: Long,
 	val eventName: String,
 	val imageURL: URL,
 	val remind: ReminderTime,

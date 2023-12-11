@@ -24,10 +24,11 @@ import androidx.room.*
  * @param id is the id of the way
  * @param nodeId is the id of the associated child node
  */
-@Entity (
+@Entity(
 	tableName = "osm_way_reference",
 	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["id"], ForeignKey.CASCADE),
-					ForeignKey(DBOSMNode::class, ["id"], ["nodeID"], ForeignKey.CASCADE)]
+					ForeignKey(DBOSMNode::class, ["id"], ["nodeId"], ForeignKey.CASCADE)],
+	primaryKeys = ["id", "nodeId"]
 )
 data class DBOSMWayReference(
 	val id: Long,

@@ -33,14 +33,13 @@ import java.net.URL
  * @param url link to RamCentral
  */
 data class Event(
-	val id :Int,
+	val id: Long,
 	val name: String,
 	val image: URL,
 	val description: String,
 	val instructions: String?,
 	val locationName: String,
-	val locationId: Int,
+	val locationId: Long,
 	val hasRSVP: Boolean,
-	val url: URL,
-
+	val url: URL
 )

@@ -29,7 +29,7 @@ import java.net.URL
  */
 data class NoteItem(
 	val comment: String,
-	val reference: Int,
+	val reference: Long,
 	val type: EntityType,
 	val image: Image,
 	val referenceName: String

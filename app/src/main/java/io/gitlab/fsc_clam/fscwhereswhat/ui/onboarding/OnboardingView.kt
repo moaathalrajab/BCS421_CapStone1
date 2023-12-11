@@ -98,9 +98,6 @@ fun OnboardingView(
 							modifier = Modifier.align(Alignment.CenterStart),
 							onClick = {
 								state.launch {
-									if(pagerState.currentPage == 1 && locationPermissionsState.allPermissionsGranted){
-
-									}
 									pagerState.scrollToPage(pagerState.currentPage - 1)
 								}
 							},

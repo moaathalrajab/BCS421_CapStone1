@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
-import android.util.Log
+import android.Manifest
+import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,17 +50,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import kotlinx.coroutines.launch
 
 /**
  * Overall Onboarding View, containing a Horizontal Pager to switch to each Onboarding Screen
  */
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalPermissionsApi::class)
 @Composable
 fun OnboardingView(
 	onFinish: () -> Unit
@@ -68,10 +72,20 @@ fun OnboardingView(
 		initialPage = 0,
 		initialPageOffsetFraction = 0f
 	) {
-		5
+		6
 	}
+	val activity = (LocalContext.current as? Activity)
 	val snackbarState = remember { SnackbarHostState() }
 	val state = rememberCoroutineScope()
+
+	val locationPermissionsState = rememberMultiplePermissionsState(
+		permissions = listOf(
+			Manifest.permission.ACCESS_COARSE_LOCATION,
+			Manifest.permission.ACCESS_FINE_LOCATION,
+		)
+	)
+	val allPermissionsRevoked =
+		locationPermissionsState.permissions.size == locationPermissionsState.revokedPermissions.size
 	Scaffold(
 		bottomBar = {
 			//Creates the bottom bar which holds two icon buttons for navigation and a page indicator
@@ -123,13 +137,19 @@ fun OnboardingView(
 								state.launch {
 									//if on last page should navigate to MapView
 									if (pagerState.currentPage == pagerState.pageCount - 1) {
-										Log.d("X Clicked", "Exit Onboard")
+										activity?.finish()
 									}
 									//else move to next screen on OnboardingView
 									else {
 										pagerState.scrollToPage(pagerState.currentPage + 1)
 									}
 								}
+							},
+							enabled = let{
+								if(pagerState.currentPage != 2)
+									true
+								else !allPermissionsRevoked || locationPermissionsState.allPermissionsGranted
+
 							}
 						)
 						{
@@ -171,11 +191,13 @@ fun OnboardingView(
 			when (page) {
 				0 -> WelcomeScreen()
 				1 -> ExplanationScreen()
-				2 -> LoginScreen(
+				2 -> PermissionScreen(locationPermissionsState)
+				3 -> LoginScreen(
 					showSnackBar = snackbarState::showSnackbar
 				)
-				3 -> OptionsScreen()
-				4 -> ThanksScreen(onFinish)
+
+				4 -> OptionsScreen()
+				5 -> ThanksScreen(onFinish)
 			}
 		}
 	}

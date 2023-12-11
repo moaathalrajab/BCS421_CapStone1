@@ -25,7 +25,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -104,72 +107,154 @@ fun LoginScreen(
 	}
 
 	//Creates white box content container
-	Box(
+	BoxWithConstraints(
 		modifier = Modifier
 			.fillMaxSize()
 	) {
-		Column(
-			modifier = Modifier
-				.fillMaxWidth(.9f)
-				.fillMaxHeight(.8f)
-				.align(Alignment.Center)
-				.background(Color.White),
-			verticalArrangement = Arrangement.Center,
-			horizontalAlignment = Alignment.CenterHorizontally
-		) {
-			//Heading
-			Text(
-				text = stringResource(id = R.string.login_heading),
-				fontFamily = headFont,
-				fontWeight = FontWeight.Bold,
-				fontStyle = FontStyle.Normal,
-				fontSize = 48.sp,
-				textAlign = TextAlign.Center
-			)
-			//App logo
-			Image(
-				painter = painterResource(id = R.drawable.wheres_what_logo),
-				contentDescription = stringResource(id = R.string.app_logo_description),
-				contentScale = ContentScale.Crop,
+		if (maxHeight > 480.dp) {
+			Column(
 				modifier = Modifier
-					.padding(vertical = 15.dp)
-					.size(280.dp)
-					.clip(RoundedCornerShape(25))
-			)
-			//Subheading
-			Text(
-				text = stringResource(id = R.string.login_welcome),
-				fontFamily = headFont,
-				fontWeight = FontWeight.Normal,
-				fontStyle = FontStyle.Italic,
-				fontSize = 40.sp,
-				textAlign = TextAlign.Center
-			)
-			//Ask users to login
-			Text(
-				text = stringResource(id = R.string.login_screen_body),
-				fontFamily = bodyFont,
-				fontWeight = FontWeight.Normal,
-				fontSize = 20.sp,
-				textAlign = TextAlign.Center,
-				modifier = Modifier.padding(bottom = 30.dp)
-			)
-			//Clickable image
-			//May convert to IconButton
-			Image(
-				painter = painterResource(id = R.drawable.google_signin),
-				contentDescription = stringResource(id = R.string.login_button_description),
+					.fillMaxWidth(.9f)
+					.fillMaxHeight(.8f)
+					.align(Alignment.Center)
+					.background(Color.White),
+				verticalArrangement = Arrangement.Center,
+				horizontalAlignment = Alignment.CenterHorizontally
+			) {
+				//Heading
+				Text(
+					text = stringResource(id = R.string.login_heading),
+					fontFamily = headFont,
+					fontWeight = FontWeight.Bold,
+					fontStyle = FontStyle.Normal,
+					fontSize = 48.sp,
+					textAlign = TextAlign.Center
+				)
+				//App logo
+				Image(
+					painter = painterResource(id = R.drawable.wheres_what_logo),
+					contentDescription = stringResource(id = R.string.app_logo_description),
+					contentScale = ContentScale.Crop,
+					modifier = Modifier
+						.padding(vertical = 15.dp)
+						.size(280.dp)
+						.clip(RoundedCornerShape(25))
+				)
+				//Subheading
+				Text(
+					text = stringResource(id = R.string.login_welcome),
+					fontFamily = headFont,
+					fontWeight = FontWeight.Normal,
+					fontStyle = FontStyle.Normal,
+					fontSize = 40.sp,
+					textAlign = TextAlign.Center
+				)
+				//Ask users to login
+				Text(
+					text = stringResource(id = R.string.login_screen_body),
+					fontFamily = bodyFont,
+					fontWeight = FontWeight.Normal,
+					fontSize = 20.sp,
+					textAlign = TextAlign.Center,
+					modifier = Modifier.padding(bottom = 30.dp)
+				)
+				//Clickable image
+				//May convert to IconButton
+				Image(
+					painter = painterResource(id = R.drawable.google_signin),
+					contentDescription = stringResource(id = R.string.login_button_description),
+					modifier = Modifier
+						.wrapContentSize()
+						.clickable(
+							onClick = {
+								signInLauncher.launch(
+									gsoClient.signInIntent
+								)
+							}
+						)
+				)
+			}
+		} else {
+			//if in landscape mode
+			Row(
 				modifier = Modifier
-					.wrapContentSize()
-					.clickable(
-						onClick = {
-							signInLauncher.launch(
-								gsoClient.signInIntent
-							)
-						}
+					.fillMaxSize(.9f)
+					.background(Color.White)
+					.align(Alignment.Center),
+				horizontalArrangement = Arrangement.SpaceBetween
+			) {
+				Column(
+					modifier = Modifier
+						.padding(8.dp),
+					verticalArrangement = Arrangement.SpaceBetween,
+					horizontalAlignment = Alignment.Start
+				) {
+					//App logo
+					Image(
+						painter = painterResource(id = R.drawable.wheres_what_logo),
+						contentDescription = stringResource(id = R.string.app_logo_description),
+						contentScale = ContentScale.Crop,
+						modifier = Modifier
+							.padding(vertical = 15.dp)
+							.size(240.dp)
+							.clip(RoundedCornerShape(25))
 					)
-			)
+				}
+				Column(
+					modifier = Modifier
+						.fillMaxSize(),
+					horizontalAlignment = Alignment.CenterHorizontally,
+					verticalArrangement = Arrangement.SpaceAround,
+				) {
+					Column {
+						//Heading
+						Text(
+							text = stringResource(id = R.string.login_heading),
+							fontFamily = headFont,
+							fontWeight = FontWeight.Bold,
+							fontStyle = FontStyle.Normal,
+							fontSize = 48.sp,
+							textAlign = TextAlign.Center
+						)
+						//Subheading
+						Text(
+							text = stringResource(id = R.string.login_welcome),
+							fontFamily = headFont,
+							fontWeight = FontWeight.Normal,
+							fontStyle = FontStyle.Normal,
+							fontSize = 40.sp,
+							textAlign = TextAlign.Center
+						)
+						//Ask users to login
+						Text(
+							text = stringResource(id = R.string.login_screen_body),
+							fontFamily = bodyFont,
+							fontWeight = FontWeight.Normal,
+							fontSize = 20.sp,
+							textAlign = TextAlign.Center,
+							modifier = Modifier.padding(bottom = 30.dp)
+						)
+					}
+					
+					//Clickable image
+					//May convert to IconButton
+					Image(
+						painter = painterResource(id = R.drawable.google_signin),
+						contentDescription = stringResource(id = R.string.login_button_description),
+						modifier = Modifier
+							.wrapContentSize()
+							.clickable(
+								onClick = {
+									signInLauncher.launch(
+										gsoClient.signInIntent
+									)
+								}
+							)
+					)
+				}
+			}
 		}
+
 	}
 }
 

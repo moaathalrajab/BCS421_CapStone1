@@ -73,7 +73,7 @@ class ImplNotesViewModel(application: Application) : NotesViewModel(application)
 						refImage = Image.Drawable(
 							when (entity) {
 								is OSMEntity.Building -> R.drawable.building_icon
-								is OSMEntity.Node -> R.drawable.node_icon
+								is OSMEntity.Node -> R.drawable.node
 							}
 						)
 					}

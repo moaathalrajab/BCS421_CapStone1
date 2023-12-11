@@ -151,7 +151,7 @@ fun OptionsContent(
 			//Lets users set colors for events
 			PinpointColorItem(
 				name = stringResource(id = R.string.options_events_label),
-				img = painterResource(id = R.drawable.flag_icon),
+				img = painterResource(id = R.drawable.event),
 				imgDescription = stringResource(
 					id = R.string.explanation_event_img,
 				),
@@ -175,7 +175,7 @@ fun OptionsContent(
 			//Lets users set colors for utilities
 			PinpointColorItem(
 				name = stringResource(id = R.string.options_utilities_label),
-				img = painterResource(id = R.drawable.node_icon),
+				img = painterResource(id = R.drawable.node),
 				imgDescription = stringResource(
 					id = R.string.explanation_node_img
 				),

@@ -121,7 +121,7 @@ fun PreviewPinpointSetting() {
 	Surface {
 		PinpointColorItem(
 			name = "EVENT",
-			img = painterResource(id = R.drawable.flag_icon),
+			img = painterResource(id = R.drawable.node),
 			imgDescription = stringResource(
 				id = R.string.explanation_event_img,
 			),

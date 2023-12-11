@@ -209,7 +209,10 @@ fun FilterButtonRow(
 	activeFilter: EntityType?,
 	setActiveFilter: (EntityType?) -> Unit
 ) {
-	Card(Modifier.padding(8.dp)) {
+	Card(
+		Modifier.padding(8.dp),
+		elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+	) {
 		Row(
 			modifier = Modifier
 				.fillMaxWidth(),

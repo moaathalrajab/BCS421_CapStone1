@@ -31,7 +31,7 @@ data class RamCentralDiscoveryEventSearchResult(
 	 */
 	@Serializable
 	data class Event(
-		val id: String,
+		val id: Long,
 		val organizationId: Int,
 		val organizationIds: List<Int>,
 		val organizationName: String,

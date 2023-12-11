@@ -17,33 +17,48 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import android.graphics.Color
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * For the More View
  */
-abstract class MoreViewModel : ViewModel() {
+abstract class MoreViewModel(application: Application) : AndroidViewModel(application) {
+
+	abstract val exceptions : Flow<Throwable>
+	abstract val cacheStatus : Flow<Boolean>
+
 	/**
 	 * Color of Building pinpoints
 	 */
-	abstract val buildingColor: StateFlow<Color>
+	abstract val buildingColor: StateFlow<Int>
 
 	/**
 	 * Color of Event pinpoints
 	 */
-	abstract val eventColor: StateFlow<Color>
+	abstract val eventColor: StateFlow<Int>
+
+	/**
+	 * Color of utility pinpoints
+	 */
+	abstract val utilityColor: StateFlow<Int>
 
 	/**
 	 * Sets color of Building pinpoints
 	 */
-	abstract fun setBuildingColor(color: Color)
+	abstract fun setBuildingColor(color: Int)
 
 	/**
 	 * Sets color of Event pinpoints
 	 */
-	abstract fun setEventColor(color: Color)
+	abstract fun setEventColor(color: Int)
+
+	/**
+	 * Sets color of utility pinpoints
+	 */
+	abstract fun setUtilityColor(color: Int)
 
 	/**
 	 * Clear cache on app

@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -147,33 +146,8 @@ fun MapUI(
 				verticalAlignment = Alignment.CenterVertically
 			) {
 				//search bar on click expands to show search view
-				Card(
-					onClick = openSearch,
-					shape = CircleShape,
-					modifier = Modifier
-						.fillMaxWidth(.8f)
-						.requiredHeight(35.dp),
-					elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-				) {
-					Row(
-						modifier = Modifier
-							.fillMaxSize(),
-						verticalAlignment = Alignment.CenterVertically,
-					) {
-						Icon(
-							Icons.Default.Search,
-							stringResource(id = R.string.search_bar_label),
-							modifier = Modifier.padding(horizontal = 8.dp)
-						)
-						Text(text = let {
-							if (!query.isNullOrEmpty())
-								query
-							else
-								stringResource(id = R.string.search_bar_label)
-						}
-						)
-					}
-				}
+				SearchBar(openSearch, query)
+
 				//The more button
 				Card {
 					IconButton(
@@ -188,6 +162,38 @@ fun MapUI(
 					}
 				}
 			}
+		}
+	}
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchBar(openSearch: () -> Unit, query: String?) {
+	Card(
+		onClick = openSearch,
+		shape = CircleShape,
+		modifier = Modifier
+			.fillMaxWidth(.8f),
+		elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+	) {
+		Row(
+			modifier = Modifier.fillMaxWidth().padding(8.dp),
+			verticalAlignment = Alignment.CenterVertically,
+			horizontalArrangement = Arrangement.spacedBy(4.dp)
+		) {
+			Icon(
+				Icons.Default.Search,
+				stringResource(id = R.string.search_bar_label),
+				modifier = Modifier
+					.size(32.dp)
+			)
+			Text(text = let {
+				if (!query.isNullOrEmpty())
+					query
+				else
+					stringResource(id = R.string.search_bar_label)
+			}
+			)
 		}
 	}
 }

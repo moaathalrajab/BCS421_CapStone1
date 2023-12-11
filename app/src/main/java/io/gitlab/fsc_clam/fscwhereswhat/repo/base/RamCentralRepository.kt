@@ -18,6 +18,7 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.base
 
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -58,6 +59,13 @@ interface RamCentralRepository {
 	 * @param event The event to be deleted.
 	 */
 	suspend fun deleteEvent(event: Event)
+
+	/**
+	 * Searches for events matching a given token
+	 *
+	 * @param take how many events to return
+	 */
+	suspend fun search(token: Token, take: Int = 10): Flow<List<Event>>
 
 	/**
 	 * Binding point for Implementation getter

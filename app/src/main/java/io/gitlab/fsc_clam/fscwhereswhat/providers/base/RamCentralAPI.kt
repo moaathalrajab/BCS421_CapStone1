@@ -20,6 +20,8 @@ package io.gitlab.fsc_clam.fscwhereswhat.providers.base
 import io.gitlab.fsc_clam.fscwhereswhat.model.remote.RamCentralDiscoveryEvent
 import io.gitlab.fsc_clam.fscwhereswhat.model.remote.RamCentralDiscoveryEventOrganization
 import io.gitlab.fsc_clam.fscwhereswhat.model.remote.RamCentralDiscoveryEventSearchResult
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 /**
  * Reversed engineered API for RamCentral.
@@ -105,5 +107,7 @@ interface RamCentralAPI {
 	/**
 	 * Binding point for Implementation getter
 	 */
-	companion object
+	companion object {
+		val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US)
+	}
 }

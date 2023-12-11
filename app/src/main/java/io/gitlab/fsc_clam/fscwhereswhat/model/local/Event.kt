@@ -39,7 +39,7 @@ data class Event(
 	val description: String,
 	val instructions: String?,
 	val locationName: String,
-	val locationId: Int,
+	val locationId: Long,
 	val hasRSVP: Boolean,
 	val url: URL
 )

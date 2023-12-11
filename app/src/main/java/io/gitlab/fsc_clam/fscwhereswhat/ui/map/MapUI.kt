@@ -37,7 +37,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -129,9 +128,9 @@ fun MapUI(
 		//Holds the search bar and filter buttons
 		Column(
 			modifier = Modifier
-				.fillMaxWidth()
-				.align(Alignment.BottomStart),
-			verticalArrangement = Arrangement.Bottom,
+				.align(Alignment.BottomStart)
+				.padding(8.dp),
+			verticalArrangement = Arrangement.spacedBy(8.dp),
 			horizontalAlignment = Alignment.Start
 		) {
 
@@ -140,10 +139,8 @@ fun MapUI(
 
 			//bottom bar holds search and more button
 			Row(
-				modifier = Modifier
-					.padding(8.dp)
-					.fillMaxWidth(),
-				horizontalArrangement = Arrangement.SpaceAround,
+				modifier = Modifier.fillMaxWidth(),
+				horizontalArrangement = Arrangement.SpaceEvenly,
 				verticalAlignment = Alignment.CenterVertically
 			) {
 				//search bar on click expands to show search view

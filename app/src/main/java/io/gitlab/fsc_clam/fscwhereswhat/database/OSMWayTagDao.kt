@@ -17,7 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.database
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayTag
 
 /**
@@ -31,19 +36,22 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayTag
 @Dao
 interface OSMWayTagDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insert(vararg wayTag: DBOSMWayTag)
+	suspend fun insert(wayTag: DBOSMWayTag)
+
+	@Update
+	suspend fun update(wayTag: DBOSMWayTag)
 
 	@Delete
-	suspend fun delete(vararg wayTag: DBOSMWayTag)
+	suspend fun delete(wayTag: DBOSMWayTag)
 
 	@Query("SELECT * FROM osm_way_tag")
 	suspend fun getAll() : List<DBOSMWayTag>
 
 	/** Get way tag by id **/
-	@Query("SELECT * FROM osm_way_tag WHERE id = :id")
-	suspend fun getById(id: Int) : DBOSMWayTag
+	@Query("SELECT * FROM osm_way_tag WHERE parentId = :id AND [key] = :key")
+	suspend fun get(id: Long, key: String) : DBOSMWayTag?
 
 	/** Get way tags by parent id **/
 	@Query("SELECT * FROM osm_way_tag WHERE parentId = :id")
-	suspend fun getByParent(id: Int) : List<DBOSMWayTag>
+	suspend fun getByParent(id: Long) : List<DBOSMWayTag>
 }

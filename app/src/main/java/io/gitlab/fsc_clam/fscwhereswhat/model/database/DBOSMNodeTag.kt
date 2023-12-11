@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
 
 /**
  * This is a tag associated with a given node
@@ -28,10 +29,10 @@ import androidx.room.*
  */
 @Entity (
 	tableName = "osm_node_tag",
-	foreignKeys = [ForeignKey(DBOSMNode::class, ["id"], ["nodeId"], ForeignKey.CASCADE)]
+	foreignKeys = [ForeignKey(DBOSMNode::class, ["id"], ["nodeId"], ForeignKey.CASCADE)],
+	primaryKeys = ["nodeId", "key"]
 )
 data class DBOSMNodeTag(
-	@PrimaryKey val id: Long,
 	val nodeId: Long,
 	val key: String,
 	val value: String

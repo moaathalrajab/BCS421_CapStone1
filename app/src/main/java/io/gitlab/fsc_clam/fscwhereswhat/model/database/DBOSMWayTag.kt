@@ -28,10 +28,10 @@ import androidx.room.*
  */
 @Entity(
 	tableName = "osm_way_tag",
-	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["parentId"], ForeignKey.CASCADE)]
+	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["parentId"], ForeignKey.CASCADE)],
+	primaryKeys = [ "parentId", "key" ]
 )
 data class DBOSMWayTag(
-	@PrimaryKey val id: Long,
 	val parentId: Long,
 	val key: String,
 	val value: String

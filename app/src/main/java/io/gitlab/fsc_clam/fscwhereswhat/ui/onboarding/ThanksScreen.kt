@@ -63,7 +63,7 @@ fun ThanksScreen(
 			.fillMaxSize()
 			.background(Color.White)
 			.verticalScroll(rememberScrollState()),
-		verticalArrangement = Arrangement.Top,
+		verticalArrangement = Arrangement.Center,
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
 		Text(

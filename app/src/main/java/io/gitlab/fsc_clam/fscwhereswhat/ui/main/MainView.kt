@@ -75,7 +75,11 @@ fun MainContent(
 		composable("onboarding") {
 			OnboardingView(
 				onFinish = {
-					navController.navigate("map")
+					navController.navigate("map") {
+						popUpTo("onboarding") {
+							inclusive = true
+						}
+					}
 				}
 			)
 		}

@@ -18,88 +18,66 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.bodyFont
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
 
 /**
  * Screen to explain the layout of the mop
  */
 @Composable
 fun ExplanationScreen() {
+	OnboardingScreenPage {
 		Column(
 			modifier = Modifier
-				.padding(12.dp)
-				.background(Color.White)
-				.fillMaxSize()
-				.verticalScroll(rememberScrollState()),
-			horizontalAlignment = Alignment.CenterHorizontally
+				.padding(8.dp)
+				.fillMaxSize(),
+			horizontalAlignment = Alignment.CenterHorizontally,
+			verticalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterVertically)
 		) {
-			//App Logo
-			Image(
-				painter = painterResource(id = R.drawable.ic_launcher_foreground),
-				contentDescription = stringResource(id = R.string.app_logo_description),
-				contentScale = ContentScale.Crop,
-				modifier = Modifier
-					.padding(vertical = 15.dp)
-					.size(280.dp)
-					.clip(RoundedCornerShape(25))
-			)
-			//Header
-			Text(
-				text = stringResource(id = R.string.headline),
-				fontFamily = headFont,
-				fontWeight = FontWeight.Bold,
-				fontStyle = FontStyle.Italic,
-				fontSize = 36.sp,
-			)
-			//Subheading
-			Text(
-				text = stringResource(id = R.string.explanation_body),
-				fontFamily = bodyFont,
-				fontWeight = FontWeight.Normal,
-				fontStyle = FontStyle.Normal,
-				fontSize = 20.sp,
-				textAlign = TextAlign.Center,
-			)
+			Column(
+				horizontalAlignment = Alignment.CenterHorizontally
+			) {
+				//Header
+				Text(
+					text = stringResource(id = R.string.headline),
+					style = MaterialTheme.typography.headlineLarge
+				)
+
+				//Subheading
+				Text(
+					text = stringResource(id = R.string.explanation_body),
+					textAlign = TextAlign.Center
+				)
+			}
 
 			Column(
 				modifier = Modifier
 					.fillMaxSize(),
-				verticalArrangement = Arrangement.SpaceEvenly
+				verticalArrangement = Arrangement.spacedBy(4.dp)
 			) {
 				//Explains Event
-				EntityExplanations(
+				ExplanationItem(
 					explanationText = stringResource(id = R.string.explanation_event),
 					img = painterResource(
 						id = R.drawable.event
@@ -107,7 +85,7 @@ fun ExplanationScreen() {
 					imgDescription = stringResource(id = R.string.explanation_event_img)
 				)
 				//Explains Buildings
-				EntityExplanations(
+				ExplanationItem(
 					explanationText = stringResource(id = R.string.explanation_building),
 					img = painterResource(
 						id = R.drawable.building_icon
@@ -115,7 +93,7 @@ fun ExplanationScreen() {
 					imgDescription = stringResource(id = R.string.explanation_building_img)
 				)
 				//Explains nodes(utilities)
-				EntityExplanations(
+				ExplanationItem(
 					explanationText = stringResource(id = R.string.explanation_node),
 					img = painterResource(
 						id = R.drawable.node
@@ -125,6 +103,7 @@ fun ExplanationScreen() {
 			}
 		}
 	}
+}
 
 @Preview
 @Composable
@@ -144,40 +123,35 @@ fun PreviewExplanationScreen() {
 }
 
 /**
- * Creates explanation for the each EntityType - Event, Building, Node
+ * An explanation for a given EntityType - Event, Building, Node
+ *
  * @param explanationText is the text explaining how each what each EntityType is and how they are represented
  * @param img is the image of the pinpoint for each EntityType
  * @param imgDescription is the content description
  */
 @Composable
-fun EntityExplanations(explanationText: String, img: Painter, imgDescription: String) {
-	Box(
-		Modifier
-			.fillMaxWidth()
-			.background(Color.White)
-	) {
-		Text(
-			text = explanationText,
-			fontFamily = bodyFont,
-			fontWeight = FontWeight.Normal,
-			fontStyle = FontStyle.Normal,
-			fontSize = 16.sp,
-			modifier = Modifier
-				.fillMaxWidth(.8f)
-				.padding(bottom = 10.dp, start = 5.dp)
-				.align(Alignment.CenterStart)
-		)
+fun ExplanationItem(explanationText: String, img: Painter, imgDescription: String) {
+	Box {
+		Row(
+			Modifier
+				.fillMaxWidth()
+				.padding(4.dp),
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			Image(
+				painter = img,
+				contentDescription = imgDescription,
+				modifier = Modifier
+					.weight(.2f)
+					.size(35.dp)
+			)
 
-		Image(
-			painter = img,
-			contentDescription = imgDescription,
-			modifier = Modifier
-				.padding(end = 5.dp)
-				.fillMaxWidth(.2f)
-				.align(Alignment.CenterEnd)
-				.requiredSize(35.dp)
-		)
-
+			Text(
+				text = explanationText,
+				modifier = Modifier
+					.weight(.8f)
+			)
+		}
 	}
 }
 
@@ -185,7 +159,7 @@ fun EntityExplanations(explanationText: String, img: Painter, imgDescription: St
 @Composable
 fun PreviewEntityExplanations() {
 	Surface {
-		EntityExplanations(
+		ExplanationItem(
 			explanationText = stringResource(id = R.string.explanation_event),
 			img = painterResource(
 				id = R.drawable.event

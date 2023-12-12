@@ -21,18 +21,13 @@ import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,25 +35,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.bodyFont
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.LoginViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplLoginViewModel
 
@@ -102,84 +88,57 @@ fun LoginScreen(
 			showSnackBar("Welcome ${user!!.name}!")
 		}
 	}
-	Column(
-		modifier = Modifier
-			.padding(16.dp)
-			.fillMaxSize()
-			.background(Color.White)
-			.verticalScroll(rememberScrollState()),
-		verticalArrangement = Arrangement.Center,
-		horizontalAlignment = Alignment.CenterHorizontally
-	) {
-		//Heading
-		Text(
-			text = stringResource(id = R.string.login_heading),
-			fontFamily = headFont,
-			fontWeight = FontWeight.Bold,
-			fontStyle = FontStyle.Normal,
-			fontSize = 48.sp,
-			textAlign = TextAlign.Center
-		)
-		//App logo
-		Image(
-			painter = painterResource(id = R.drawable.ic_launcher_foreground),
-			contentDescription = stringResource(id = R.string.app_logo_description),
-			contentScale = ContentScale.Crop,
+	LoginScreenContent(
+		onLogin = {
+			signInLauncher.launch(
+				gsoClient.signInIntent
+			)
+		}
+	)
+}
+
+@Composable
+fun LoginScreenContent(
+	onLogin: () -> Unit
+) {
+	OnboardingScreenPage {
+		Column(
 			modifier = Modifier
-				.padding(vertical = 15.dp)
-				.size(280.dp)
-				.clip(RoundedCornerShape(25))
-		)
-		//Subheading
-		Text(
-			text = stringResource(id = R.string.login_welcome),
-			fontFamily = headFont,
-			fontWeight = FontWeight.Normal,
-			fontStyle = FontStyle.Normal,
-			fontSize = 40.sp,
-			textAlign = TextAlign.Center
-		)
-		//Ask users to login
-		Text(
-			text = stringResource(id = R.string.login_screen_body),
-			fontFamily = bodyFont,
-			fontWeight = FontWeight.Normal,
-			fontSize = 20.sp,
-			textAlign = TextAlign.Center,
-			modifier = Modifier.padding(bottom = 30.dp)
-		)
-		//Clickable image
-		//May convert to IconButton
-		Image(
-			painter = painterResource(id = R.drawable.google_signin),
-			contentDescription = stringResource(id = R.string.login_button_description),
-			modifier = Modifier
-				.wrapContentSize()
-				.clickable(
-					onClick = {
-						signInLauncher.launch(
-							gsoClient.signInIntent
-						)
-					}
-				)
-		)
+				.padding(8.dp)
+				.fillMaxSize(),
+			verticalArrangement = Arrangement.Center,
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			//Heading
+			Text(
+				text = stringResource(id = R.string.login_heading),
+				style = MaterialTheme.typography.headlineLarge
+			)
+			//Ask users to login
+			Text(
+				text = stringResource(id = R.string.login_screen_body),
+				modifier = Modifier.padding(bottom = 30.dp)
+			)
+			//Clickable image
+			//May convert to IconButton
+			// https://developers.google.com/identity/branding-guidelines
+			Image(
+				painterResource(id = R.drawable.google_signin),
+				stringResource(id = R.string.login_button_description),
+				Modifier
+					.clickable(onClick = onLogin)
+					.scale(1.5f)
+			)
+		}
 	}
 }
 
 @Preview
 @Composable
-fun PreviewLoginScreen() {
-	//Creates background
-	Box(
-		modifier = Modifier
-			.fillMaxSize()
-			.paint(
-				painterResource(id = R.drawable.welcome_screen_background),
-				contentScale = ContentScale.FillBounds
-			)
-	) {
-		LoginScreen(
-			showSnackBar = {}
+fun PreviewLoginScreenContent() {
+	Surface {
+		LoginScreenContent(
+			onLogin = {}
 		)
 	}
 }

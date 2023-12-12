@@ -19,17 +19,15 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
 import android.Manifest
 import android.app.Activity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -39,19 +37,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.bodyFont
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -59,55 +53,57 @@ fun PermissionScreen(
 	locationPermissionsState: MultiplePermissionsState
 ) {
 	val activity = (LocalContext.current as? Activity)
+
 	var showExitDialog by remember { mutableStateOf(false) }
+
 	val allPermissionsRevoked =
 		locationPermissionsState.permissions.size == locationPermissionsState.revokedPermissions.size
+
 	val fineLocationPermission =
 		rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
 
-	Column(
-		modifier = Modifier
-			.padding(16.dp)
-			.fillMaxSize()
-			.background(Color.White)
-			.verticalScroll(rememberScrollState()),
-		verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-		horizontalAlignment = Alignment.CenterHorizontally
-	) {
-		Text(
-			text = stringResource(id = R.string.permissions),
-			fontFamily = headFont,
-			fontSize = 46.sp
-		)
-		Text(
-			text = let {
-				if (locationPermissionsState.allPermissionsGranted)
-					stringResource(id = R.string.permissions_thank)
-				else if (!allPermissionsRevoked)
-				//if user grants only coarse location, tell user map will not be as accurate
-					stringResource(id = R.string.coarse_location_only)
-				else
-				//tell user the app cannot function without location permissions
-					stringResource(id = R.string.request_location_permissions)
-			},
-			fontFamily = bodyFont,
-			textAlign = TextAlign.Center
-		)
-		if (locationPermissionsState.allPermissionsGranted) {
-			//show nothing
-		} else if (locationPermissionsState.shouldShowRationale) {
-			showExitDialog = true
-		} else {
-			Button(onClick = {
-				locationPermissionsState.launchMultiplePermissionRequest()
-				if (!allPermissionsRevoked)
-					fineLocationPermission.launchPermissionRequest()
-			}
-			) {
-				Text(text = stringResource(id = R.string.request_permissions))
+	OnboardingScreenPage {
+		Column(
+			modifier = Modifier
+				.padding(8.dp)
+				.fillMaxSize(),
+			verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+			horizontalAlignment = Alignment.CenterHorizontally
+		) {
+			Text(
+				text = stringResource(id = R.string.permissions),
+				style = MaterialTheme.typography.headlineLarge
+			)
+			Text(
+				text = let {
+					if (locationPermissionsState.allPermissionsGranted)
+						stringResource(id = R.string.permissions_thank)
+					else if (!allPermissionsRevoked)
+					//if user grants only coarse location, tell user map will not be as accurate
+						stringResource(id = R.string.coarse_location_only)
+					else
+					//tell user the app cannot function without location permissions
+						stringResource(id = R.string.request_location_permissions)
+				},
+				textAlign = TextAlign.Center
+			)
+			if (locationPermissionsState.allPermissionsGranted) {
+				//show nothing
+			} else if (locationPermissionsState.shouldShowRationale) {
+				showExitDialog = true
+			} else {
+				Button(onClick = {
+					locationPermissionsState.launchMultiplePermissionRequest()
+					if (!allPermissionsRevoked)
+						fineLocationPermission.launchPermissionRequest()
+				}
+				) {
+					Text(text = stringResource(id = R.string.request_permissions))
+				}
 			}
 		}
 	}
+
 	if (showExitDialog) {
 		Dialog(onDismissRequest = {
 			showExitDialog = false

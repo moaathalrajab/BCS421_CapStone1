@@ -29,24 +29,24 @@
     <string name="arrow_backward">Backward</string>
 
     //Explanation Screen Strings
-    <string name="explanation_body">is an interactive campus map that allows users to find</string>
-    <string name="explanation_event">Events that are marked with a flag.They represent nearby events from RamCentral</string>
+    <string name="explanation_body">is an interactive campus map that allows users to find…</string>
+    <string name="explanation_event">Events that are marked with a flag.\nThey represent nearby events from RamCentral</string>
     <string name="explanation_event_img">Events marked with a flag</string>
-    <string name="explanation_building">Buildings that are marked with this icon to the right.They represent the campus buildings of FSC</string>
+    <string name="explanation_building">Buildings that are marked with this icon to the right.\nThey represent the campus buildings of FSC</string>
     <string name="explanation_building_img">Buildings marked with rectangle</string>
-    <string name="explanation_node">Utilities that are marked with a question mark.They represent the amenities and utilities around the campus</string>
+    <string name="explanation_node">Utilities that are marked with a question mark.\nThey represent the amenities and utilities around the campus</string>
     <string name="explanation_node_img">Utilities marked with question mark</string>
 
     //Login Screen Strings
     <string name="login_heading">LOGIN</string>
     <string name="login_welcome">Welcome!</string>
-    <string name="login_screen_body">Before we continue, please login</string>
+    <string name="login_screen_body">Login to save your settings</string>
     <string name="login_google_button">Login with Google</string>
     <string name="login_button_description">Login with google</string>
 
     //Option Screen Strings
     <string name="options_heading">OPTIONS</string>
-    <string name="options_subheading">Set colors for your markers</string>
+    <string name="options_subheading">Set colors for the markers</string>
     <string name="options_events_label">EVENTS</string>
     <string name="options_buildings_label">BUILDINGS</string>
     <string name="options_utilities_label">UTILITIES</string>
@@ -75,11 +75,11 @@
     <string name="account_icon">User account</string>
     <string name="request_permissions">Request Permission</string>
     <string name="permissions">Permissions</string>
-    <string name="coarse_location_only">The application currently has permissions for coarse location. The map will work with limited functionality.</string>
-    <string name="request_location_permissions">The application needs to access your location to find nearby events and objects. Grant us permission for fine location for the best experience.</string>
+    <string name="coarse_location_only">The application currently has permissions for coarse location.\nThe map will work with limited functionality.</string>
+    <string name="request_location_permissions">The application needs to access your location to find nearby events and objects.\nGrant us permission for fine location for the best experience.</string>
     <string name="deny">Deny</string>
     <string name="allow_fine_location">Allow precise location</string>
-    <string name="need_permissions">You have denied permission for location. Please enable these settings before continuing</string>
+    <string name="need_permissions">You have denied permission for location.\nPlease enable these settings before continuing</string>
     <string name="ok">OK</string>
-    <string name="permissions_thank">You have enabled all permissions. Thank you!</string>
+    <string name="permissions_thank">You have enabled all permissions.\nThank you!</string>
 </resources>

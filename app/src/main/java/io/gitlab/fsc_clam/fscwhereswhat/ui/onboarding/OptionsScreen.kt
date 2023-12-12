@@ -17,41 +17,29 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.bodyFont
-import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.OptionsViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplOptionsViewModel
 
@@ -64,15 +52,16 @@ fun OptionsScreen() {
 	val eventColor by optionsViewModel.eventColor.collectAsState()
 	val buildingColor by optionsViewModel.buildingColor.collectAsState()
 	val utilityColor by optionsViewModel.utilityColor.collectAsState()
-	OptionsContent(
-		eventColor = eventColor,
-		buildingColor = buildingColor,
-		utilityColor = utilityColor,
-		setEventColor = optionsViewModel::setEventColor,
-		setBuildingColor = optionsViewModel::setBuildingColor,
-		setUtilityColor = optionsViewModel::setUtilityColor
-	)
-
+	OnboardingScreenPage {
+		OptionsContent(
+			eventColor = eventColor,
+			buildingColor = buildingColor,
+			utilityColor = utilityColor,
+			setEventColor = optionsViewModel::setEventColor,
+			setBuildingColor = optionsViewModel::setBuildingColor,
+			setUtilityColor = optionsViewModel::setUtilityColor
+		)
+	}
 }
 
 /**
@@ -95,10 +84,8 @@ fun OptionsContent(
 ) {
 	Column(
 		modifier = Modifier
-			.padding(16.dp)
-			.fillMaxSize()
-			.background(Color.White)
-			.verticalScroll(rememberScrollState()),
+			.padding(8.dp)
+			.fillMaxSize(),
 		verticalArrangement = Arrangement.spacedBy(
 			16.dp,
 			alignment = Alignment.CenterVertically
@@ -114,32 +101,13 @@ fun OptionsContent(
 			//Heading
 			Text(
 				text = stringResource(id = R.string.options_heading),
-				fontFamily = headFont,
-				fontWeight = FontWeight.Bold,
-				fontStyle = FontStyle.Normal,
-				fontSize = 48.sp,
-				textAlign = TextAlign.Center
+				style = MaterialTheme.typography.headlineLarge
 			)
 			//Subheading
 			Text(
 				text = stringResource(id = R.string.options_subheading),
-				fontFamily = bodyFont,
-				fontWeight = FontWeight.Normal,
-				fontStyle = FontStyle.Normal,
-				fontSize = 16.sp,
-				textAlign = TextAlign.Center
 			)
 		}
-		//App logo
-		Image(
-			painter = painterResource(id = R.drawable.ic_launcher_foreground),
-			contentDescription = stringResource(id = R.string.app_logo_description),
-			contentScale = ContentScale.Crop,
-			modifier = Modifier
-				.padding(vertical = 15.dp)
-				.size(280.dp)
-				.clip(RoundedCornerShape(25))
-		)
 		//This column contains the three color setters for each EntityType
 		Column(
 			modifier = Modifier.fillMaxWidth(),

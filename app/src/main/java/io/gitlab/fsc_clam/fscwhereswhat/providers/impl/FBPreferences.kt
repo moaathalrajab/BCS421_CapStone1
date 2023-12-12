@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.providers.base.Firebase
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -56,7 +57,11 @@ class FBPreferences : Firebase {
 			val listener = userDir.addValueEventListener(object : ValueEventListener {
 				override fun onDataChange(dataSnapshot: DataSnapshot) {
 					//val colors = dataSnapshot.getValue<Map<String, String>>()
-					val colors: MutableMap<String, Int> = mutableMapOf()
+					val colors: MutableMap<String, Int> = mutableMapOf(
+						EntityType.BUILDING.name to EntityType.BUILDING.defaultColor,
+						EntityType.NODE.name to EntityType.NODE.defaultColor,
+						EntityType.EVENT.name to EntityType.EVENT.defaultColor,
+					)
 
 					for (dataValue in dataSnapshot.children) {
 						colors[dataValue.key.toString()] = (dataValue.value as Long).toInt()
@@ -70,7 +75,7 @@ class FBPreferences : Firebase {
 				}
 			})
 
-			awaitClose() {
+			awaitClose {
 				userDir.removeEventListener(listener)
 			}
 		}

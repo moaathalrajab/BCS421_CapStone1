@@ -90,31 +90,34 @@ data class OpeningHours(
 					if (str.length == 8) {
 						startHr = str.substring(0, 1).toInt()
 						startMin = str.substring(2, 3).toInt()
-						endHr = str.substring(4,5).toInt()
+						endHr = str.substring(4, 5).toInt()
 						endMin = str.substring(6, 7).toInt()
 					}
 				}
 
-				hours.add( OpeningHours(isOpen[0], isOpen[1], isOpen[2], isOpen[3],
-										isOpen[4], isOpen[5], isOpen[6], startHr, startMin, endHr, endMin) )
+				hours.add(
+					OpeningHours(
+						isOpen[0], isOpen[1], isOpen[2], isOpen[3],
+						isOpen[4], isOpen[5], isOpen[6], startHr, startMin, endHr, endMin
+					)
+				)
 			}
 
 			return hours
 		}
 	}
 
-		val everyDay = OpeningHours(
-			monday = true,
-			tuesday = true,
-			wednesday = true,
-			thursday = true,
-			friday = true,
-			saturday = true,
-			sunday = true,
-			startHour = 0,
-			startMinute = 0,
-			endHour = 24,
-			endMinute = 0
-		)
-	}
+	val everyDay = OpeningHours(
+		monday = true,
+		tuesday = true,
+		wednesday = true,
+		thursday = true,
+		friday = true,
+		saturday = true,
+		sunday = true,
+		startHour = 0,
+		startMinute = 0,
+		endHour = 24,
+		endMinute = 0
+	)
 }

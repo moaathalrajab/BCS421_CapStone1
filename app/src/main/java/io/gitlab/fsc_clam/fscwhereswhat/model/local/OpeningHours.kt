@@ -102,4 +102,19 @@ data class OpeningHours(
 			return hours
 		}
 	}
+
+		val everyDay = OpeningHours(
+			monday = true,
+			tuesday = true,
+			wednesday = true,
+			thursday = true,
+			friday = true,
+			saturday = true,
+			sunday = true,
+			startHour = 0,
+			startMinute = 0,
+			endHour = 24,
+			endMinute = 0
+		)
+	}
 }

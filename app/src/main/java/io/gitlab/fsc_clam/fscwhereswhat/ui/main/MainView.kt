@@ -17,6 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.main
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
@@ -29,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.gitlab.fsc_clam.fscwhereswhat.ui.map.MapView
+import io.gitlab.fsc_clam.fscwhereswhat.ui.more.MoreView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.notes.NotesView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding.OnboardingView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.reminders.RemindersView
@@ -95,7 +98,25 @@ fun MainContent(
 			)
 		}
 
-		composable("more") {
+		composable(
+			"more",
+			enterTransition = {
+				slideIntoContainer(
+					towards = AnimatedContentTransitionScope.SlideDirection.Left,
+					animationSpec = tween(700)
+				)
+			},
+			exitTransition = {
+				slideOutOfContainer(
+					towards = AnimatedContentTransitionScope.SlideDirection.Right,
+					animationSpec = tween(700)
+				)
+			},
+		) {
+			MoreView(
+				navToNotes = { navController.navigate("notes") },
+				navToReminders = { navController.navigate("reminders") }
+			)
 		}
 	}
 }

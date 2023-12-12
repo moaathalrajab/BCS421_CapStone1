@@ -53,7 +53,7 @@
     <string name="options_confirm_button">Confirm</string>
 
     //Thanks Screen Strings
-    <string name="thanks_heading">Thank you,</string>
+    <string name="thanks_heading">Thank you</string>
     <string name="thanks_body">Enjoy!</string>
     <string name="thanks_developers_logo">Developer Logo</string>
     <string name="thanks_continue_button">Continue to App</string>
@@ -73,4 +73,13 @@
     <string name="search_bar_label">Search</string>
     <string name="more_button_desc">Go to more view</string>
     <string name="account_icon">User account</string>
+    <string name="request_permissions">Request Permission</string>
+    <string name="permissions">Permissions</string>
+    <string name="coarse_location_only">The application currently has permissions for coarse location. The map will work with limited functionality.</string>
+    <string name="request_location_permissions">The application needs to access your location to find nearby events and objects. Grant us permission for fine location for the best experience.</string>
+    <string name="deny">Deny</string>
+    <string name="allow_fine_location">Allow precise location</string>
+    <string name="need_permissions">You have denied permission for location. Please enable these settings before continuing</string>
+    <string name="ok">OK</string>
+    <string name="permissions_thank">You have enabled all permissions. Thank you!</string>
 </resources>

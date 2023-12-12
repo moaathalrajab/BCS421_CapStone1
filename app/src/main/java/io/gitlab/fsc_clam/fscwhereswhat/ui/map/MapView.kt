@@ -17,8 +17,11 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
+import android.app.Activity
 import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +29,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,9 +42,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.utsman.osmandcompose.DefaultMapProperties
 import com.utsman.osmandcompose.Marker
 import com.utsman.osmandcompose.MarkerState
@@ -77,9 +85,45 @@ fun MapView(
 	val eventColor by mapViewModel.eventColor.collectAsState()
 	val nodeColor by mapViewModel.nodeColor.collectAsState()
 	val focus by mapViewModel.focus.collectAsState()
+
+
+	val exception by mapViewModel.exception.collectAsState(null)
+	val snackbarState = remember { SnackbarHostState() }
+
+	// Display exceptions
+	LaunchedEffect(exception) {
+		if (exception != null) {
+			snackbarState.showSnackbar(exception?.message ?: "Unknown Error")
+		}
+	}
+
+	val context = LocalContext.current
+	val gsoClient = GoogleSignIn.getClient(
+		context as Activity,
+		GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+			.requestIdToken(stringResource(R.string.default_web_client_id))
+			.requestEmail()
+			.build()
+	)
+
+	val signInLauncher = rememberLauncherForActivityResult(
+		contract = ActivityResultContracts.StartActivityForResult(),
+		onResult = mapViewModel::handleSignInResult
+	)
+
+	// Feedback that the sign in worked
+	LaunchedEffect(user) {
+		if (user != null) {
+			snackbarState.showSnackbar("Welcome ${user!!.name}!")
+		}
+	}
+
 	Scaffold(
 		bottomBar = {
 			// TODO banner ad here
+		},
+		snackbarHost = {
+			SnackbarHost(snackbarState)
 		}
 	) {
 		//pinpoints is fake data currently
@@ -98,7 +142,10 @@ fun MapView(
 			setActiveFilter = mapViewModel::setActiveFilter,
 			setFocus = mapViewModel::setFocus,
 			openSearch = openSearch,
-			navigateToMore = navigateToMore
+			navigateToMore = navigateToMore,
+			login = {
+				signInLauncher.launch(gsoClient.signInIntent)
+			}
 		)
 	}
 
@@ -141,7 +188,8 @@ fun MapContent(
 	setActiveFilter: (EntityType?) -> Unit,
 	setFocus: (Pinpoint?) -> Unit,
 	openSearch: () -> Unit,
-	navigateToMore: () -> Unit
+	navigateToMore: () -> Unit,
+	login: () -> Unit
 ) {
 	val cameraState = rememberCameraState {
 		geoPoint = GeoPoint(latitude, longitude)
@@ -187,7 +235,7 @@ fun MapContent(
 			properties = mapProperties,
 			overlayManagerState = rememberSaveable(key = null, saver = Saver(
 				save = {
-					   null
+					null
 				},
 				restore = {
 					OverlayManagerState(null)
@@ -214,10 +262,11 @@ fun MapContent(
 			onRecenter = ::onRecenter,
 			query = query,
 			openSearch = openSearch,
-			navigateToMore = navigateToMore
+			navigateToMore = navigateToMore,
+			login = login
 		)
 	}
-	if(focus != null){
+	if (focus != null) {
 		ModalBottomSheet(onDismissRequest = { setFocus(null) }) {
 			EntityDetail()
 		}
@@ -229,11 +278,7 @@ fun MapContent(
 fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 	val context = LocalContext.current
 	//the icon is chosen based on EntityType
-	val icon = when (pinpoint.type) {
-		EntityType.BUILDING -> context.getDrawable(R.drawable.map_building)
-		EntityType.EVENT -> context.getDrawable(R.drawable.map_event)
-		EntityType.NODE -> context.getDrawable(R.drawable.map_node)
-	}
+	val icon = context.getDrawable(pinpoint.type.drawable)
 
 	Marker(
 		state = rememberMarkerState(
@@ -244,7 +289,7 @@ fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 		),
 		icon = icon,
 	) {
-		LaunchedEffect(key1 = pinpoint){
+		LaunchedEffect(key1 = pinpoint) {
 			setFocus(pinpoint)
 		}
 	}
@@ -277,7 +322,6 @@ fun PreviewMapContent() {
 				0,
 				0,
 				EntityType.NODE,
-				false
 			),
 			Pinpoint(
 				40.751485,
@@ -285,7 +329,6 @@ fun PreviewMapContent() {
 				0,
 				0,
 				EntityType.BUILDING,
-				false
 			),
 			Pinpoint(
 				40.751632,
@@ -293,7 +336,6 @@ fun PreviewMapContent() {
 				0,
 				0,
 				EntityType.EVENT,
-				false
 			)
 		),
 		activeFilter = null,
@@ -304,6 +346,7 @@ fun PreviewMapContent() {
 		setActiveFilter = {},
 		setFocus = {},
 		openSearch = {},
-		navigateToMore = {}
+		navigateToMore = {},
+		login = {}
 	)
 }

@@ -18,10 +18,12 @@
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
 import android.app.Application
+import androidx.activity.result.ActivityResult
 import androidx.lifecycle.AndroidViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -88,4 +90,7 @@ abstract class MapViewModel(application: Application) : AndroidViewModel(applica
 	 */
 	abstract fun setFocus(pinpoint: Pinpoint?)
 
+	abstract fun handleSignInResult(result: ActivityResult)
+
+	abstract val exception: MutableSharedFlow<Throwable>
 }

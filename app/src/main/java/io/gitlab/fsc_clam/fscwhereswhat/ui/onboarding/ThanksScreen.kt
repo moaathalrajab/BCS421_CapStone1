@@ -21,16 +21,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -52,6 +49,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.primaryColor
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
 
+
 /**
  * Screen to thank users
  */
@@ -59,113 +57,52 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.titleFont
 fun ThanksScreen(
 	onFinish: () -> Unit
 ) {
-	BoxWithConstraints(Modifier.fillMaxSize()) {
-		if(maxHeight > 480.dp)
-		//Creates white box for content
-		Box(
-			modifier = Modifier
-				.align(Alignment.Center)
-				.fillMaxWidth(.8f)
-				.fillMaxHeight(.7f)
-				.background(Color.White)
+	Column(
+		modifier = Modifier
+			.padding(16.dp)
+			.fillMaxSize()
+			.background(Color.White)
+			.verticalScroll(rememberScrollState()),
+		verticalArrangement = Arrangement.Center,
+		horizontalAlignment = Alignment.CenterHorizontally
+	) {
+		Text(
+			text = stringResource(id = R.string.thanks_heading),
+			fontFamily = titleFont,
+			fontWeight = FontWeight.Bold,
+			fontStyle = FontStyle.Normal,
+			fontSize = 46.sp,
 		)
-		{
-			Column(
-				modifier = Modifier
-					.fillMaxWidth()
-					.wrapContentSize(),
-				verticalArrangement = Arrangement.Top,
-				horizontalAlignment = Alignment.CenterHorizontally
-			) {
-				//Developer logo
-				Image(
-					painter = painterResource(id = R.drawable.team_clam_logo),
-					contentDescription = stringResource(id = R.string.thanks_developers_logo),
-					contentScale = ContentScale.Crop,
-					modifier = Modifier
-						.padding(top = 5.dp, bottom = 15.dp)
-						.size(280.dp)
-						.clip(RoundedCornerShape(25))
-				)
-				Text(
-					text = stringResource(id = R.string.thanks_heading),
-					fontFamily = titleFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Normal,
-					fontSize = 46.sp,
-				)
-				Text(
-					text = stringResource(id = R.string.thanks_body),
-					fontFamily = titleFont,
-					fontWeight = FontWeight.Bold,
-					fontStyle = FontStyle.Normal,
-					fontSize = 38.sp,
-					modifier = Modifier.padding(top = 15.dp, bottom = 25.dp)
-				)
-				//Button to navigate to MapView
-				Button(
-					onClick = onFinish,
-					colors = ButtonDefaults.buttonColors(primaryColor),
-				) {
-					Text(
-						text = stringResource(id = R.string.thanks_continue_button),
-						color = Color.Black
-					)
+		//Developer logo
+		Image(
+			painter = painterResource(id = R.drawable.team_clam_logo),
+			contentDescription = stringResource(id = R.string.thanks_developers_logo),
+			contentScale = ContentScale.Crop,
+			modifier = Modifier
+				.padding(top = 5.dp, bottom = 15.dp)
+				.size(280.dp)
+				.clip(RoundedCornerShape(25))
+		)
+		Text(
+			text = stringResource(id = R.string.thanks_body),
+			fontFamily = titleFont,
+			fontWeight = FontWeight.Bold,
+			fontStyle = FontStyle.Normal,
+			fontSize = 38.sp,
+			modifier = Modifier.padding(top = 15.dp, bottom = 25.dp)
+		)
+		//Button to navigate to MapView
+		Button(
+			onClick = {
+				onFinish()
+			},
+			colors = ButtonDefaults.buttonColors(primaryColor),
+		) {
+			Text(
+				text = stringResource(id = R.string.thanks_continue_button),
+				color = Color.Black
+			)
 
-				}
-			}
-		}
-		else{
-			Row(
-				modifier = Modifier
-					.fillMaxSize(.9f)
-					.background(Color.White)
-					.align(Alignment.Center),
-				horizontalArrangement = Arrangement.SpaceBetween
-			) {
-				//Developer logo
-				Image(
-					painter = painterResource(id = R.drawable.team_clam_logo),
-					contentDescription = stringResource(id = R.string.thanks_developers_logo),
-					contentScale = ContentScale.Crop,
-					modifier = Modifier
-						.padding(top = 5.dp, bottom = 15.dp)
-						.size(280.dp)
-						.clip(RoundedCornerShape(25))
-				)
-				Column(
-					modifier = Modifier.fillMaxSize(),
-					horizontalAlignment = Alignment.CenterHorizontally,
-					verticalArrangement = Arrangement.spacedBy(8.dp)
-				) {
-					Text(
-						text = stringResource(id = R.string.thanks_heading),
-						fontFamily = titleFont,
-						fontWeight = FontWeight.Bold,
-						fontStyle = FontStyle.Normal,
-						fontSize = 46.sp,
-					)
-					Text(
-						text = stringResource(id = R.string.thanks_body),
-						fontFamily = titleFont,
-						fontWeight = FontWeight.Bold,
-						fontStyle = FontStyle.Normal,
-						fontSize = 38.sp,
-						modifier = Modifier.padding(top = 15.dp, bottom = 25.dp)
-					)
-					//Button to navigate to MapView
-					Button(
-						onClick = onFinish,
-						colors = ButtonDefaults.buttonColors(primaryColor),
-					) {
-						Text(
-							text = stringResource(id = R.string.thanks_continue_button),
-							color = Color.Black
-						)
-
-					}
-				}
-			}
 		}
 	}
 }

@@ -17,15 +17,16 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityItem
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import kotlinx.coroutines.flow.StateFlow
 
-/**
- * For the Search View
- */
-abstract class SearchViewModel : ViewModel() {
+	/**
+	 * For the Search View
+	 */
+	abstract class SearchViewModel (application: Application) : AndroidViewModel(application) {
 	/**
 	 * Holds user input from search bar
 	 */

@@ -17,7 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.database
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
 import kotlinx.coroutines.flow.Flow
 
@@ -43,6 +48,9 @@ interface EventDao {
 
 	@Query("SELECT * FROM event")
 	fun getAll(): Flow<List<DBEvent>>
+
+	@Query("SELECT * FROM event WHERE id in (:ids)")
+	fun getAll(ids: List<Long>): Flow<List<DBEvent>>
 
 	/** Get specific item by Id **/
 	@Query("SELECT * FROM event WHERE id = :event")

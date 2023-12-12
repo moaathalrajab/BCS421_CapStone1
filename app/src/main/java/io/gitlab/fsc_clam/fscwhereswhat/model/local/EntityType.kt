@@ -18,24 +18,26 @@
 package io.gitlab.fsc_clam.fscwhereswhat.model.local
 
 import android.graphics.Color
+import androidx.annotation.DrawableRes
+import io.gitlab.fsc_clam.fscwhereswhat.R
 
 /**
  * EntityType are constants for the three fundamental types of data we are working with
  */
-enum class EntityType(val defaultColor: Int) {
+enum class EntityType(val defaultColor: Int, @DrawableRes val drawable: Int) {
 	/**
 	 * Represents a building
 	 */
-	BUILDING(Color.CYAN),
+	BUILDING(Color.CYAN, R.drawable.building_icon),
 
 	/**
 	 * Represents an event
 	 */
-	EVENT(Color.GREEN),
+	EVENT(Color.GREEN, R.drawable.event),
 
 	/**
 	 * Represents utilities/amenities
 	 * Ex. water fountain
 	 */
-	NODE(Color.RED),
+	NODE(Color.RED, R.drawable.node),
 }

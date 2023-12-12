@@ -21,7 +21,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -58,24 +57,12 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.headFont
  */
 @Composable
 fun ExplanationScreen() {
-	//Creates white box content container
-	BoxWithConstraints(
-		modifier = Modifier
-			.padding(16.dp)
-			.fillMaxSize()
-			.background(Color.White)
-	) {
 		Column(
 			modifier = Modifier
+				.padding(12.dp)
+				.background(Color.White)
 				.fillMaxSize()
-				.let {
-					if (maxHeight < 480.dp) {
-						it.verticalScroll(rememberScrollState())
-					} else {
-						it
-					}
-				},
-			verticalArrangement = Arrangement.Center,
+				.verticalScroll(rememberScrollState()),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			//App Logo
@@ -115,7 +102,7 @@ fun ExplanationScreen() {
 				EntityExplanations(
 					explanationText = stringResource(id = R.string.explanation_event),
 					img = painterResource(
-						id = R.drawable.flag_icon
+						id = R.drawable.event
 					),
 					imgDescription = stringResource(id = R.string.explanation_event_img)
 				)
@@ -131,14 +118,13 @@ fun ExplanationScreen() {
 				EntityExplanations(
 					explanationText = stringResource(id = R.string.explanation_node),
 					img = painterResource(
-						id = R.drawable.node_icon
+						id = R.drawable.node
 					),
 					imgDescription = stringResource(id = R.string.explanation_node_img)
 				)
 			}
 		}
 	}
-}
 
 @Preview
 @Composable
@@ -202,7 +188,7 @@ fun PreviewEntityExplanations() {
 		EntityExplanations(
 			explanationText = stringResource(id = R.string.explanation_event),
 			img = painterResource(
-				id = R.drawable.flag_icon
+				id = R.drawable.event
 			),
 			imgDescription = stringResource(id = R.string.explanation_event_img)
 		)

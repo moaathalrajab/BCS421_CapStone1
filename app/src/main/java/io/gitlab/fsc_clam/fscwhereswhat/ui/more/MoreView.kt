@@ -18,6 +18,7 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.more
 
 import android.content.Intent
+import android.content.Intent.ACTION_SEND
 import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
@@ -203,9 +204,9 @@ fun MoreContent(
 
 			AuthorsCard()
 
-			Row(
-				horizontalArrangement = Arrangement.Absolute.Center,
-				modifier = Modifier.fillMaxWidth()
+			Column(
+				modifier = Modifier.fillMaxWidth(),
+				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				val context = LocalContext.current
 				ClearCacheCard(clearCacheLogic)
@@ -219,6 +220,16 @@ fun MoreContent(
 						)
 				}) {
 					Text("Start workers")
+				}
+				Button(onClick = {
+					context.startActivity(
+						Intent(ACTION_SEND)
+							.setType("message/rfc822")
+							.putExtra(Intent.EXTRA_EMAIL, arrayOf("akhtr@farmingdale.edu"))
+							.putExtra(Intent.EXTRA_SUBJECT, "Contact in regards to FSC Wheres What")
+					)
+				}) {
+					Text("Contact developers")
 				}
 			}
 

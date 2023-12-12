@@ -28,22 +28,21 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.NoteRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeOSMRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplNoteRepository.Companion.get
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplOSMRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.NotesViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.net.URL
 
 /**
  * Fake ViewModel for NotesView
  */
 class ImplNotesViewModel(application: Application) : NotesViewModel(application) {
 	private val repo = NoteRepository.get(application)
-	private val osmRepo: OSMRepository = FakeOSMRepo()
+	private val osmRepo: OSMRepository = OSMRepository.get(application)
 	private val ramRepo = RamCentralRepository.get(application)
 
 	override val notes = repo.getAllNotes().map { list ->

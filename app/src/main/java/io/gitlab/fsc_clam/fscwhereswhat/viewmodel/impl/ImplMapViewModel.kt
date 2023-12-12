@@ -32,11 +32,12 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.UserRepository
-import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.FakeOSMRepo
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplLocationRepository.Companion.get
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplOSMRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplPreferencesRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplUserRepository.Companion.get
@@ -56,7 +57,7 @@ import kotlinx.coroutines.launch
 class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val userRepo = UserRepository.get()
 	private val prefRepo = PreferencesRepository.get(application)
-	private val osmRepo = FakeOSMRepo()
+	private val osmRepo = OSMRepository.get(application)
 	private val ramCentralRepo = RamCentralRepository.get(application)
 	private val locationRepo = LocationRepository.get(application)
 
@@ -106,7 +107,7 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		emitAll(
 			osmRepo.queryNearby(lat, long).map { entities ->
 				entities.map { entity ->
-					when (osmRepo.get(entity.id)) {
+					when (entity) {
 						is OSMEntity.Building -> {
 							Pinpoint(
 								latitude = entity.lat,
@@ -134,10 +135,10 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 
 	private val eventPinpoint: StateFlow<List<Pinpoint>> = ramCentralRepo.getAll().map { events ->
 		events.map { event ->
-			val osmEvent = osmRepo.get(event.id)
+			val osmEvent = osmRepo.get(event.locationId)
 			Pinpoint(
-				latitude = osmEvent.lat,
-				longitude = osmEvent.long,
+				latitude = osmEvent?.lat ?: FSC_LAT,
+				longitude = osmEvent?.long ?: FSC_LOG,
 				color = eventColor.value,
 				id = event.id,
 				type = EntityType.EVENT
@@ -189,6 +190,7 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 			exception.emit(e)
 		}
 	}
+
 	init {
 		/* TODO figure out view reentering automatically
 		val viewDistancePerc = .005

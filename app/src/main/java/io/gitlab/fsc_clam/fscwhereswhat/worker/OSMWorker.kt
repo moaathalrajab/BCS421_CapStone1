@@ -42,9 +42,12 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 
 	private val api: OpenStreetMapAPI = OkHttpOpenStreetMapAPI(okHttpClient)
 	private val entities = ArrayList<OSMEntity>()
+	private lateinit var sourceElements: List<OSMElement>
+
 	override suspend fun doWork(): Result {
 		Log.i("OSMWorker", "Starting")
 		val relation = api.getFullElement(OSMType.RELATION, FSC_RELATION)
+		sourceElements = relation.elements
 
 		relation.elements.forEach { element ->
 			process(element)
@@ -130,11 +133,20 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 			Log.d(LOG, "OSMElement(${element.id}) is not a building")
 		} else {
 			Log.d(LOG, "OSMElement(${element.id}) is a building")
+
+			Log.d(LOG, "Parsing OSMElement(${element.id}) nodes for location")
+			val nodes = element.nodes.mapNotNull { nodeId -> // find data we already have
+				sourceElements.find { it.id == nodeId }
+			}.filter { it.lat != null && it.lon != null } // ensure no null lat / lon
+
+			val lat = nodes.sumOf { it.lat!! } / nodes.size
+			val log = nodes.sumOf { it.lon!! } / nodes.size
+
 			entities.add(
 				OSMEntity.Building(
 					id = element.id,
-					lat = 0.0,
-					long = 0.0,
+					lat = lat,
+					long = log,
 					name = element.tags.name ?: "Building ${element.id}",
 					description = "",
 					hours = listOf(OpeningHours.everyDay),
@@ -143,14 +155,6 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 				)
 			)
 		}
-
-		/*
-		Log.d(LOG, "Parsing OSMElement(${element.id}) nodes")
-		element.nodes.forEach {
-			process(api.getElement(OSMType.NODE, it).elements.first())
-			delay(100)
-		}
-		 */
 	}
 
 	companion object {

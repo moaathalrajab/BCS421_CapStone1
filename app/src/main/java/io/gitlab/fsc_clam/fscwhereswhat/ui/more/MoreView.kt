@@ -38,6 +38,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -70,6 +71,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import io.gitlab.fsc_clam.fscwhereswhat.BuildConfig
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
@@ -77,6 +81,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding.PinpointColorItem
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MoreViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMoreViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.worker.OSMWorker
 
 //@Preview
 @Composable
@@ -198,7 +203,24 @@ fun MoreContent(
 
 			AuthorsCard()
 
-			ClearCacheCard(clearCacheLogic)
+			Row(
+				horizontalArrangement = Arrangement.Absolute.Center,
+				modifier = Modifier.fillMaxWidth()
+			) {
+				val context = LocalContext.current
+				ClearCacheCard(clearCacheLogic)
+				Button(onClick = {
+					// Start OSM
+					WorkManager.getInstance(context)
+						.enqueueUniqueWork(
+							"OSM",
+							ExistingWorkPolicy.KEEP,
+							OneTimeWorkRequest.Companion.from(OSMWorker::class.java)
+						)
+				}) {
+					Text("Start workers")
+				}
+			}
 
 			Text(
 				text = "Version ${BuildConfig.VERSION_NAME}",
@@ -284,8 +306,7 @@ fun ClearCacheCard(clearCacheLogic: () -> Unit) {
 	Column(
 		modifier = Modifier
 			.padding(horizontal = 14.dp)
-			.padding(top = 10.dp)
-			.fillMaxWidth(),
+			.padding(top = 10.dp),
 		horizontalAlignment = Alignment.CenterHorizontally,
 		verticalArrangement = Arrangement.SpaceBetween
 	) {

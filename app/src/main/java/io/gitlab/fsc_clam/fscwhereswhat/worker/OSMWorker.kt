@@ -17,6 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.worker
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
@@ -30,6 +31,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.providers.base.OpenStreetMapAPI
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.OkHttpOpenStreetMapAPI
 import io.gitlab.fsc_clam.fscwhereswhat.providers.okHttpClient
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplOSMRepository.Companion.get
 import kotlinx.coroutines.delay
 
 /**
@@ -37,7 +39,7 @@ import kotlinx.coroutines.delay
  */
 class OSMWorker(appContext: Context, params: WorkerParameters) :
 	CoroutineWorker(appContext, params) {
-	private val repo = OSMRepository
+	private val repo = OSMRepository.get(applicationContext as Application)
 
 	private val api: OpenStreetMapAPI = OkHttpOpenStreetMapAPI(okHttpClient)
 	private val entities = ArrayList<OSMEntity>()
@@ -48,7 +50,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 			process(element)
 		}
 
-		repo
+		repo.update(entities)
 
 		return Result.success()
 	}

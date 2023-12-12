@@ -32,7 +32,6 @@ import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.OkHttpOpenStreetMapAPI
 import io.gitlab.fsc_clam.fscwhereswhat.providers.okHttpClient
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplOSMRepository.Companion.get
-import kotlinx.coroutines.delay
 
 /**
  * Downloads latest OSM data and updates database with the new data
@@ -145,11 +144,13 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 			)
 		}
 
+		/*
 		Log.d(LOG, "Parsing OSMElement(${element.id}) nodes")
 		element.nodes.forEach {
 			process(api.getElement(OSMType.NODE, it).elements.first())
 			delay(100)
 		}
+		 */
 	}
 
 	companion object {

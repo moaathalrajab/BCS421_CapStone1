@@ -18,16 +18,8 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
 import android.app.Activity
-import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -36,35 +28,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.utsman.osmandcompose.DefaultMapProperties
-import com.utsman.osmandcompose.Marker
-import com.utsman.osmandcompose.MarkerState
-import com.utsman.osmandcompose.OpenStreetMap
-import com.utsman.osmandcompose.OsmAndroidComposable
-import com.utsman.osmandcompose.OverlayManagerState
-import com.utsman.osmandcompose.ZoomButtonVisibility
-import com.utsman.osmandcompose.rememberCameraState
-import com.utsman.osmandcompose.rememberMarkerState
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
-import io.gitlab.fsc_clam.fscwhereswhat.providers.MapBoxXYTileSource
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMapViewModel
-import org.osmdroid.util.GeoPoint
 
 /**
  * MapView contains the viewmodels and the MapContent
@@ -148,7 +120,6 @@ fun MapView(
 			}
 		)
 	}
-
 }
 
 @Preview
@@ -157,196 +128,5 @@ fun PreviewMapView() {
 	MapView(
 		openSearch = {},
 		navigateToMore = {}
-	)
-}
-
-/**
- * Creates the content of Map View, including the MapUI and the OSM Map
- * @param user is the google account if logged in
- * @param pinPoints is the list of PinPoints visible in the Map
- * @param activeFilter is the current filter selected for EntityType. If null, all filters are active
- * @param buildingColor is the color of building pinpoints
- * @param eventColor is the color of event pinpoints
- * @param nodeColor is the color of node pinpoints
- * @param setActiveFilter is the function from the viewmodel that sets current active filter when user presses filter button
- * @param setFocus is when the user clicks on the pinpoint
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MapContent(
-	padding: PaddingValues,
-	user: User?,
-	query: String?,
-	latitude: Double,
-	longitude: Double,
-	pinPoints: List<Pinpoint>,
-	activeFilter: EntityType?,
-	buildingColor: Int,
-	eventColor: Int,
-	nodeColor: Int,
-	focus: Pinpoint?,
-	setActiveFilter: (EntityType?) -> Unit,
-	setFocus: (Pinpoint?) -> Unit,
-	openSearch: () -> Unit,
-	navigateToMore: () -> Unit,
-	login: () -> Unit
-) {
-	val cameraState = rememberCameraState {
-		geoPoint = GeoPoint(latitude, longitude)
-		zoom = 18.5// optional, default is 5.0
-	}
-
-	fun onRecenter() {
-		cameraState.geoPoint = GeoPoint(latitude, longitude)
-	}
-
-	val userMarkerState = rememberMarkerState(
-		geoPoint = GeoPoint(
-			latitude,
-			longitude
-		)
-	)
-
-	LaunchedEffect(longitude, latitude) {
-		Log.d("compose", "Update camera")
-		userMarkerState.geoPoint = GeoPoint(latitude, longitude)
-	}
-
-	// define properties with remember with default value
-	val mapProperties = remember {
-		DefaultMapProperties
-			.copy(
-				isTilesScaledToDpi = true,
-				tileSources = MapBoxXYTileSource,
-				isEnableRotationGesture = true,
-				zoomButtonVisibility = ZoomButtonVisibility.NEVER,
-			)
-	}
-
-	Box(
-		modifier = Modifier
-			.padding(padding)
-			.fillMaxSize()
-	) {
-		//creates map from OSM
-		OpenStreetMap(
-			modifier = Modifier.fillMaxSize(),
-			cameraState = cameraState,
-			properties = mapProperties,
-			overlayManagerState = rememberSaveable(key = null, saver = Saver(
-				save = {
-					null
-				},
-				restore = {
-					OverlayManagerState(null)
-				}
-			)) {
-				OverlayManagerState(null)
-			}
-		) {
-			pinPoints.forEach { pinpoint ->
-				MapPinPoint(pinpoint, setFocus)
-			}
-
-			UserMarker(userMarkerState)
-		}
-
-		//Creates the Map UI after map creation
-		MapUI(
-			user = user,
-			activeFilter = activeFilter,
-			buildingColor = buildingColor,
-			eventColor = eventColor,
-			nodeColor = nodeColor,
-			setActiveFilter = setActiveFilter,
-			onRecenter = ::onRecenter,
-			query = query,
-			openSearch = openSearch,
-			navigateToMore = navigateToMore,
-			login = login
-		)
-	}
-	if (focus != null) {
-		ModalBottomSheet(onDismissRequest = { setFocus(null) }) {
-			EntityDetail()
-		}
-	}
-}
-
-@Composable
-@OsmAndroidComposable
-fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
-	val context = LocalContext.current
-	//the icon is chosen based on EntityType
-	val icon = context.getDrawable(pinpoint.type.drawable)
-
-	Marker(
-		state = rememberMarkerState(
-			geoPoint = GeoPoint(
-				pinpoint.latitude,
-				pinpoint.longitude
-			)
-		),
-		icon = icon,
-	) {
-		LaunchedEffect(key1 = pinpoint) {
-			setFocus(pinpoint)
-		}
-	}
-}
-
-@Composable
-fun UserMarker(userMarker: MarkerState) {
-	val context = LocalContext.current
-	Marker(
-		state = userMarker,
-		icon = context.getDrawable(R.drawable.baseline_navigation_24),
-	) {
-	}
-}
-
-@Preview
-@Composable
-fun PreviewMapContent() {
-	val user = User(":", "", Uri.parse("https://google.com"))
-	MapContent(
-		padding = PaddingValues(8.dp),
-		user = user,
-		query = null,
-		latitude = 40.75175,
-		longitude = -73.42902,
-		pinPoints = listOf(
-			Pinpoint(
-				40.75175,
-				-73.42902,
-				0,
-				0,
-				EntityType.NODE,
-			),
-			Pinpoint(
-				40.751485,
-				-73.428329,
-				0,
-				0,
-				EntityType.BUILDING,
-			),
-			Pinpoint(
-				40.751632,
-				-73.428936,
-				0,
-				0,
-				EntityType.EVENT,
-			)
-		),
-		activeFilter = null,
-		buildingColor = Color.Red.toArgb(),
-		eventColor = Color.Red.toArgb(),
-		nodeColor = Color.Red.toArgb(),
-		focus = null,
-		setActiveFilter = {},
-		setFocus = {},
-		openSearch = {},
-		navigateToMore = {},
-		login = {}
 	)
 }

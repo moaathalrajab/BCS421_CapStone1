@@ -43,7 +43,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,20 +56,14 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 /**
  * Creates the UI for Map Content
  * @param activeFilter is the current filter selected
- * @param buildingColor is the color of building pinpoints from preferences repo
- * @param eventColor is the color of event pinpoints from preferences repo
- * @param nodeColor is the color of node pinpoints from preferences repo
  * @param setActiveFilter will change the active filter to selected filter type from viewmodel
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapUI(
+fun MapOverview(
 	user: User?,
 	query: String?,
 	activeFilter: EntityType?,
-	buildingColor: Int,
-	eventColor: Int,
-	nodeColor: Int,
 	setActiveFilter: (EntityType?) -> Unit,
 	onRecenter: () -> Unit,
 	openSearch: () -> Unit,
@@ -244,13 +237,10 @@ fun FilterButtonRow(
 @Composable
 fun PreviewMapUI() {
 	Surface {
-		MapUI(
+		MapOverview(
 			user = null,
 			query = null,
 			activeFilter = null,
-			buildingColor = Color.Red.toArgb(),
-			eventColor = Color.Red.toArgb(),
-			nodeColor = Color.Red.toArgb(),
 			setActiveFilter = {},
 			onRecenter = {},
 			openSearch = {},

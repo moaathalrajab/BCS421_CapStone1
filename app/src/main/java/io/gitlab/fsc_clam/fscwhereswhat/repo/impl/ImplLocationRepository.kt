@@ -63,7 +63,7 @@ class ImplLocationRepository(application: Application) : LocationRepository {
 		LocationManagerCompat.requestLocationUpdates(
 			manager,
 			provider,
-			LocationRequestCompat.Builder(500)
+			LocationRequestCompat.Builder(10000)
 				.setQuality(LocationRequestCompat.QUALITY_HIGH_ACCURACY)
 				.build(),
 			Dispatchers.Default.asExecutor(),

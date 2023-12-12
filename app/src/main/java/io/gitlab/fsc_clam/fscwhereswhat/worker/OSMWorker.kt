@@ -44,6 +44,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 	private val api: OpenStreetMapAPI = OkHttpOpenStreetMapAPI(okHttpClient)
 	private val entities = ArrayList<OSMEntity>()
 	override suspend fun doWork(): Result {
+		Log.i("OSMWorker", "Starting")
 		val relation = api.getFullElement(OSMType.RELATION, FSC_RELATION)
 
 		relation.elements.forEach { element ->
@@ -52,6 +53,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 
 		repo.update(entities)
 
+		Log.i("OSMWorker", "Complete")
 		return Result.success()
 	}
 

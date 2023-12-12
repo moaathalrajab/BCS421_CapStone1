@@ -17,8 +17,6 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.ui.main
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
@@ -102,21 +100,7 @@ fun MainContent(
 			)
 		}
 
-		composable(
-			"more",
-			enterTransition = {
-				slideIntoContainer(
-					towards = AnimatedContentTransitionScope.SlideDirection.Left,
-					animationSpec = tween(700)
-				)
-			},
-			exitTransition = {
-				slideOutOfContainer(
-					towards = AnimatedContentTransitionScope.SlideDirection.Right,
-					animationSpec = tween(700)
-				)
-			},
-		) {
+		composable("more") {
 			MoreView(
 				navToNotes = { navController.navigate("notes") },
 				navToReminders = { navController.navigate("reminders") }

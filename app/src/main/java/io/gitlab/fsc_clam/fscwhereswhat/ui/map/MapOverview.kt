@@ -19,6 +19,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -73,33 +75,7 @@ fun MapOverview(
 	Box(
 		modifier = Modifier.fillMaxSize()
 	) {
-		//Icon of the Account
-		//WIP should include functionality to login
-		Card(
-			modifier = Modifier
-				.padding(8.dp)
-				.align(Alignment.TopStart),
-			shape = CircleShape,
-			onClick = login
-		) {
-			if (user != null) {
-				AsyncImage(
-					model = user.image,
-					contentDescription = stringResource(id = R.string.account_icon),
-					modifier = Modifier
-						.size(50.dp)
-						.padding(8.dp)
-				)
-			} else {
-				Icon(
-					Icons.Filled.AccountCircle,
-					contentDescription = stringResource(id = R.string.account_icon),
-					modifier = Modifier
-						.size(50.dp)
-						.padding(8.dp)
-				)
-			}
-		}
+		MapUserIcon(user, login)
 
 		Card(
 			modifier = Modifier
@@ -141,6 +117,37 @@ fun MapOverview(
 				//The more button
 				MoreButton(navigateToMore)
 			}
+		}
+	}
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BoxScope.MapUserIcon(user: User?, login: () -> Unit) {
+	Card(
+		modifier = Modifier
+			.padding(8.dp)
+			.align(Alignment.TopStart),
+		shape = CircleShape,
+		onClick = login
+	) {
+		if (user != null) {
+			AsyncImage(
+				model = user.image,
+				contentDescription = stringResource(id = R.string.account_icon),
+				modifier = Modifier
+					.size(50.dp)
+					.padding(8.dp)
+					.clip(CircleShape),
+			)
+		} else {
+			Icon(
+				Icons.Filled.AccountCircle,
+				contentDescription = stringResource(id = R.string.account_icon),
+				modifier = Modifier
+					.size(50.dp)
+					.padding(8.dp)
+			)
 		}
 	}
 }

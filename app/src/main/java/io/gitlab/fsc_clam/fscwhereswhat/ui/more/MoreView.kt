@@ -19,6 +19,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.more
 
 import android.content.Intent
 import android.net.Uri
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -437,11 +438,25 @@ fun Customize(eventColor: Int, buildingColor: Int, utilityColor: Int) {
 	}
 }
 
+data class Author(
+	val name: String,
+	@DrawableRes
+	val image: Int
+)
+
+val authors = listOf(
+	Author("Rahim Akhter", R.drawable.rahim),
+	Author("Harvey Tseng", R.drawable.harvey),
+	Author("Olivia Sanfilippo", R.drawable.olivia),
+	Author("Aaron Tabuteau", R.drawable.aaron),
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileCard() {
 	val context = LocalContext.current
+
+
 	Card(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -479,97 +494,29 @@ fun ProfileCard() {
 					horizontalArrangement = Arrangement.SpaceEvenly,
 					verticalAlignment = Alignment.Bottom
 				) {
-					Column(horizontalAlignment = Alignment.CenterHorizontally) {
-						Image(
-							painter = painterResource(id = R.drawable.event),
-							contentDescription = "",
-							modifier = Modifier
-								.clip(CircleShape)
-								.size(35.dp)
-								.clickable {
-									val intent = Intent(
-										Intent.ACTION_VIEW,
-										Uri.parse("https://www.linkedin.com/in/rahim-akhter-2002")
-									)
-									context.startActivity(intent)
-								}
-						)
+					authors.forEach {
+						Column(horizontalAlignment = Alignment.CenterHorizontally) {
+							Image(
+								painter = painterResource(id = it.image),
+								contentDescription = "",
+								modifier = Modifier
+									.clip(CircleShape)
+									.size(35.dp)
+									.clickable {
+										val intent = Intent(
+											Intent.ACTION_VIEW,
+											Uri.parse("https://www.linkedin.com/in/rahim-akhter-2002")
+										)
+										context.startActivity(intent)
+									}
+							)
 
-						Text(
-							text = "Rahim Ahkter", style = MaterialTheme.typography.labelSmall,
-							textAlign = TextAlign.Center
-						)
-					}
-
-					Column(
-						horizontalAlignment = Alignment.CenterHorizontally,
-						verticalArrangement = Arrangement.spacedBy(4.dp)
-					) {
-
-						Image(
-							painter = painterResource(id = R.drawable.event),
-							contentDescription = "",
-							modifier = Modifier
-								.clip(CircleShape)
-								.size(35.dp)
-								.clickable {
-									val intent = Intent(
-										Intent.ACTION_VIEW,
-										Uri.parse("https://www.linkedin.com/in/harvey-tseng/")
-									)
-									context.startActivity(intent)
-								}
-						)
-
-						Text(
-							text = "Harvey Tseng", style = MaterialTheme.typography.labelSmall,
-							textAlign = TextAlign.Center
-						)
-					}
-
-					Column(horizontalAlignment = Alignment.CenterHorizontally) {
-						Image(
-							painter = painterResource(id = R.drawable.event),
-							contentDescription = "",
-							modifier = Modifier
-								.clip(CircleShape)
-								.size(35.dp)
-								.clickable {
-									val intent = Intent(
-										Intent.ACTION_VIEW,
-										Uri.parse("https://www.linkedin.com/in/atabuteau/")
-									)
-									context.startActivity(intent)
-								}
-						)
-
-						Text(
-							text = "Aaron Tabuteau", style = MaterialTheme.typography.labelSmall,
-							textAlign = TextAlign.Center
-						)
-					}
-
-					Column(horizontalAlignment = Alignment.CenterHorizontally) {
-						Image(
-							painter = painterResource(id = R.drawable.event),
-							contentDescription = "",
-							modifier = Modifier
-								.clip(CircleShape)
-								.size(35.dp)
-								.clickable {
-									val intent = Intent(
-										Intent.ACTION_VIEW,
-										Uri.parse("https://www.linkedin.com/in/olivia-sanfilippo/")
-									)
-									context.startActivity(intent)
-								}
-						)
-
-						Text(
-							text = "Olivia Sanfilippo",
-							style = MaterialTheme.typography.labelSmall,
-							textAlign = TextAlign.Center
-						)
+							Text(
+								text = it.name,
+								style = MaterialTheme.typography.labelSmall,
+								textAlign = TextAlign.Center
+							)
+						}
 					}
 				}
 			}

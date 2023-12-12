@@ -17,7 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.database
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBNote
 import kotlinx.coroutines.flow.Flow
 
@@ -46,7 +51,7 @@ interface NoteDao {
 
 	/** Get note by reference **/
 	@Query("SELECT * FROM note WHERE reference = :note")
-	fun getById(note: Int) : Flow<DBNote?>
+	fun getById(note: Long): Flow<DBNote?>
 
 	/** Returns all notes with Flow **/
 	@Query("SELECT * FROM note")

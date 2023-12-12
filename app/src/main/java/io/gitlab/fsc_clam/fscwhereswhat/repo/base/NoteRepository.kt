@@ -27,7 +27,7 @@ interface NoteRepository {
 	 * @param parentId is the id of the event/utility that the note is attached to
 	 * @return a [Flow] returning the note with the given parentId, or null if none found
 	 */
-	fun getNote(parentId: Int): Flow<Note?>
+	fun getNote(parentId: Long): Flow<Note?>
 
 	/**
 	 * Get all notes stored in the repository

@@ -31,7 +31,7 @@ import kotlinx.coroutines.withContext
 class ImplNoteRepository(application: Application) : NoteRepository {
 	private val db = AppDatabase.get(application).noteDao
 
-	override fun getNote(parentId: Int): Flow<Note?> =
+	override fun getNote(parentId: Long): Flow<Note?> =
 		db.getById(parentId)
 			.map { it?.toModel() }
 			.flowOn(Dispatchers.IO)

@@ -41,6 +41,16 @@ interface PreferencesRepository {
 	suspend fun setColor(type: EntityType, color: Int)
 
 	/**
+	 * Is this the first time the user has used this app
+	 */
+	fun getIsFirst(): Flow<Boolean>
+
+	/**
+	 * Set the user is no longer first
+	 */
+	fun setNotFirst()
+
+	/**
 	 * Binding point for Implementation getter
 	 */
 	companion object

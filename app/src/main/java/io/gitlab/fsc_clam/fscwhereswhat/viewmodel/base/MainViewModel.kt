@@ -21,15 +21,24 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class OnboardingViewModel(
-	application: Application
-) : AndroidViewModel(application) {
-	abstract val currentPage: StateFlow<Int>
-
-	abstract fun setPage(page: Int)
+abstract class MainViewModel(application: Application) : AndroidViewModel(application) {
+	/**
+	 * Is this the first time the user launched the app
+	 */
+	abstract val isFirstTime: StateFlow<Boolean>
 
 	/**
-	 * State the user has been onboarded
+	 * Is the search UI visible or not
 	 */
-	abstract fun finish()
+	abstract val isSearchVisible: StateFlow<Boolean>
+
+	/**
+	 * Show search UI
+	 */
+	abstract fun showSearch()
+
+	/**
+	 * Hide search UI
+	 */
+	abstract fun hideSearch()
 }

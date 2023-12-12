@@ -66,13 +66,14 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 		} else {
 			// Current user is null; check SharedPreferences
 			return callbackFlow {
-
 				val listener = OnSharedPreferenceChangeListener { sp, key ->
 					if (key == type.name) { // Ensure the key that updated is ours
 						val color = sp.getInt(type.name, type.defaultColor)
 						trySend(color)
 					}
 				}
+
+				send(sharedPref.getInt(type.name, type.defaultColor)) // send first
 
 				sharedPref.registerOnSharedPreferenceChangeListener(listener)
 
@@ -96,7 +97,32 @@ class ImplPreferencesRepository(application: Application) : PreferencesRepositor
 		}
 	}
 
+	override fun getIsFirst(): Flow<Boolean> =
+		callbackFlow {
+			val listener = OnSharedPreferenceChangeListener { sp, key ->
+				if (key == FIRST_TIME) { // Ensure the key that updated is ours
+					trySend(sp.getBoolean(FIRST_TIME, true))
+				}
+			}
+
+			send(sharedPref.getBoolean(FIRST_TIME, true)) // send first value
+
+			sharedPref.registerOnSharedPreferenceChangeListener(listener)
+
+			awaitClose {
+				sharedPref.unregisterOnSharedPreferenceChangeListener(listener)
+			}
+		}
+
+	override fun setNotFirst() {
+		sharedPref.edit(true) {
+			putBoolean(FIRST_TIME, false)
+		}
+	}
+
 	companion object {
+		private const val FIRST_TIME = "first_time_1"
+
 		private var repo: ImplPreferencesRepository? = null
 
 		/**

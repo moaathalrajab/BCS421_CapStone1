@@ -20,11 +20,10 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.main
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -35,26 +34,28 @@ import io.gitlab.fsc_clam.fscwhereswhat.ui.onboarding.OnboardingView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.reminders.RemindersView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.search.SearchView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.theme.FSCWheresWhatTheme
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MainViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun MainView() {
-	// TODO move to view model
-	//state of showing search bar
-	var isSearchVisible by remember { mutableStateOf(false) }
+	val viewModel: MainViewModel = viewModel<ImplMainViewModel>()
+
+	val isSearchVisible by viewModel.isSearchVisible.collectAsState()
+	val isFirstTime by viewModel.isFirstTime.collectAsState()
 
 	FSCWheresWhatTheme {
 		MainContent(
-			openSearch = {
-				isSearchVisible = true
-			}
+			openSearch = viewModel::showSearch,
+			isFirstTime = isFirstTime
 		)
 	}
 
 	//placeholder for search view
 	if (isSearchVisible) {
-		ModalBottomSheet(onDismissRequest = { isSearchVisible = false }) {
+		ModalBottomSheet(onDismissRequest = viewModel::hideSearch) {
 			SearchView()
 		}
 	}
@@ -62,13 +63,14 @@ fun MainView() {
 
 @Composable
 fun MainContent(
-	openSearch: () -> Unit
+	openSearch: () -> Unit,
+	isFirstTime: Boolean
 ) {
 	val navController = rememberNavController()
 
 	NavHost(
 		navController = navController,
-		startDestination = "onboarding",
+		startDestination = if (isFirstTime) "onboarding" else "map",
 	) {
 		composable("onboarding") {
 			OnboardingView(

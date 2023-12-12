@@ -98,7 +98,10 @@ fun OnboardingView(
 		bottomBar = {
 			OnboardingBottomBar(
 				pagerState,
-				onFinish,
+				onFinish = {
+					viewModel.finish()
+					onFinish()
+				},
 				allPermissionsRevoked,
 				locationPermissionsState.allPermissionsGranted
 			)

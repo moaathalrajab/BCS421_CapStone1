@@ -18,23 +18,30 @@
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
 import android.app.Application
+import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplPreferencesRepository.Companion.get
-import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.OnboardingViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MainViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
-class ImplOnboardingViewModel(
-	application: Application
-) : OnboardingViewModel(application) {
+class ImplMainViewModel(application: Application) : MainViewModel(application) {
+
 	private val preferences = PreferencesRepository.get(application)
 
-	override val currentPage = MutableStateFlow(0)
+	override val isFirstTime: StateFlow<Boolean> =
+		preferences.getIsFirst()
+			.stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
-	override fun setPage(page: Int) {
-		currentPage.value = page
+	override val isSearchVisible = MutableStateFlow(false)
+
+	override fun showSearch() {
+		isSearchVisible.value = true
 	}
 
-	override fun finish() {
-		preferences.setNotFirst()
+	override fun hideSearch() {
+		isSearchVisible.value = false
 	}
 }

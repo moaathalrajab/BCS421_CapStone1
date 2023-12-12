@@ -36,9 +36,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -76,7 +79,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplMoreViewModel
 //@Preview
 @Composable
 fun MoreView(
-	navToNotes: () -> Unit, navToReminders: () -> Unit
+	navToNotes: () -> Unit,
+	navToReminders: () -> Unit,
+	onBack: () -> Unit
 ) {
 	val viewModel: MoreViewModel = viewModel<ImplMoreViewModel>()
 	val exception by viewModel.exceptions.collectAsState(initial = null)
@@ -100,10 +105,11 @@ fun MoreView(
 
 	FSCWheresWhatTheme {
 		MoreContent(
-			navToNotes,
-			navToReminders,
+			navToNotes = navToNotes,
+			navToReminders = navToReminders,
 			clearCacheLogic = viewModel::clearCache,
-			snackbarHostState //
+			snackbarHostState = snackbarHostState,
+			onBack = onBack
 		)
 	}
 }
@@ -115,7 +121,8 @@ fun PreviewMoreContent() {
 		navToNotes = {},
 		navToReminders = {},
 		clearCacheLogic = {},
-		snackbarHostState = SnackbarHostState()
+		snackbarHostState = SnackbarHostState(),
+		onBack = {}
 	)
 }
 
@@ -125,14 +132,26 @@ fun MoreContent(
 	navToNotes: () -> Unit,
 	navToReminders: () -> Unit,
 	clearCacheLogic: () -> Unit,
-	snackbarHostState: SnackbarHostState
+	snackbarHostState: SnackbarHostState,
+	onBack: () -> Unit
 ) {
 
-	Scaffold(topBar = {
-		TopAppBar(title = {
-			Text(text = "More View") // TODO: Subject to change
-		})
-	}, snackbarHost = { SnackbarHost(snackbarHostState) }
+	Scaffold(
+		topBar = {
+			TopAppBar(
+				title = {
+					Text(text = "More View") // TODO: Subject to change
+				},
+				navigationIcon = {
+					IconButton(
+						onClick = onBack
+					) {
+						Icon(Icons.Default.ArrowBack, stringResource(R.string.nav_back))
+					}
+				}
+			)
+		},
+		snackbarHost = { SnackbarHost(snackbarHostState) }
 	) {
 		val scroll = rememberScrollState()
 		Column(

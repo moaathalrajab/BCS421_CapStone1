@@ -103,7 +103,8 @@ fun MainContent(
 		composable("more") {
 			MoreView(
 				navToNotes = { navController.navigate("notes") },
-				navToReminders = { navController.navigate("reminders") }
+				navToReminders = { navController.navigate("reminders") },
+				onBack = navController::popBackStack
 			)
 		}
 	}

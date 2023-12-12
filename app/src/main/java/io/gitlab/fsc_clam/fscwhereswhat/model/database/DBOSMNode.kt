@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * This is an OSM node
@@ -30,6 +31,6 @@ import androidx.room.*
 )
 data class DBOSMNode(
 	@PrimaryKey val id: Long,
-	val lat: Float,
-	val long: Float,
+	val lat: Double,
+	val long: Double,
 )

@@ -24,5 +24,18 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.local
  * If user searches "water not in campus center", token will have water, afterwards filtering out anything mentioning "campus center"
  * If user searches "water in campus center", token will have water, afterwards filtering for "campus center"
  */
-data class Token(val strings: List<String>)
+data class Token(val strings: List<String>) {
+
+	/**
+	 * compares the values between all of the strings in the list, and the given value
+	 *
+	 * @param value defines the current string value being looked for within the strings list.
+	 * If value is found anywhere within the list, return true.
+	 */
+	fun compareValue(value: String): Boolean {
+		return strings.any {
+			value.contains(it)
+		}
+	}
+}
 

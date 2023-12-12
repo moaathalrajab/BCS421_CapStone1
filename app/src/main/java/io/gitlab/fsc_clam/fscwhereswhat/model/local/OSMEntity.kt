@@ -27,7 +27,7 @@ sealed interface OSMEntity {
 	val long: Double
 	val name: String
 	val description: String
-	val hours: OpeningHours
+	val hours: List<OpeningHours>
 
 	/**
 	 * Represents a Way
@@ -38,7 +38,7 @@ sealed interface OSMEntity {
 		override val long: Double,
 		override val name: String,
 		override val description: String,
-		override val hours: OpeningHours,
+		override val hours: List<OpeningHours>,
 		val hasWater: Boolean,
 		val hasFood: Boolean,
 	) : OSMEntity
@@ -49,7 +49,7 @@ sealed interface OSMEntity {
 		override val long: Double,
 		override val name: String,
 		override val description: String,
-		override val hours: OpeningHours,
+		override val hours: List<OpeningHours>,
 		val nodeType: NodeType,
 		) : OSMEntity
 }

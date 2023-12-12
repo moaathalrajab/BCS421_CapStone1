@@ -17,7 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.database
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeTag
 
 /**
@@ -25,21 +30,24 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeTag
  * @property insert inserts a single tag into the table
  * @property delete deletes a single tag from the table
  * @property getAllByNode returns a list of all tags as DBOSMNodeTags
- * @property getById returns a specific tag using its id as a parameter
+ * @property get returns a specific tag using its id as a parameter
  */
 @Dao
 interface OSMNodeTagDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insert(vararg nodeTag: DBOSMNodeTag)
+	suspend fun insert(nodeTag: DBOSMNodeTag)
+
+	@Update
+	suspend fun update(nodeTag: DBOSMNodeTag)
 
 	@Delete
-	suspend fun delete(vararg nodeTag: DBOSMNodeTag)
+	suspend fun delete(nodeTag: DBOSMNodeTag)
 
 	/** get nodeTag by nodeId **/
 	@Query("SELECT * FROM osm_node_tag WHERE nodeId = :id")
-	suspend fun getAllByNode(id: Int) : List<DBOSMNodeTag>
+	suspend fun getAllByNode(id: Long) : List<DBOSMNodeTag>
 
 	/** Get nodeTag by id **/
-	@Query("SELECT * FROM osm_node_tag WHERE id = :id")
-	suspend fun getById(id: Int) : DBOSMNodeTag
+	@Query("SELECT * FROM osm_node_tag WHERE nodeId = :id AND [key] = :key")
+	suspend fun get(id: Long, key: String) : DBOSMNodeTag
 }

@@ -17,7 +17,12 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.database
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWay
 
 /**
@@ -30,15 +35,18 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWay
 @Dao
 interface OSMWayDao {
 	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insert(vararg note: DBOSMWay)
+	suspend fun insert(osmWay: DBOSMWay)
+
+	@Update
+	suspend fun update(osmWay: DBOSMWay)
 
 	@Delete
-	suspend fun delete(vararg note: DBOSMWay)
+	suspend fun delete(osmWay: DBOSMWay)
 
 	@Query("SELECT * FROM osm_way")
 	suspend fun getAll() : List<DBOSMWay>
 
 	/** Get way by id **/
 	@Query("SELECT * FROM osm_way WHERE id = :id")
-	suspend fun getById(id: Int) : DBOSMWay
+	suspend fun getById(id: Long) : DBOSMWay
 }

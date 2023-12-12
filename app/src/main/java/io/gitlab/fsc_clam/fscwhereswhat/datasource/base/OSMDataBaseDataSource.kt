@@ -59,4 +59,9 @@ interface OSMDataBaseDataSource {
 	 * Should not return a null. But is possible if there are no OSM entities in the database.
 	 */
 	suspend fun getNear(latitude: Double, longitude: Double): OSMEntity?
+
+	/**
+	 * Companion object for implementation
+	 */
+	companion object
 }

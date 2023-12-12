@@ -39,6 +39,70 @@ data class OpeningHours(
 	val endMinute: Int
 ) {
 	companion object {
+
+		private lateinit var hours: MutableList<OpeningHours>
+
+		/**
+		 * Converts the OSM hours string into the opening hours object
+		 */
+		fun setHours(value: String): List<OpeningHours> {
+			val daySet = mutableListOf<String>()
+			var str = ""
+			value.forEach {
+				if (it == ';') {
+					daySet.add(str)
+					str = ""
+				}
+				str += it;
+			}
+
+			daySet.forEach { set ->
+				str = ""
+				val isOpen = mutableListOf<Boolean>(false, false, false, false, false, false, false)
+				var startHr = 0
+				var startMin = 0
+				var endHr = 0
+				var endMin = 0
+				if (set.contains("Mo"))
+					isOpen[0] = true
+
+				if (set.contains("Tu"))
+					isOpen[1] = true
+
+				if (set.contains("We"))
+					isOpen[2] = true
+
+				if (set.contains("Th"))
+					isOpen[3] = true
+
+				if (set.contains("Fr"))
+					isOpen[4] = true
+
+				if (set.contains("Sa"))
+					isOpen[5] = true
+
+				if (set.contains("Su"))
+					isOpen[6] = true
+
+				set.forEach { char ->
+					if (char.isDigit())
+						str += char
+					if (str.length == 8) {
+						startHr = str.substring(0, 1).toInt()
+						startMin = str.substring(2, 3).toInt()
+						endHr = str.substring(4,5).toInt()
+						endMin = str.substring(6, 7).toInt()
+					}
+				}
+
+				hours.add( OpeningHours(isOpen[0], isOpen[1], isOpen[2], isOpen[3],
+										isOpen[4], isOpen[5], isOpen[6], startHr, startMin, endHr, endMin) )
+			}
+
+			return hours
+		}
+	}
+
 		val everyDay = OpeningHours(
 			monday = true,
 			tuesday = true,

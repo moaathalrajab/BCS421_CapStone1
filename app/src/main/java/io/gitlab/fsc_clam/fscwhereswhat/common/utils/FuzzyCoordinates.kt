@@ -15,25 +15,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.gitlab.fsc_clam.fscwhereswhat.model.database
-
-import androidx.room.Entity
-import androidx.room.ForeignKey
+package io.gitlab.fsc_clam.fscwhereswhat.common.utils
 
 /**
- * This is a tag associated with a given node
- * @param id is the id of a specific node tage
- * @param nodeId is the id of the associated node
- * @param key is the osm key of the tag
- * @param value is the value associated with the osm key
+ * Fuzz a coordinate, providng the min and max of it
  */
-@Entity (
-	tableName = "osm_node_tag",
-	foreignKeys = [ForeignKey(DBOSMNode::class, ["id"], ["nodeId"], ForeignKey.CASCADE)],
-	primaryKeys = ["nodeId", "key"]
-)
-data class DBOSMNodeTag(
-	val nodeId: Long,
-	val key: String,
-	val value: String
-)
+fun Double.fuzz(percentage: Double): Pair<Double, Double> {
+	val diff = this * percentage
+
+	return this - diff to this + diff
+}

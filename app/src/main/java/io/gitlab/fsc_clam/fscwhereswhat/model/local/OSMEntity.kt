@@ -40,7 +40,7 @@ sealed interface OSMEntity {
 		override val description: String,
 		override val hours: List<OpeningHours>,
 		val hasWater: Boolean,
-		val hasFood: Boolean,
+		val hasFood: Boolean
 	) : OSMEntity
 
 	data class Node(
@@ -50,8 +50,8 @@ sealed interface OSMEntity {
 		override val name: String,
 		override val description: String,
 		override val hours: List<OpeningHours>,
-		val nodeType: NodeType,
-		) : OSMEntity
+		val nodeType: NodeType
+	) : OSMEntity
 }
 
 

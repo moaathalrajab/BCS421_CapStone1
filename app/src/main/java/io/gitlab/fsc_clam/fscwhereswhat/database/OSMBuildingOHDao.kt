@@ -23,30 +23,24 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayReference
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMBuildingOH
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeOH
 
 /**
- * The dao for open street map way references stored in the room database
- * @property insert inserts a single way reference into the table
- * @property delete deletes a single way reference from the table
- * @property getAll returns a list of all way references as DBOSMWayReferences
- * @property getById returns a specific way reference using its id as a parameter
+ * The dao for open street map node opening hours are stored
  */
 @Dao
-interface OSMWayReferenceDao {
-	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insert(ref: DBOSMWayReference)
+interface OSMBuildingOHDao {
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	suspend fun insert(nodeTag: DBOSMNodeOH)
 
 	@Update
-	suspend fun update(ref: DBOSMWayReference)
+	suspend fun update(nodeTag: DBOSMNodeOH)
 
 	@Delete
-	suspend fun delete(ref: DBOSMWayReference)
+	suspend fun delete(nodeTag: DBOSMNodeOH)
 
-	@Query ("SELECT * FROM osm_way_reference")
-	suspend fun getAll() : List<DBOSMWayReference>
-
-	/** Get by id **/
-	@Query("SELECT * FROM osm_way_reference WHERE id = :id")
-	suspend fun getById(id: Long) : List<DBOSMWayReference>
+	/** get nodeTag by nodeId **/
+	@Query("SELECT * FROM osm_way_oh WHERE parentId = :id")
+	suspend fun getAllByParent(id: Long): List<DBOSMBuildingOH>
 }

@@ -23,31 +23,34 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeTag
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMBuilding
+import kotlinx.coroutines.flow.Flow
 
 /**
- * The dao for open street map node tags stored in the room database
- * @property insert inserts a single tag into the table
- * @property delete deletes a single tag from the table
- * @property getAllByNode returns a list of all tags as DBOSMNodeTags
- * @property get returns a specific tag using its id as a parameter
+ * The dao for open street map way ids stored in the room database
+ * @property insert inserts a single way id into the table
+ * @property delete deletes a single way id from the table
+ * @property getAll returns a list of all way ids as DBOSMWays
+ * @property getById returns a specific way using its id as a parameter
  */
 @Dao
-interface OSMNodeTagDao {
-	@Insert (onConflict = OnConflictStrategy.REPLACE)
-	suspend fun insert(nodeTag: DBOSMNodeTag)
+interface OSMBuildingDao {
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	suspend fun insert(osmWay: DBOSMBuilding)
 
 	@Update
-	suspend fun update(nodeTag: DBOSMNodeTag)
+	suspend fun update(osmWay: DBOSMBuilding)
 
 	@Delete
-	suspend fun delete(nodeTag: DBOSMNodeTag)
+	suspend fun delete(osmWay: DBOSMBuilding)
 
-	/** get nodeTag by nodeId **/
-	@Query("SELECT * FROM osm_node_tag WHERE nodeId = :id")
-	suspend fun getAllByNode(id: Long) : List<DBOSMNodeTag>
+	@Query("SELECT * FROM osm_way")
+	suspend fun getAll(): List<DBOSMBuilding>
 
-	/** Get nodeTag by id **/
-	@Query("SELECT * FROM osm_node_tag WHERE nodeId = :id AND [key] = :key")
-	suspend fun get(id: Long, key: String) : DBOSMNodeTag
+	@Query("SELECT * FROM osm_way")
+	fun getAllFlow(): Flow<List<DBOSMBuilding>>
+
+	/** Get way by id **/
+	@Query("SELECT * FROM osm_way WHERE id = :id")
+	suspend fun getById(id: Long): DBOSMBuilding?
 }

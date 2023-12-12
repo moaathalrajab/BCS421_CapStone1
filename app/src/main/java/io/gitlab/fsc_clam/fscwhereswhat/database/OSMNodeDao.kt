@@ -24,6 +24,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNode
+import kotlinx.coroutines.flow.Flow
 
 /**
  * The dao for open street map nodes held in the room database
@@ -34,7 +35,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNode
  */
 @Dao
 interface OSMNodeDao {
-	@Insert (onConflict = OnConflictStrategy.REPLACE)
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insert(node: DBOSMNode)
 
 	@Update
@@ -44,9 +45,12 @@ interface OSMNodeDao {
 	suspend fun delete(node: DBOSMNode)
 
 	@Query("SELECT * FROM osm_node")
-	suspend fun getAll() : List<DBOSMNode>
+	suspend fun getAll(): List<DBOSMNode>
+
+	@Query("SELECT * FROM osm_node")
+	fun getAllFlow(): Flow<List<DBOSMNode>>
 
 	/** Get by Id **/
 	@Query("SELECT * FROM osm_node WHERE id = :node")
-	suspend fun getById(node: Long) : DBOSMNode
+	suspend fun getById(node: Long): DBOSMNode?
 }

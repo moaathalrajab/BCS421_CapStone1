@@ -17,20 +17,31 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 
 /**
- * This is a reference between a OSM Way and its child nodes
- * @param id is the id of the way
- * @param nodeId is the id of the associated child node
+ * This is a tag associated with a given way
+ * @param id is the id of a specific way tag
  */
 @Entity(
-	tableName = "osm_way_reference",
-	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["id"], ForeignKey.CASCADE),
-					ForeignKey(DBOSMNode::class, ["id"], ["nodeId"], ForeignKey.CASCADE)],
-	primaryKeys = ["id", "nodeId"]
+	tableName = "osm_way_oh",
+	foreignKeys = [ForeignKey(DBOSMBuilding::class, ["id"], ["parentId"], ForeignKey.CASCADE)],
 )
-data class DBOSMWayReference(
-	val id: Long,
-	val nodeId: Long,
+data class DBOSMBuildingOH(
+	@PrimaryKey(autoGenerate = true)
+	val id: Long = 0,
+	val parentId: Long,
+	val monday: Boolean,
+	val tuesday: Boolean,
+	val wednesday: Boolean,
+	val thursday: Boolean,
+	val friday: Boolean,
+	val saturday: Boolean,
+	val sunday: Boolean,
+	val startHour: Int,
+	val startMinute: Int,
+	val endHour: Int,
+	val endMinute: Int
 )

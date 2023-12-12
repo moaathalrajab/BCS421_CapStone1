@@ -18,31 +18,28 @@
 package io.gitlab.fsc_clam.fscwhereswhat.datasource.impl
 
 import android.app.Application
+import io.gitlab.fsc_clam.fscwhereswhat.common.utils.fuzz
 import io.gitlab.fsc_clam.fscwhereswhat.database.AppDatabase
 import io.gitlab.fsc_clam.fscwhereswhat.datasource.base.OSMDataBaseDataSource
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMBuilding
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMBuildingOH
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNode
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeTag
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWay
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMWayTag
-import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeOH
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
-import kotlin.math.abs
-import kotlin.math.sqrt
+import kotlinx.coroutines.flow.map
 
 class ImplOSMDataBaseDataSource(application: Application) : OSMDataBaseDataSource {
 	/**
 	 * Dao connections for OSM Nodes & Ways
 	 */
-	private val dbOSMNode = AppDatabase.get(application).OSMNodeDao
-	private val dbOSMNodeTag = AppDatabase.get(application).OSMNodeTagDao
-	private val dbOSMWay = AppDatabase.get(application).OSMWayDao
-	private val dbOSMWayTag = AppDatabase.get(application).OSMWayTagDao
-	private val dbOSMWayReference = AppDatabase.get(application).OSMWayReferenceDao
+	private val dbOSMNode = AppDatabase.get(application).osmNodeDao
+	private val dbOSMNodeOH = AppDatabase.get(application).osmNodeOHDao
+	private val dbOSMWay = AppDatabase.get(application).osmBuildingDao
+	private val dbOSMWayOH = AppDatabase.get(application).osmBuildingOHDao
 
 	/**
 	 * Percentage used to define distances used in [queryNearby] and [getNear]
@@ -50,245 +47,159 @@ class ImplOSMDataBaseDataSource(application: Application) : OSMDataBaseDataSourc
 	private val queryDistance = 0.003
 
 	override suspend fun query(token: Token): Flow<List<OSMEntity>> {
-		return flow {
-			val queriedEntities = mutableListOf<OSMEntity>()
-
-			dbOSMNode.getAll().forEach { node ->
-				dbOSMNodeTag.getAllByNode(node.id).forEach { nodeTag ->
-					if (token.compareValue(nodeTag.value))
-						queriedEntities.add(node.toModel())
-				}
+		val nodeFlow = dbOSMNode.getAllFlow().map { list ->
+			list.filter { node ->
+				token.compareValue(node.description) ||
+						token.compareValue(node.name)
+			}.map {
+				it.toModel()
 			}
-
-			dbOSMWayReference.getAll().forEach {
-				dbOSMWayTag.getByParent(it.id).forEach { wayTag ->
-					if (token.compareValue(wayTag.value))
-						queriedEntities.add(dbOSMWay.getById(it.id).toModel())
-				}
-			}
-
-			emit(queriedEntities)
 		}
+
+		val wayFlow = dbOSMWay.getAllFlow().map { list ->
+			list.filter { node ->
+				token.compareValue(node.description) ||
+						token.compareValue(node.name)
+			}.map {
+				it.toModel()
+			}
+		}
+
+		return nodeFlow.combine(wayFlow) { a, b -> a + b }
 	}
 
 	override suspend fun queryNearby(latitude: Double, longitude: Double): Flow<List<OSMEntity>> {
-		val minLat = latitude - (latitude * queryDistance)
-		val minLong = longitude - (longitude * queryDistance)
-		val maxLat = latitude + (latitude * queryDistance)
-		val maxLong = longitude + (longitude * queryDistance)
+		val (minLat, maxLat) = latitude.fuzz(queryDistance)
+		val (minLong, maxLong) = longitude.fuzz(queryDistance)
 
-		return flow {
-			emit(
-				dbOSMNode.getAll().filter { node ->
-					node.lat > minLat && node.long > minLong && node.lat < maxLat && node.long < maxLong
-				}.map { it.toModel() })
-
-		}.combine(flow {
-			emit(
-				dbOSMWay.getAll().filter { way ->
-					dbOSMWayTag.get(way.id, "lat")!!.value.toDouble() > minLat &&
-							dbOSMWayTag.get(way.id, "long")!!.value.toDouble() > minLong &&
-							dbOSMWayTag.get(way.id, "lat")!!.value.toDouble() < maxLat &&
-							dbOSMWayTag.get(way.id, "long")!!.value.toDouble() < maxLong
-				}.map { it.toModel() })
-		})
-		{ a, b ->
-			a + b
+		val nodeFlow = dbOSMNode.getAllFlow().map { list ->
+			list.filter { node ->
+				node.lat > minLat && node.long > minLong && node.lat < maxLat && node.long < maxLong
+			}.map { it.toModel() }
 		}
+
+		val buildingFlow = dbOSMWay.getAllFlow().map { list ->
+			list.filter { node ->
+				node.lat > minLat && node.long > minLong && node.lat < maxLat && node.long < maxLong
+			}.map { it.toModel() }
+		}
+
+		return nodeFlow.combine(buildingFlow) { a, b -> a + b }
 	}
 
 	override suspend fun get(id: Long): OSMEntity? {
-		return dbOSMNode.getById(id).toModel()
+		return dbOSMNode.getById(id)?.toModel() ?: dbOSMWay.getById(id)?.toModel()
 	}
 
-	private suspend fun updateWayTag(entityId: Long, key: String, newValue: String) {
-		val tag = dbOSMWayTag.get(entityId, key)
-
-		if (tag == null) {
-			dbOSMWayTag.insert(
-				DBOSMWayTag(
-					entityId,
-					key,
-					newValue
-				)
-			)
-		} else {
-			dbOSMWayTag.update(
-				tag.copy(value = newValue)
-			)
-		}
-	}
-
-	private suspend fun updateNodeTag(entityId: Long, key: String, newValue: String) {
-		val tag = dbOSMNodeTag.get(entityId, key)
-
-		if (tag == null) {
-			dbOSMNodeTag.insert(
-				DBOSMNodeTag(
-					entityId,
-					key,
-					newValue
-				)
-			)
-		} else {
-			dbOSMNodeTag.update(
-				tag.copy(value = newValue)
-			)
-		}
-	}
 
 	override suspend fun update(entities: List<OSMEntity>) {
 		entities.forEach { entity ->
 			when (entity) {
 				is OSMEntity.Building -> {
-					updateWayTag(
-						entity.id,
-						"hasFood",
-						if (entity.hasFood) "1" else "0"
-					)
-
-					updateWayTag(
-						entity.id,
-						"hasWater",
-						if (entity.hasWater) "1" else "0"
-					)
-
-					updateWayTag(
-						entity.id,
-						"opening_hours",
-						entity.hours.toString()
-					)
-
-					updateWayTag(
-						entity.id,
-						"description",
-						entity.description
-					)
-
-					updateWayTag(
-						entity.id,
-						"name",
-						entity.name
-					)
-
-					updateWayTag(
-						entity.id,
-						"lat",
-						entity.lat.toString()
-					)
-
-					updateWayTag(
-						entity.id,
-						"long",
-						entity.long.toString()
-					)
-
-					dbOSMWay.update(dbOSMWay.getById(entity.id))
+					val db = dbOSMWay.getById(entity.id)
+					if (db != null) {
+						dbOSMWay.update(
+							db.copy(
+								lat = entity.lat,
+								long = entity.long,
+								name = entity.name,
+								description = entity.description,
+								hasWater = entity.hasWater,
+								hasFood = entity.hasFood
+							)
+						)
+					} else {
+						dbOSMWay.insert(
+							DBOSMBuilding(
+								entity.id,
+								entity.lat,
+								entity.long,
+								entity.name,
+								entity.description,
+								entity.hasWater,
+								entity.hasFood
+							)
+						)
+					}
 				}
 
 				is OSMEntity.Node -> {
-					updateNodeTag(
-						entity.id,
-						"lat",
-						entity.lat.toString()
-					)
-
-					updateNodeTag(
-						entity.id,
-						"long",
-						entity.long.toString()
-					)
-
-					updateNodeTag(
-						entity.id,
-						"name",
-						entity.name
-					)
-
-					updateNodeTag(
-						entity.id,
-						"description",
-						entity.description
-					)
-
-					updateNodeTag(
-						entity.id,
-						"opening_hours",
-						entity.hours.toString()
-					)
-
-					updateNodeTag(
-						entity.id,
-						"nodeType",
-						dbOSMNodeTag.get(entity.id, "type").value
-					)
-
-					dbOSMNode.update(dbOSMNode.getById(entity.id))
+					val db = dbOSMNode.getById(entity.id)
+					if (db != null) {
+						dbOSMNode.update(
+							db.copy(
+								lat = entity.lat,
+								long = entity.long,
+								name = entity.name,
+								description = entity.description,
+								nodeType = entity.nodeType
+							)
+						)
+					} else {
+						dbOSMNode.insert(
+							DBOSMNode(
+								entity.id,
+								entity.lat,
+								entity.long,
+								entity.name,
+								entity.description,
+								entity.nodeType
+							)
+						)
+					}
 				}
 			}
 		}
 	}
 
 	override suspend fun getLikeName(name: String): List<OSMEntity> {
-		val simName = mutableListOf<OSMEntity>()
+		val nodes = dbOSMNode.getAll().filter { it.name.contains(name, true) }.map { it.toModel() }
+		val ways = dbOSMWay.getAll().filter { it.name.contains(name, true) }.map { it.toModel() }
 
-		dbOSMNode.getAll().forEach { node ->
-			if ( node.toModel().name.lowercase().contains(name.lowercase()) )
-				simName.add(node.toModel())
-			else if (abs(name.compareTo(node.toModel().name)) < 30)
-				simName.add(node.toModel())
-		}
-
-		dbOSMWay.getAll().forEach { way ->
-			if ( way.toModel().name.lowercase().contains(name.lowercase()) )
-				simName.add(way.toModel())
-			else if (abs(name.compareTo(way.toModel().name)) < 30)
-				simName.add(way.toModel())
-		}
-
-		return simName
+		return nodes + ways
 	}
 
+	private val nearDistance = .0005
+
 	override suspend fun getNear(latitude: Double, longitude: Double): OSMEntity? {
-		val minLat = latitude - (latitude * queryDistance)
-		val minLong = longitude - (longitude * queryDistance)
 
-		var nearest: OSMEntity = dbOSMNode.getAll().first().toModel()
-		var distLat = abs(nearest.lat) - abs(latitude)
-		var distLong = abs(nearest.long) - abs(longitude)
-		var distFlatNearest = sqrt(distLat + distLong) //distance of the (currently) closest node
-		var distFlatNode: Double //distance of the current node
+		val nodePair = dbOSMNode.getAll().map { node ->
+			// Calculate average difference in distance
+			node to ((node.lat - latitude) + (node.long - longitude)) / 2
+		}.minByOrNull { it.second }
 
-		dbOSMNode.getAll().forEach { node ->
-			if (node.lat < minLat && node.long < minLong) {
-				distLat = abs(node.lat) - abs(latitude)
-				distLong = abs(node.long) - abs(longitude)
-				distFlatNode = sqrt(distLat + distLong)
+		val buildingPair = dbOSMWay.getAll().map { way ->
+			// Calculate average difference in distance
+			way to ((way.lat - latitude) + (way.long - longitude)) / 2
+		}.minByOrNull { it.second } // the first one is the closest
 
-				if (distFlatNode < distFlatNearest) {
-					nearest = node.toModel()
-					distFlatNearest = distFlatNode
-				}
-			}
+		return when {
+			nodePair == null && buildingPair == null -> null
+
+			nodePair != null && buildingPair == null -> nodePair.first.toModel()
+
+			nodePair == null && buildingPair != null -> buildingPair.first.toModel()
+
+			nodePair!!.second > buildingPair!!.second -> nodePair.first.toModel()
+
+			else -> buildingPair.first.toModel()
 		}
-
-		return nearest;
 	}
 
 	/**
 	 * Convert db to model
 	 */
 
-	private suspend fun DBOSMWay.toModel() =
+	private suspend fun DBOSMBuilding.toModel() =
 		OSMEntity.Building(
 			id = id,
-			lat = dbOSMWayTag.get(id, "lat")!!.value.toDouble(),
-			long = dbOSMWayTag.get(id, "long")!!.value.toDouble(),
-			name = dbOSMWayTag.get(id, "name")!!.value,
-			description = dbOSMWayTag.get(id, "description")!!.value,
-			hasFood = dbOSMWayTag.get(id, "hasFood")!!.value.toBoolean(),
-			hasWater = dbOSMWayTag.get(id, "hasWater")!!.value.toBoolean(),
-			hours = OpeningHours.setHours(dbOSMWayTag.get(id, "opening_hours")!!.value)
+			lat = lat,
+			long = long,
+			name = name,
+			description = description,
+			hasFood = hasFood,
+			hasWater = hasWater,
+			hours = dbOSMWayOH.getAllByParent(id).map { it.toModel() }
 		)
 
 	private suspend fun DBOSMNode.toModel() =
@@ -296,44 +207,41 @@ class ImplOSMDataBaseDataSource(application: Application) : OSMDataBaseDataSourc
 			id = id,
 			lat = lat,
 			long = long,
-			name = dbOSMNodeTag.get(id, "name").value,
-			description = dbOSMNodeTag.get(id, "description").value,
-			nodeType = enumValueOf<NodeType>(dbOSMNodeTag.get(id, "type").value),
-			hours = OpeningHours.setHours(dbOSMNodeTag.get(id, "opening_hours").value)
+			name = name,
+			description = description,
+			nodeType = nodeType,
+			hours = dbOSMNodeOH.getAllByParent(id).map { it.toModel() }
 		)
 
-	/**
-	 * Convert model to db osm node
-	 */
-	private fun OSMEntity.toDBOSMNode() =
-		DBOSMNode(
-			id = id,
-			lat = lat,
-			long = long
+	private fun DBOSMBuildingOH.toModel() =
+		OpeningHours(
+			monday,
+			tuesday,
+			wednesday,
+			thursday,
+			friday,
+			saturday,
+			sunday,
+			startHour,
+			startMinute,
+			endHour,
+			endMinute
 		)
 
-	/**
-	 * Convert model to osm tag
-	 */
-	private fun OSMEntity.toDBOSMTag() {
-		when (this) {
-			is OSMEntity.Building -> {
-				DBOSMWayTag(
-					parentId = 0,
-					key = "",
-					value = ""
-				)
-			}
-
-			is OSMEntity.Node -> {
-				DBOSMNodeTag(
-					nodeId = 0,
-					key = "",
-					value = ""
-				)
-			}
-		}
-	}
+	private fun DBOSMNodeOH.toModel() =
+		OpeningHours(
+			monday,
+			tuesday,
+			wednesday,
+			thursday,
+			friday,
+			saturday,
+			sunday,
+			startHour,
+			startMinute,
+			endHour,
+			endMinute
+		)
 
 	companion object {
 		private var repo: ImplOSMDataBaseDataSource? = null

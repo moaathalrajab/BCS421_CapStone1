@@ -18,8 +18,17 @@
 package io.gitlab.fsc_clam.fscwhereswhat.database
 
 import android.content.Context
-import androidx.room.*
-import io.gitlab.fsc_clam.fscwhereswhat.model.database.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBNote
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMBuilding
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMBuildingOH
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNode
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBOSMNodeOH
+import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBReminder
 
 @Database(
 	version = 1,
@@ -28,10 +37,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.database.*
 		DBNote::class,
 		DBEvent::class,
 		DBOSMNode::class,
-		DBOSMNodeTag::class,
-		DBOSMWay::class,
-		DBOSMWayReference::class,
-		DBOSMWayTag::class
+		DBOSMNodeOH::class,
+		DBOSMBuilding::class,
+		DBOSMBuildingOH::class
 	]
 )
 @TypeConverters(TypeConversion::class)
@@ -39,11 +47,10 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract val reminderDao: ReminderDao
 	abstract val noteDao: NoteDao
 	abstract val eventDao: EventDao
-	abstract val OSMNodeDao: OSMNodeDao
-	abstract val OSMNodeTagDao: OSMNodeTagDao
-	abstract val OSMWayDao: OSMWayDao
-	abstract val OSMWayReferenceDao: OSMWayReferenceDao
-	abstract val OSMWayTagDao: OSMWayTagDao
+	abstract val osmNodeDao: OSMNodeDao
+	abstract val osmNodeOHDao: OSMNodeOHDao
+	abstract val osmBuildingDao: OSMBuildingDao
+	abstract val osmBuildingOHDao: OSMBuildingOHDao
 
 	companion object {
 		@Volatile
@@ -52,9 +59,11 @@ abstract class AppDatabase : RoomDatabase() {
 		fun get(context: Context): AppDatabase {
 			synchronized(AppDatabase::class) {
 				if (instance == null) {
-					instance = Room.databaseBuilder(context.applicationContext,
+					instance = Room.databaseBuilder(
+						context.applicationContext,
 						AppDatabase::class.java,
-						"whereswhat.db").build()
+						"whereswhat.db"
+					).build()
 				}
 			}
 			return instance!!

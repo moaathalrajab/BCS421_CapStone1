@@ -19,6 +19,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
 
 /**
  * This is an OSM node
@@ -26,11 +27,15 @@ import androidx.room.PrimaryKey
  * @param lat is the latitude of the node
  * @param long is the longitude of the node
  */
-@Entity (
+@Entity(
 	tableName = "osm_node"
 )
 data class DBOSMNode(
-	@PrimaryKey val id: Long,
+	@PrimaryKey
+	val id: Long,
 	val lat: Double,
 	val long: Double,
+	val name: String,
+	val description: String,
+	val nodeType: NodeType,
 )

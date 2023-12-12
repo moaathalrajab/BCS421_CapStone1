@@ -17,22 +17,23 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
- * This is a tag associated with a given way
- * @param id is the id of a specific way tag
- * @param parentId is the id of the associated way
- * @param key is the osm key of the tag
- * @param value is the value associated with the osm key
+ * This is an open street map way
+ * @param id is the id of a specific way
  */
 @Entity(
-	tableName = "osm_way_tag",
-	foreignKeys = [ForeignKey(DBOSMWay::class, ["id"], ["parentId"], ForeignKey.CASCADE)],
-	primaryKeys = [ "parentId", "key" ]
+	tableName = "osm_way"
 )
-data class DBOSMWayTag(
-	val parentId: Long,
-	val key: String,
-	val value: String
+data class DBOSMBuilding(
+	@PrimaryKey
+	val id: Long,
+	val lat: Double,
+	val long: Double,
+	val name: String,
+	val description: String,
+	val hasWater: Boolean,
+	val hasFood: Boolean,
 )

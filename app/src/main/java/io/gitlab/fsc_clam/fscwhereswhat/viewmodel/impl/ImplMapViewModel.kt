@@ -98,6 +98,9 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 			SharingStarted.Eagerly, Color.BLACK
 		)
 
+	/**
+	 * lat to log
+	 */
 	private val coordinates: Flow<Pair<Double, Double>> =
 		userLatitude.combine(userLongitude) { lat, long ->
 			lat to long
@@ -196,5 +199,31 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 			cameraLatitude.emit(latitude)
 			cameraLongitude.emit(latitude)
 		}
+	}
+
+	init {
+		/* TODO figure out view reentering automatically
+		val viewDistancePerc = .005
+
+		viewModelScope.launch {
+			cameraLatitude.combine(cameraLongitude) { a, b -> a to b }.collect { (cLat, cLog) ->
+
+				coordinates.debounce(100).collect { (uLat, uLog) ->
+					val minLat = uLat - (uLat * viewDistancePerc)
+					val maxLat = uLat + (uLat * viewDistancePerc)
+
+					val minLong = uLog - (uLog * viewDistancePerc)
+					val maxLong = uLog + (uLog * viewDistancePerc)
+
+					if (cLat <= minLat || cLat >= maxLat && cLog <= minLong || cLog >= maxLong) {
+						// The camera is too far away with the user moving, recenter
+						Log.d("MapViewModel", "Recentering")
+						cameraLatitude.emit(uLat)
+						cameraLongitude.emit(uLog)
+					}
+				}
+			}
+		}
+		 */
 	}
 }

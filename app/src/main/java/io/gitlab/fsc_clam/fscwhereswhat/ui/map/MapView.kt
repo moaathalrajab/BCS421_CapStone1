@@ -20,8 +20,6 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -92,34 +90,26 @@ fun MapView(
 		}
 	}
 
-	Scaffold(
-		bottomBar = {
-			// TODO banner ad here
-		},
-		snackbarHost = {
-			SnackbarHost(snackbarState)
+
+	//pinpoints is fake data currently
+	MapContent(
+		snackbarState,
+		user = user,
+		query = query,
+		latitude = latitude,
+		longitude = longitude,
+		pinPoints = pinpoints,
+		activeFilter = activeFilter,
+		focus = focus,
+		setActiveFilter = mapViewModel::setActiveFilter,
+		setFocus = mapViewModel::setFocus,
+		openSearch = openSearch,
+		navigateToMore = navigateToMore,
+		login = {
+			fromLogIn = true
+			signInLauncher.launch(gsoClient.signInIntent)
 		}
-	) {
-		//pinpoints is fake data currently
-		MapContent(
-			it,
-			user = user,
-			query = query,
-			latitude = latitude,
-			longitude = longitude,
-			pinPoints = pinpoints,
-			activeFilter = activeFilter,
-			focus = focus,
-			setActiveFilter = mapViewModel::setActiveFilter,
-			setFocus = mapViewModel::setFocus,
-			openSearch = openSearch,
-			navigateToMore = navigateToMore,
-			login = {
-				fromLogIn = true
-				signInLauncher.launch(gsoClient.signInIntent)
-			}
-		)
-	}
+	)
 }
 
 @Preview

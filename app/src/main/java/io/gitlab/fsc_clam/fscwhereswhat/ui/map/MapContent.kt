@@ -18,13 +18,15 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -32,7 +34,6 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.utsman.osmandcompose.DefaultMapProperties
 import com.utsman.osmandcompose.OpenStreetMap
 import com.utsman.osmandcompose.OverlayManagerState
@@ -61,7 +62,7 @@ import org.osmdroid.util.GeoPoint
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapContent(
-	padding: PaddingValues,
+	snackbarState: SnackbarHostState,
 	user: User?,
 	query: String?,
 	latitude: Double,
@@ -80,6 +81,9 @@ fun MapContent(
 		zoom = 18.5// optional, default is 5.0
 	}
 
+	/**
+	 * Recenter location to where the user is
+	 */
 	fun onRecenter() {
 		cameraState.geoPoint = GeoPoint(latitude, longitude)
 	}
@@ -91,8 +95,8 @@ fun MapContent(
 		)
 	)
 
+	// Update user location
 	LaunchedEffect(longitude, latitude) {
-		Log.d("compose", "Update camera")
 		userMarkerState.geoPoint = GeoPoint(latitude, longitude)
 	}
 
@@ -107,49 +111,62 @@ fun MapContent(
 			)
 	}
 
-	Box(
-		modifier = Modifier
-			.padding(padding)
-			.fillMaxSize()
+	Scaffold(
+		bottomBar = {
+			Column {
+				MapBottomBar(
+					activeFilter,
+					setActiveFilter,
+					openSearch,
+					query,
+					navigateToMore
+				)
+			}
+		},
+		snackbarHost = {
+			SnackbarHost(snackbarState)
+		}
 	) {
-		//creates map from OSM
-		OpenStreetMap(
-			modifier = Modifier.fillMaxSize(),
-			cameraState = cameraState,
-			properties = mapProperties,
-			overlayManagerState = rememberSaveable(key = null, saver = Saver(
-				save = {
-					null
-				},
-				restore = {
+		Box(Modifier.padding(it)) // ignore the padding
+
+		Box(
+			modifier = Modifier
+				.fillMaxSize()
+		) {
+			//creates map from OSM
+			OpenStreetMap(
+				modifier = Modifier.fillMaxSize(),
+				cameraState = cameraState,
+				properties = mapProperties,
+				overlayManagerState = rememberSaveable(key = null, saver = Saver(
+					save = {
+						null
+					},
+					restore = {
+						OverlayManagerState(null)
+					}
+				)) {
 					OverlayManagerState(null)
 				}
-			)) {
-				OverlayManagerState(null)
-			}
-		) {
-			pinPoints.forEach { pinpoint ->
-				MapPinPoint(pinpoint, setFocus)
+			) {
+				pinPoints.forEach { pinpoint ->
+					MapPinPoint(pinpoint, setFocus)
+				}
+
+				MapUserMarker(userMarkerState)
 			}
 
-			MapUserMarker(userMarkerState)
+			//Creates the Map UI after map creation
+			MapOverview(
+				user = user,
+				onRecenter = ::onRecenter,
+				login = login
+			)
 		}
-
-		//Creates the Map UI after map creation
-		MapOverview(
-			user = user,
-			activeFilter = activeFilter,
-			setActiveFilter = setActiveFilter,
-			onRecenter = ::onRecenter,
-			query = query,
-			openSearch = openSearch,
-			navigateToMore = navigateToMore,
-			login = login
-		)
-	}
-	if (focus != null) {
-		ModalBottomSheet(onDismissRequest = { setFocus(null) }) {
-			EntityDetail()
+		if (focus != null) {
+			ModalBottomSheet(onDismissRequest = { setFocus(null) }) {
+				EntityDetail()
+			}
 		}
 	}
 }
@@ -159,7 +176,6 @@ fun MapContent(
 fun PreviewMapContent() {
 	val user = User(":", "", Uri.parse("https://google.com"))
 	MapContent(
-		padding = PaddingValues(8.dp),
 		user = user,
 		query = null,
 		latitude = 40.75175,
@@ -193,6 +209,7 @@ fun PreviewMapContent() {
 		setFocus = {},
 		openSearch = {},
 		navigateToMore = {},
-		login = {}
+		login = {},
+		snackbarState = SnackbarHostState()
 	)
 }

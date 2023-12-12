@@ -64,12 +64,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 @Composable
 fun MapOverview(
 	user: User?,
-	query: String?,
-	activeFilter: EntityType?,
-	setActiveFilter: (EntityType?) -> Unit,
 	onRecenter: () -> Unit,
-	openSearch: () -> Unit,
-	navigateToMore: () -> Unit,
 	login: () -> Unit
 ) {
 	Box(
@@ -93,31 +88,6 @@ fun MapOverview(
 			)
 		}
 
-		//Holds the search bar and filter buttons
-		Column(
-			modifier = Modifier
-				.align(Alignment.BottomStart)
-				.padding(8.dp),
-			verticalArrangement = Arrangement.spacedBy(8.dp),
-			horizontalAlignment = Alignment.Start
-		) {
-
-			//Creates the filter buttons
-			FilterButtonRow(activeFilter, setActiveFilter)
-
-			//bottom bar holds search and more button
-			Row(
-				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.SpaceEvenly,
-				verticalAlignment = Alignment.CenterVertically
-			) {
-				//search bar on click expands to show search view
-				SearchBar(openSearch, query)
-
-				//The more button
-				MoreButton(navigateToMore)
-			}
-		}
 	}
 }
 
@@ -246,12 +216,7 @@ fun PreviewMapUI() {
 	Surface {
 		MapOverview(
 			user = null,
-			query = null,
-			activeFilter = null,
-			setActiveFilter = {},
 			onRecenter = {},
-			openSearch = {},
-			navigateToMore = {},
 			login = {}
 		)
 	}
@@ -297,5 +262,39 @@ fun FilterButton(
 fun PreviewFilterButtons() {
 	Surface {
 		FilterButtonRow(activeFilter = null, setActiveFilter = {})
+	}
+}
+
+@Composable
+fun MapBottomBar(
+	activeFilter: EntityType?,
+	setActiveFilter: (EntityType?) -> Unit,
+	openSearch: () -> Unit,
+	query: String?,
+	navigateToMore: () -> Unit
+) {
+	//Holds the search bar and filter buttons
+	Column(
+		modifier = Modifier
+			.padding(8.dp),
+		verticalArrangement = Arrangement.spacedBy(8.dp),
+		horizontalAlignment = Alignment.Start
+	) {
+
+		//Creates the filter buttons
+		FilterButtonRow(activeFilter, setActiveFilter)
+
+		//bottom bar holds search and more button
+		Row(
+			modifier = Modifier.fillMaxWidth(),
+			horizontalArrangement = Arrangement.SpaceEvenly,
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			//search bar on click expands to show search view
+			SearchBar(openSearch, query)
+
+			//The more button
+			MoreButton(navigateToMore)
+		}
 	}
 }

@@ -21,24 +21,32 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.utsman.osmandcompose.DefaultMapProperties
 import com.utsman.osmandcompose.OpenStreetMap
 import com.utsman.osmandcompose.OverlayManagerState
 import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
+import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
@@ -117,6 +125,16 @@ fun MapContent(
 
 	Scaffold(
 		bottomBar = {
+			AndroidView(
+				modifier = Modifier.fillMaxWidth(),
+				factory = { context ->
+					AdView(context).apply {
+						setAdSize(AdSize.BANNER)
+						adUnitId = context.getString(R.string.ad_id_banner)
+						loadAd(AdRequest.Builder().build())
+					}
+				}
+			)
 			Column {
 				MapBottomBar(
 					activeFilter,
@@ -126,6 +144,7 @@ fun MapContent(
 					navigateToMore
 				)
 			}
+
 		},
 		snackbarHost = {
 			SnackbarHost(snackbarState)

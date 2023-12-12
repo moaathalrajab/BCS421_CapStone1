@@ -61,16 +61,6 @@ abstract class MapViewModel(application: Application) : AndroidViewModel(applica
 	abstract val userLatitude: StateFlow<Double>
 
 	/**
-	 * The current longitude of the camera
-	 */
-	abstract val cameraLongitude: StateFlow<Double>
-
-	/**
-	 * The current latitude of the camera
-	 */
-	abstract val cameraLatitude: StateFlow<Double>
-
-	/**
 	 * If user clicks a pinpoint, that pinpoint is zoomed in to focus
 	 */
 	abstract val focus: StateFlow<Pinpoint?>
@@ -101,8 +91,6 @@ abstract class MapViewModel(application: Application) : AndroidViewModel(applica
 	abstract fun setFocus(pinpoint: Pinpoint?)
 
 	abstract fun handleSignInResult(result: ActivityResult)
-
-	abstract fun saveCameraState(latitude: Double, longitude: Double)
 
 	abstract val exception: MutableSharedFlow<Throwable>
 }

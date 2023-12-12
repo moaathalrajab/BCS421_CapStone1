@@ -52,8 +52,6 @@ fun MapView(
 	val pinpoints by mapViewModel.pinpoints.collectAsState()
 	val userLatitude by mapViewModel.userLatitude.collectAsState()
 	val userLongitude by mapViewModel.userLongitude.collectAsState()
-	val cameraLatitude by mapViewModel.cameraLatitude.collectAsState()
-	val cameraLongitude by mapViewModel.cameraLongitude.collectAsState()
 
 	val activeFilter by mapViewModel.activeFilter.collectAsState()
 	val focus by mapViewModel.focus.collectAsState()
@@ -111,10 +109,7 @@ fun MapView(
 		login = {
 			fromLogIn = true
 			signInLauncher.launch(gsoClient.signInIntent)
-		},
-		cameraLatitude = cameraLatitude,
-		cameraLongitude = cameraLongitude,
-		saveCameraState = mapViewModel::saveCameraState
+		}
 	)
 }
 

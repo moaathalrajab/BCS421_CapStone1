@@ -28,7 +28,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
@@ -41,8 +40,6 @@ import com.utsman.osmandcompose.OverlayManagerState
 import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
-import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
-import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
@@ -69,8 +66,6 @@ fun MapContent(
 	snackbarState: SnackbarHostState,
 	user: User?,
 	query: String?,
-	cameraLatitude: Double,
-	cameraLongitude: Double,
 	userLatitude: Double,
 	userLongitude: Double,
 	pinPoints: List<Pinpoint>,
@@ -81,19 +76,11 @@ fun MapContent(
 	openSearch: () -> Unit,
 	navigateToMore: () -> Unit,
 	login: () -> Unit,
-	saveCameraState: (lat: Double, log: Double) -> Unit
 ) {
 	val cameraState = rememberCameraState {
-		geoPoint = GeoPoint(cameraLatitude, cameraLongitude)
+		geoPoint = GeoPoint(userLatitude, userLongitude)
 		zoom = 18.5// optional, default is 5.0
 		speed = 0
-	}
-
-	// Save camera state
-	DisposableEffect(cameraState) {
-		onDispose {
-			saveCameraState(cameraState.geoPoint.latitude, cameraState.geoPoint.longitude)
-		}
 	}
 
 	/**
@@ -229,9 +216,6 @@ fun PreviewMapContent() {
 		openSearch = {},
 		navigateToMore = {},
 		login = {},
-		snackbarState = SnackbarHostState(),
-		cameraLatitude = FSC_LAT,
-		cameraLongitude = FSC_LOG,
-		saveCameraState = { _, _ -> }
+		snackbarState = SnackbarHostState()
 	)
 }

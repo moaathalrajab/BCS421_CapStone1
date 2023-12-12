@@ -76,10 +76,6 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	override val userLatitude: StateFlow<Double> =
 		locationRepo.latitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LAT)
 
-	override val cameraLongitude = MutableStateFlow(FSC_LOG)
-
-	override val cameraLatitude = MutableStateFlow(FSC_LAT)
-
 	override val buildingColor: StateFlow<Int> =
 		prefRepo.getColor(EntityType.BUILDING).stateIn(
 			viewModelScope,
@@ -193,14 +189,6 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 			exception.emit(e)
 		}
 	}
-
-	override fun saveCameraState(latitude: Double, longitude: Double) {
-		viewModelScope.launch {
-			cameraLatitude.emit(latitude)
-			cameraLongitude.emit(latitude)
-		}
-	}
-
 	init {
 		/* TODO figure out view reentering automatically
 		val viewDistancePerc = .005

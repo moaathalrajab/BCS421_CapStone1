@@ -462,7 +462,7 @@ fun ProfileCard() {
 				) {
 					Column(horizontalAlignment = Alignment.CenterHorizontally) {
 						Image(
-							painter = painterResource(id = R.drawable.rahim_pfp),
+							painter = painterResource(id = R.drawable.event),
 							contentDescription = "",
 							modifier = Modifier
 								.clip(CircleShape)
@@ -488,7 +488,7 @@ fun ProfileCard() {
 					) {
 
 						Image(
-							painter = painterResource(id = R.drawable.harvey_pfp),
+							painter = painterResource(id = R.drawable.event),
 							contentDescription = "",
 							modifier = Modifier
 								.clip(CircleShape)
@@ -510,7 +510,7 @@ fun ProfileCard() {
 
 					Column(horizontalAlignment = Alignment.CenterHorizontally) {
 						Image(
-							painter = painterResource(id = R.drawable.aaron_pfp),
+							painter = painterResource(id = R.drawable.event),
 							contentDescription = "",
 							modifier = Modifier
 								.clip(CircleShape)
@@ -532,7 +532,7 @@ fun ProfileCard() {
 
 					Column(horizontalAlignment = Alignment.CenterHorizontally) {
 						Image(
-							painter = painterResource(id = R.drawable.olivia_pfp),
+							painter = painterResource(id = R.drawable.event),
 							contentDescription = "",
 							modifier = Modifier
 								.clip(CircleShape)

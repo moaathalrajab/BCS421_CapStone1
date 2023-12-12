@@ -145,7 +145,7 @@ fun SearchViewItem(item: SearchItem) {
 			horizontalArrangement = Arrangement.spacedBy(15.dp)
 		) {
 			Image(
-				painter = painterResource(id = R.drawable.wheres_what_logo),
+				painter = painterResource(id = R.drawable.ic_launcher_foreground),
 				contentDescription = null,
 				modifier = Modifier.size(115.dp)
 			)

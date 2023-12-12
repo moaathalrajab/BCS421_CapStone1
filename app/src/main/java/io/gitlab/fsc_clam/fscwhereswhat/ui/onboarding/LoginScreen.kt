@@ -122,7 +122,7 @@ fun LoginScreen(
 		)
 		//App logo
 		Image(
-			painter = painterResource(id = R.drawable.wheres_what_logo),
+			painter = painterResource(id = R.drawable.ic_launcher_foreground),
 			contentDescription = stringResource(id = R.string.app_logo_description),
 			contentScale = ContentScale.Crop,
 			modifier = Modifier

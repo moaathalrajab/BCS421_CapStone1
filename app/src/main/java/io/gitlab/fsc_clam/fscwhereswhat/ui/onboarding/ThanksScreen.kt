@@ -75,7 +75,7 @@ fun ThanksScreen(
 		)
 		//Developer logo
 		Image(
-			painter = painterResource(id = R.drawable.team_clam_logo),
+			painter = painterResource(id = R.drawable.ic_launcher_foreground),
 			contentDescription = stringResource(id = R.string.thanks_developers_logo),
 			contentScale = ContentScale.Crop,
 			modifier = Modifier

@@ -28,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
@@ -40,11 +41,14 @@ import com.utsman.osmandcompose.OverlayManagerState
 import com.utsman.osmandcompose.ZoomButtonVisibility
 import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
+import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LAT
+import io.gitlab.fsc_clam.fscwhereswhat.common.FSC_LOG
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.providers.MapBoxXYTileSource
 import io.gitlab.fsc_clam.fscwhereswhat.ui.entity.EntityDetail
+import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 
 
@@ -65,8 +69,10 @@ fun MapContent(
 	snackbarState: SnackbarHostState,
 	user: User?,
 	query: String?,
-	latitude: Double,
-	longitude: Double,
+	cameraLatitude: Double,
+	cameraLongitude: Double,
+	userLatitude: Double,
+	userLongitude: Double,
 	pinPoints: List<Pinpoint>,
 	activeFilter: EntityType?,
 	focus: Pinpoint?,
@@ -74,11 +80,19 @@ fun MapContent(
 	setFocus: (Pinpoint?) -> Unit,
 	openSearch: () -> Unit,
 	navigateToMore: () -> Unit,
-	login: () -> Unit
+	login: () -> Unit,
+	saveCameraState: (lat: Double, log: Double) -> Unit
 ) {
 	val cameraState = rememberCameraState {
-		geoPoint = GeoPoint(latitude, longitude)
+		geoPoint = GeoPoint(cameraLatitude, cameraLongitude)
 		zoom = 18.5// optional, default is 5.0
+	}
+
+	// Save camera state
+	DisposableEffect(cameraState) {
+		onDispose {
+			saveCameraState(cameraState.geoPoint.latitude, cameraState.geoPoint.longitude)
+		}
 	}
 
 	/**
@@ -90,14 +104,14 @@ fun MapContent(
 
 	val userMarkerState = rememberMarkerState(
 		geoPoint = GeoPoint(
-			latitude,
-			longitude
+			userLatitude,
+			userLongitude
 		)
 	)
 
 	// Update user location
-	LaunchedEffect(longitude, latitude) {
-		userMarkerState.geoPoint = GeoPoint(latitude, longitude)
+	LaunchedEffect(userLongitude, userLatitude) {
+		userMarkerState.geoPoint = GeoPoint(userLatitude, userLongitude)
 	}
 
 	// define properties with remember with default value
@@ -147,7 +161,7 @@ fun MapContent(
 					}
 				)) {
 					OverlayManagerState(null)
-				}
+				},
 			) {
 				pinPoints.forEach { pinpoint ->
 					MapPinPoint(pinpoint, setFocus)
@@ -178,8 +192,8 @@ fun PreviewMapContent() {
 	MapContent(
 		user = user,
 		query = null,
-		latitude = 40.75175,
-		longitude = -73.42902,
+		userLatitude = 40.75175,
+		userLongitude = -73.42902,
 		pinPoints = listOf(
 			Pinpoint(
 				40.75175,
@@ -210,6 +224,9 @@ fun PreviewMapContent() {
 		openSearch = {},
 		navigateToMore = {},
 		login = {},
-		snackbarState = SnackbarHostState()
+		snackbarState = SnackbarHostState(),
+		cameraLatitude = FSC_LAT,
+		cameraLongitude = FSC_LOG,
+		saveCameraState = { _, _ -> }
 	)
 }

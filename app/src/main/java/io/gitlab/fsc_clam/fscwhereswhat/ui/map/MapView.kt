@@ -50,8 +50,11 @@ fun MapView(
 	val user by mapViewModel.user.collectAsState()
 	val query by mapViewModel.query.collectAsState()
 	val pinpoints by mapViewModel.pinpoints.collectAsState()
-	val latitude by mapViewModel.latitude.collectAsState()
-	val longitude by mapViewModel.longitude.collectAsState()
+	val userLatitude by mapViewModel.userLatitude.collectAsState()
+	val userLongitude by mapViewModel.userLongitude.collectAsState()
+	val cameraLatitude by mapViewModel.cameraLatitude.collectAsState()
+	val cameraLongitude by mapViewModel.cameraLongitude.collectAsState()
+
 	val activeFilter by mapViewModel.activeFilter.collectAsState()
 	val focus by mapViewModel.focus.collectAsState()
 
@@ -96,8 +99,8 @@ fun MapView(
 		snackbarState,
 		user = user,
 		query = query,
-		latitude = latitude,
-		longitude = longitude,
+		userLatitude = userLatitude,
+		userLongitude = userLongitude,
 		pinPoints = pinpoints,
 		activeFilter = activeFilter,
 		focus = focus,
@@ -108,7 +111,10 @@ fun MapView(
 		login = {
 			fromLogIn = true
 			signInLauncher.launch(gsoClient.signInIntent)
-		}
+		},
+		cameraLatitude = cameraLatitude,
+		cameraLongitude = cameraLongitude,
+		saveCameraState = mapViewModel::saveCameraState
 	)
 }
 

@@ -70,11 +70,15 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 
 	override val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)
 
-	override val longitude: StateFlow<Double> =
+	override val userLongitude: StateFlow<Double> =
 		locationRepo.longitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LOG)
 
-	override val latitude: StateFlow<Double> =
+	override val userLatitude: StateFlow<Double> =
 		locationRepo.latitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LAT)
+
+	override val cameraLongitude = MutableStateFlow(FSC_LOG)
+
+	override val cameraLatitude = MutableStateFlow(FSC_LAT)
 
 	override val buildingColor: StateFlow<Int> =
 		prefRepo.getColor(EntityType.BUILDING).stateIn(
@@ -94,15 +98,16 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 			SharingStarted.Eagerly, Color.BLACK
 		)
 
-	private val coordinates: Flow<Pair<Double, Double>> = latitude.combine(longitude){ lat, long ->
-		lat to long
-	}
+	private val coordinates: Flow<Pair<Double, Double>> =
+		userLatitude.combine(userLongitude) { lat, long ->
+			lat to long
+		}
 
 	private val osmPinpoint: StateFlow<List<Pinpoint>> = coordinates.transform { (lat, long) ->
 		emitAll(
-			osmRepo.queryNearby(lat, long).map{ entities ->
-				entities.map {entity ->
-					when(osmRepo.get(entity.id)){
+			osmRepo.queryNearby(lat, long).map { entities ->
+				entities.map { entity ->
+					when (osmRepo.get(entity.id)) {
 						is OSMEntity.Building -> {
 							Pinpoint(
 								latitude = entity.lat,
@@ -112,6 +117,7 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 								type = EntityType.BUILDING,
 							)
 						}
+
 						is OSMEntity.Node -> {
 							Pinpoint(
 								latitude = entity.lat,
@@ -140,18 +146,19 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		}
 	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-	override val pinpoints: StateFlow<List<Pinpoint>> = osmPinpoint.combine(eventPinpoint){ osm, event ->
-		osm + event
-	}.combine(activeFilter) { list, filter ->
-		if (filter == null)
-			list
-		else list.filter { it.type == filter }
-	}.combine(focus) { list, focus ->
-		// Don't display other pin points if we have a focus
-		if (focus == null)
-			list
-		else list.filter { it.id == focus.id }
-	}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+	override val pinpoints: StateFlow<List<Pinpoint>> =
+		osmPinpoint.combine(eventPinpoint) { osm, event ->
+			osm + event
+		}.combine(activeFilter) { list, filter ->
+			if (filter == null)
+				list
+			else list.filter { it.type == filter }
+		}.combine(focus) { list, focus ->
+			// Don't display other pin points if we have a focus
+			if (focus == null)
+				list
+			else list.filter { it.id == focus.id }
+		}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
 	override fun setActiveFilter(filter: EntityType?) {
 		activeFilter.value = filter
@@ -181,6 +188,13 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		e.printStackTrace()
 		viewModelScope.launch {
 			exception.emit(e)
+		}
+	}
+
+	override fun saveCameraState(latitude: Double, longitude: Double) {
+		viewModelScope.launch {
+			cameraLatitude.emit(latitude)
+			cameraLongitude.emit(latitude)
 		}
 	}
 }

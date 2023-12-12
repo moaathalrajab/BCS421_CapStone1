@@ -43,7 +43,7 @@ abstract class MoreViewModel(application: Application) : AndroidViewModel(applic
 	/**
 	 * Color of utility pinpoints
 	 */
-	abstract val utilityColor: StateFlow<Int>
+	abstract val nodeColor: StateFlow<Int>
 
 	/**
 	 * Sets color of Building pinpoints
@@ -58,7 +58,7 @@ abstract class MoreViewModel(application: Application) : AndroidViewModel(applic
 	/**
 	 * Sets color of utility pinpoints
 	 */
-	abstract fun setUtilityColor(color: Int)
+	abstract fun setNodeColor(color: Int)
 
 	/**
 	 * Clear cache on app

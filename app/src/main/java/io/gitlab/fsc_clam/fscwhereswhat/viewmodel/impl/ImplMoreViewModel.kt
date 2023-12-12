@@ -54,7 +54,7 @@ class ImplMoreViewModel(application: Application) : MoreViewModel(application) {
 		)
 	}
 
-	override val utilityColor: StateFlow<Int> by lazy {
+	override val nodeColor: StateFlow<Int> by lazy {
 		repo.getColor(EntityType.NODE).stateIn(
 			viewModelScope,
 			SharingStarted.Eagerly, Color.RED
@@ -73,7 +73,7 @@ class ImplMoreViewModel(application: Application) : MoreViewModel(application) {
 		}
 	}
 
-	override fun setUtilityColor(color: Int) {
+	override fun setNodeColor(color: Int) {
 		viewModelScope.launch {
 			repo.setColor(EntityType.NODE, color)
 		}

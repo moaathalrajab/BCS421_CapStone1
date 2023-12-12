@@ -55,9 +55,6 @@ fun MapView(
 	val latitude by mapViewModel.latitude.collectAsState()
 	val longitude by mapViewModel.longitude.collectAsState()
 	val activeFilter by mapViewModel.activeFilter.collectAsState()
-	val buildingColor by mapViewModel.buildingColor.collectAsState()
-	val eventColor by mapViewModel.eventColor.collectAsState()
-	val nodeColor by mapViewModel.nodeColor.collectAsState()
 	val focus by mapViewModel.focus.collectAsState()
 
 
@@ -112,9 +109,6 @@ fun MapView(
 			longitude = longitude,
 			pinPoints = pinpoints,
 			activeFilter = activeFilter,
-			buildingColor = buildingColor,
-			eventColor = eventColor,
-			nodeColor = nodeColor,
 			focus = focus,
 			setActiveFilter = mapViewModel::setActiveFilter,
 			setFocus = mapViewModel::setFocus,

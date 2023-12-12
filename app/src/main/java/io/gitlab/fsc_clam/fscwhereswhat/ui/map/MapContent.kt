@@ -31,8 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.utsman.osmandcompose.DefaultMapProperties
@@ -70,9 +68,6 @@ fun MapContent(
 	longitude: Double,
 	pinPoints: List<Pinpoint>,
 	activeFilter: EntityType?,
-	buildingColor: Int,
-	eventColor: Int,
-	nodeColor: Int,
 	focus: Pinpoint?,
 	setActiveFilter: (EntityType?) -> Unit,
 	setFocus: (Pinpoint?) -> Unit,
@@ -193,9 +188,6 @@ fun PreviewMapContent() {
 			)
 		),
 		activeFilter = null,
-		buildingColor = Color.Red.toArgb(),
-		eventColor = Color.Red.toArgb(),
-		nodeColor = Color.Red.toArgb(),
 		focus = null,
 		setActiveFilter = {},
 		setFocus = {},

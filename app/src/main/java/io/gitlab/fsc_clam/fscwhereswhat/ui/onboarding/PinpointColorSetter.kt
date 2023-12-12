@@ -45,7 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.gitlab.fsc_clam.fscwhereswhat.R
-import io.gitlab.fsc_clam.fscwhereswhat.ui.colorPicker
+import io.gitlab.fsc_clam.fscwhereswhat.ui.ColorPickerDialog
 
 /**
  * Composable to let users set colors for each EntityType
@@ -106,7 +106,7 @@ fun PinpointColorItem(
 	}
 	if (isDialogVisible) {
 		//Creates the dialog to let users pick colors
-		colorPicker(
+		ColorPickerDialog(
 			name, onDismissRequest = {
 				isDialogVisible = false
 			},

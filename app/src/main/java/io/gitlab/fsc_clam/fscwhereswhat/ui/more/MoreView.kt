@@ -22,18 +22,19 @@ import android.net.Uri
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -58,7 +59,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
@@ -445,16 +445,34 @@ fun OptionsUI(
 data class Author(
 	val name: String,
 	@DrawableRes
-	val image: Int
+	val image: Int,
+	val link: Uri
 )
 
 val authors = listOf(
-	Author("Rahim Akhter", R.drawable.rahim),
-	Author("Harvey Tseng", R.drawable.harvey),
-	Author("Olivia Sanfilippo", R.drawable.olivia),
-	Author("Aaron Tabuteau", R.drawable.aaron),
+	Author(
+		"Rahim Akhter",
+		R.drawable.rahim,
+		Uri.parse("https://www.linkedin.com/in/rahim-akhter-2002")
+	),
+	Author(
+		"Harvey Tseng",
+		R.drawable.harvey,
+		Uri.parse("https://www.linkedin.com/in/harvey-tseng/")
+	),
+	Author(
+		"Olivia Sanfilippo",
+		R.drawable.olivia,
+		Uri.parse("https://www.linkedin.com/in/olivia-sanfilippo/")
+	),
+	Author(
+		"Aaron Tabuteau",
+		R.drawable.aaron,
+		Uri.parse("https://www.linkedin.com/in/atabuteau/")
+	),
 )
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AuthorsCard() {
 	Column(
@@ -468,54 +486,47 @@ fun AuthorsCard() {
 			style = MaterialTheme.typography.titleMedium
 		)
 
-		Card {
-			Column(
-				modifier = Modifier
-					.padding(8.dp)
-					.fillMaxWidth(),
-				horizontalAlignment = Alignment.CenterHorizontally
-			) {
-				Row(
-					modifier = Modifier
-						.padding(top = 8.dp)
-						.fillMaxWidth(),
-					horizontalArrangement = Arrangement.SpaceEvenly,
-					verticalAlignment = Alignment.Bottom
-				) {
-					// Add Authors
-					authors.forEach { AuthorCard(it) }
-				}
-			}
+		FlowRow(
+			modifier = Modifier.fillMaxWidth(),
+			horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+			verticalArrangement = Arrangement.spacedBy(8.dp)
+		) {
+			// Add Authors
+			authors.forEach { AuthorCard(it) }
 		}
 	}
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthorCard(
 	author: Author
 ) {
 	val context = LocalContext.current
+	val intent = Intent(Intent.ACTION_VIEW, author.link)
 
-	Column(horizontalAlignment = Alignment.CenterHorizontally) {
-		Image(
-			painter = painterResource(id = author.image),
-			contentDescription = "",
-			modifier = Modifier
-				.clip(CircleShape)
-				.size(64.dp)
-				.clickable {
-					val intent = Intent(
-						Intent.ACTION_VIEW,
-						Uri.parse("https://www.linkedin.com/in/rahim-akhter-2002")
-					)
-					context.startActivity(intent)
-				}
-		)
+	Card(
+		onClick = {
+			context.startActivity(intent)
+		},
+		modifier = Modifier
+			.width(80.dp)
+	) {
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+		) {
+			Image(
+				painter = painterResource(id = author.image),
+				contentDescription = "",
+				modifier = Modifier.fillMaxWidth()
+			)
 
-		Text(
-			text = author.name,
-			style = MaterialTheme.typography.labelMedium,
-			textAlign = TextAlign.Center
-		)
+			Text(
+				text = author.name,
+				style = MaterialTheme.typography.labelMedium,
+				textAlign = TextAlign.Center,
+				modifier = Modifier.padding(4.dp)
+			)
+		}
 	}
 }

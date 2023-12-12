@@ -86,6 +86,7 @@ fun MapContent(
 	val cameraState = rememberCameraState {
 		geoPoint = GeoPoint(cameraLatitude, cameraLongitude)
 		zoom = 18.5// optional, default is 5.0
+		speed = 0
 	}
 
 	// Save camera state
@@ -99,7 +100,11 @@ fun MapContent(
 	 * Recenter location to where the user is
 	 */
 	fun onRecenter() {
-		cameraState.geoPoint = GeoPoint(latitude, longitude)
+		cameraState.animateTo(
+			GeoPoint(userLatitude, userLongitude),
+			cameraState.zoom,
+			Configuration.getInstance().animationSpeedDefault.toLong()
+		)
 	}
 
 	val userMarkerState = rememberMarkerState(

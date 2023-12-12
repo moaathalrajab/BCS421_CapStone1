@@ -86,10 +86,10 @@ class ImplOSMDataBaseDataSource(application: Application) : OSMDataBaseDataSourc
 		}.combine(flow {
 			emit(
 				dbOSMWay.getAll().filter { way ->
-					dbOSMWayTag.get(way.id, "lat").value.toDouble() > minLat &&
-							dbOSMWayTag.get(way.id, "long").value.toDouble() > minLong &&
-							dbOSMWayTag.get(way.id, "lat").value.toDouble() < maxLat &&
-							dbOSMWayTag.get(way.id, "long").value.toDouble() < maxLong
+					dbOSMWayTag.get(way.id, "lat")!!.value.toDouble() > minLat &&
+							dbOSMWayTag.get(way.id, "long")!!.value.toDouble() > minLong &&
+							dbOSMWayTag.get(way.id, "lat")!!.value.toDouble() < maxLat &&
+							dbOSMWayTag.get(way.id, "long")!!.value.toDouble() < maxLong
 				}.map { it.toModel() })
 		})
 		{ a, b ->
@@ -282,13 +282,13 @@ class ImplOSMDataBaseDataSource(application: Application) : OSMDataBaseDataSourc
 	private suspend fun DBOSMWay.toModel() =
 		OSMEntity.Building(
 			id = id,
-			lat = dbOSMWayTag.get(id, "lat").value.toDouble(),
-			long = dbOSMWayTag.get(id, "long").value.toDouble(),
-			name = dbOSMWayTag.get(id, "name").value,
-			description = dbOSMWayTag.get(id, "description").value,
-			hasFood = dbOSMWayTag.get(id, "hasFood").value.toBoolean(),
-			hasWater = dbOSMWayTag.get(id, "hasWater").value.toBoolean(),
-			hours = OpeningHours.setHours(dbOSMWayTag.get(id, "opening_hours").value)
+			lat = dbOSMWayTag.get(id, "lat")!!.value.toDouble(),
+			long = dbOSMWayTag.get(id, "long")!!.value.toDouble(),
+			name = dbOSMWayTag.get(id, "name")!!.value,
+			description = dbOSMWayTag.get(id, "description")!!.value,
+			hasFood = dbOSMWayTag.get(id, "hasFood")!!.value.toBoolean(),
+			hasWater = dbOSMWayTag.get(id, "hasWater")!!.value.toBoolean(),
+			hours = OpeningHours.setHours(dbOSMWayTag.get(id, "opening_hours")!!.value)
 		)
 
 	private suspend fun DBOSMNode.toModel() =

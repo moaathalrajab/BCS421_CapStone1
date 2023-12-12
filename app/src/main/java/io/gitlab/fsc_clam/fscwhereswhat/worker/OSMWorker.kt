@@ -115,7 +115,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 				long = element.lon!!,
 				name = element.tags.name ?: "Element ${element.id}",
 				description = "", // TODO OSM descriptions??
-				hours = OpeningHours.everyDay,
+				hours = listOf(OpeningHours.everyDay),
 				nodeType = nodeType
 			)
 		)
@@ -134,7 +134,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 					long = 0.0,
 					name = element.tags.name ?: "Building ${element.id}",
 					description = "",
-					hours = OpeningHours.everyDay,
+					hours = listOf(OpeningHours.everyDay),
 					hasWater = true,
 					hasFood = true
 				)

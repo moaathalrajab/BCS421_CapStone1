@@ -37,7 +37,7 @@ class FakeOSMRepo: OSMRepository {
 				long = -73.0,
 				name = "Example",
 				description = "Description",
-				hours = OpeningHours(true, true, true, true, true, true, true, 0, 0 ,0, 0),
+				hours = listOf(OpeningHours.everyDay),
 				nodeType = NodeType.SOS
 			)
 		)

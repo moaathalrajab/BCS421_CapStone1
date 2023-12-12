@@ -27,7 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,10 +85,13 @@ fun MapView(
 		onResult = mapViewModel::handleSignInResult
 	)
 
+	var fromLogIn by remember { mutableStateOf(false) }
+
 	// Feedback that the sign in worked
 	LaunchedEffect(user) {
-		if (user != null) {
+		if (user != null && fromLogIn) {
 			snackbarState.showSnackbar("Welcome ${user!!.name}!")
+			fromLogIn = false
 		}
 	}
 
@@ -116,6 +121,7 @@ fun MapView(
 			openSearch = openSearch,
 			navigateToMore = navigateToMore,
 			login = {
+				fromLogIn = true
 				signInLauncher.launch(gsoClient.signInIntent)
 			}
 		)

@@ -33,6 +33,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -81,15 +84,19 @@ fun LoginScreen(
 		contract = ActivityResultContracts.StartActivityForResult(),
 		onResult = viewModel::handleSignInResult
 	)
+	var fromLogIn by remember { mutableStateOf(false) }
 
 	// Feedback that the sign in worked
 	LaunchedEffect(user) {
-		if (user != null) {
+		if (user != null && fromLogIn) {
 			showSnackBar("Welcome ${user!!.name}!")
+			fromLogIn = false
 		}
 	}
 	LoginScreenContent(
 		onLogin = {
+			fromLogIn = true
+
 			signInLauncher.launch(
 				gsoClient.signInIntent
 			)

@@ -105,7 +105,7 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 
 	private val osmPinpoint: StateFlow<List<Pinpoint>> = coordinates.transform { (lat, long) ->
 		emitAll(
-			osmRepo.queryNearby(lat, long).map { entities ->
+			osmRepo.getAll().map { entities ->
 				entities.map { entity ->
 					when (entity) {
 						is OSMEntity.Building -> {

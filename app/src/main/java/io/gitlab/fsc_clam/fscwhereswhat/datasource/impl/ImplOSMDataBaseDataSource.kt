@@ -186,6 +186,12 @@ class ImplOSMDataBaseDataSource(application: Application) : OSMDataBaseDataSourc
 		}
 	}
 
+	override fun getAll(): Flow<List<OSMEntity>> =
+		dbOSMNode.getAllFlow().map { list -> list.map { it.toModel() } }
+			.combine(dbOSMWay.getAllFlow().map { list -> list.map { it.toModel() } }) { a, b ->
+				a + b
+			}
+
 	/**
 	 * Convert db to model
 	 */

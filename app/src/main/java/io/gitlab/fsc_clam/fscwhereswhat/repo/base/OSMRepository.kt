@@ -52,6 +52,9 @@ interface OSMRepository {
 	 */
 	suspend fun update(entities: List<OSMEntity>)
 
+
+	fun getAll(): Flow<List<OSMEntity>>
+
 	/**
 	 * Binding point for Implementation getter
 	 */

@@ -25,6 +25,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
 class ImplOSMRepository(application: Application) : OSMRepository {
@@ -50,8 +51,8 @@ class ImplOSMRepository(application: Application) : OSMRepository {
 		}
 	}
 
-
-
+	override fun getAll(): Flow<List<OSMEntity>> =
+		dataSource.getAll().flowOn(Dispatchers.IO)
 
 
 	companion object {

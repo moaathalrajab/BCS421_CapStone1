@@ -27,6 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import io.gitlab.fsc_clam.fscwhereswhat.ui.entity.EntityDetailView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.map.MapView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.more.MoreView
 import io.gitlab.fsc_clam.fscwhereswhat.ui.notes.NotesView
@@ -45,6 +46,7 @@ fun MainView() {
 
 	val isSearchVisible by viewModel.isSearchVisible.collectAsState()
 	val isFirstTime by viewModel.isFirstTime.collectAsState()
+	val focus by viewModel.focus.collectAsState()
 
 	FSCWheresWhatTheme {
 		MainContent(
@@ -57,6 +59,12 @@ fun MainView() {
 	if (isSearchVisible) {
 		ModalBottomSheet(onDismissRequest = viewModel::hideSearch) {
 			SearchView()
+		}
+	}
+
+	if (focus != null) {
+		ModalBottomSheet(onDismissRequest = viewModel::removeFocus) {
+			EntityDetailView()
 		}
 	}
 }

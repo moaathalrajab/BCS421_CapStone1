@@ -19,9 +19,14 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import kotlinx.coroutines.flow.StateFlow
 
 abstract class MainViewModel(application: Application) : AndroidViewModel(application) {
+	abstract val focus: StateFlow<Pinpoint?>
+
+	abstract fun removeFocus()
+
 	/**
 	 * Is this the first time the user launched the app
 	 */

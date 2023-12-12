@@ -21,10 +21,10 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.MapViewFocusRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ImplMapViewFocusRepository: MapViewFocusRepository {
-	override val focus = MutableStateFlow(null as Pinpoint?)
+class ImplMapViewFocusRepository : MapViewFocusRepository {
+	override val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)
 
-	override fun setFocus(pinpoint: Pinpoint) {
+	override fun setFocus(pinpoint: Pinpoint?) {
 		focus.value = pinpoint
 	}
 

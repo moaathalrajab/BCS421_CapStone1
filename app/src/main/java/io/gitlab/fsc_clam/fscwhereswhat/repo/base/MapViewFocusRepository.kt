@@ -35,7 +35,7 @@ interface MapViewFocusRepository {
 	 *
 	 * @param pinpoint is the pinpoint gaining focus
 	 */
-	fun setFocus(pinpoint: Pinpoint)
+	fun setFocus(pinpoint: Pinpoint?)
 
 	/**
 	 * Binding point for implementation getter

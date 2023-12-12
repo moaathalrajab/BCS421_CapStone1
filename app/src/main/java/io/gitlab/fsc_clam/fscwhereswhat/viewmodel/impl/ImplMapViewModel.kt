@@ -32,19 +32,22 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.LocationRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.MapViewFocusRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.QueryRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.UserRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplLocationRepository.Companion.get
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplMapViewFocusRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplOSMRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplPreferencesRepository.Companion.get
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplQueryRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplUserRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MapViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -60,16 +63,18 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val osmRepo = OSMRepository.get(application)
 	private val ramCentralRepo = RamCentralRepository.get(application)
 	private val locationRepo = LocationRepository.get(application)
+	private val focusRepo = MapViewFocusRepository.get()
+	private val queryRepo = QueryRepository.get()
 
 	override val user: StateFlow<User?> = userRepo.user.stateIn(
 		viewModelScope, SharingStarted.Eagerly, null
 	)
 
-	override val query: MutableStateFlow<String?> = MutableStateFlow(null)
+	override val query = queryRepo.query
 
-	override val activeFilter: MutableStateFlow<EntityType?> = MutableStateFlow(null)
+	override val activeFilter = queryRepo.activeFilter
 
-	override val focus: MutableStateFlow<Pinpoint?> = MutableStateFlow(null)
+	override val focus = focusRepo.focus
 
 	override val userLongitude: StateFlow<Double> =
 		locationRepo.longitude.stateIn(viewModelScope, SharingStarted.Eagerly, FSC_LOG)
@@ -161,11 +166,11 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
 	override fun setActiveFilter(filter: EntityType?) {
-		activeFilter.value = filter
+		queryRepo.setActiveFilter(filter)
 	}
 
 	override fun setFocus(pinpoint: Pinpoint?) {
-		focus.value = pinpoint
+		focusRepo.setFocus(pinpoint)
 	}
 
 	private val firebaseAuth = FirebaseAuth.getInstance()

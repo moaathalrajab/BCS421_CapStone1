@@ -19,7 +19,10 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Pinpoint
+import io.gitlab.fsc_clam.fscwhereswhat.repo.base.MapViewFocusRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.PreferencesRepository
+import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplMapViewFocusRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplPreferencesRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.MainViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +33,12 @@ import kotlinx.coroutines.flow.stateIn
 class ImplMainViewModel(application: Application) : MainViewModel(application) {
 
 	private val preferences = PreferencesRepository.get(application)
+	private val focusRepo = MapViewFocusRepository.get()
+	override val focus: StateFlow<Pinpoint?> = focusRepo.focus
+
+	override fun removeFocus() {
+		focusRepo.setFocus(null)
+	}
 
 	override val isFirstTime: StateFlow<Boolean> =
 		preferences.getIsFirst()

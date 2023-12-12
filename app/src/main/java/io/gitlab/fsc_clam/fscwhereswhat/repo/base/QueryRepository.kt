@@ -27,7 +27,7 @@ interface QueryRepository {
 	/**
 	 * The current query being stored in the repository
 	 */
-	val repoQuery: StateFlow<String?>
+	val query: StateFlow<String?>
 
 	/**
 	 * The current active filter on a query

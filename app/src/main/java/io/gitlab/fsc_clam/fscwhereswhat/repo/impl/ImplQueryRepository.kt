@@ -22,11 +22,11 @@ import io.gitlab.fsc_clam.fscwhereswhat.repo.base.QueryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ImplQueryRepository : QueryRepository {
-	override val repoQuery = MutableStateFlow(null as String?)
+	override val query = MutableStateFlow(null as String?)
 	override val activeFilter = MutableStateFlow(null as EntityType?)
 
 	override fun setQuery(query: String?) {
-		repoQuery.value = query
+		this.query.value = query
 	}
 
 	override fun setActiveFilter(filter: EntityType?) {

@@ -20,6 +20,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
 import com.utsman.osmandcompose.Marker
 import com.utsman.osmandcompose.OsmAndroidComposable
@@ -37,6 +38,10 @@ fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 	//the icon is chosen based on EntityType
 	val icon = AppCompatResources.getDrawable(context, pinpoint.type.drawable)
 
+	SideEffect {
+		icon?.setTint(pinpoint.color)
+	}
+
 	Marker(
 		state = rememberMarkerState(
 			geoPoint = GeoPoint(
@@ -44,7 +49,7 @@ fun MapPinPoint(pinpoint: Pinpoint, setFocus: (Pinpoint) -> Unit) {
 				pinpoint.longitude
 			)
 		),
-		icon = icon,
+		icon = icon
 	) {
 		LaunchedEffect(key1 = pinpoint) {
 			setFocus(pinpoint)

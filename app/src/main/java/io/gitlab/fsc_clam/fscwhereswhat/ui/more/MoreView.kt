@@ -320,7 +320,7 @@ fun OptionsUI(
 	setNodeColor: (Int) -> Unit,
 ) {
 	Column(
-		modifier = Modifier.padding(horizontal = 8.dp),
+		modifier = Modifier.padding(8.dp),
 		verticalArrangement = Arrangement.spacedBy(4.dp)
 	) {
 		Text(
@@ -335,43 +335,35 @@ fun OptionsUI(
 		Card(
 			modifier = Modifier
 				.fillMaxWidth()
+				.padding(bottom = 4.dp)
 		) {
-			IconToggleButton(
-				isOptionsVisible,
-				onCheckedChange = { isOptionsVisible = it },
+			Row(
 				modifier = Modifier
-					.padding(vertical = 10.dp, horizontal = 14.dp)
-					.fillMaxWidth(),
+					.fillMaxWidth()
+					.padding(8.dp),
+				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.SpaceBetween
 			) {
 				Row(
-					modifier = Modifier.fillMaxWidth(),
 					verticalAlignment = Alignment.CenterVertically,
-					horizontalArrangement = Arrangement.SpaceBetween
+					horizontalArrangement = Arrangement.Start
 				) {
-					Box(
-						modifier = Modifier.size(34.dp)
-					) {
-						// You can add content or other icon here
+					Column {
+						Text(
+							text = "Customize",
+							style = MaterialTheme.typography.titleSmall
+						)
+						Text(
+							text = "Change pinpoint colors",
+							style = MaterialTheme.typography.bodySmall
+						)
 					}
-					Row(
-						verticalAlignment = Alignment.CenterVertically,
-						horizontalArrangement = Arrangement.Start
-					) {
-						Column(
-							verticalArrangement = Arrangement.Center
-						) {
-							Text(
-								text = "Customize",
-								fontSize = 14.sp,
-								modifier = Modifier.align(Alignment.CenterHorizontally)
-							)
-							Text(
-								text = "Change pinpoint colors",
-								fontSize = 10.sp,
-								modifier = Modifier.align(Alignment.CenterHorizontally)
-							)
-						}
-					}
+				}
+
+				IconToggleButton(
+					isOptionsVisible,
+					onCheckedChange = { isOptionsVisible = it }
+				) {
 					Icon(
 						painter = if (isOptionsVisible) {
 							painterResource(id = R.drawable.down_arrow) // Use a different icon
@@ -384,16 +376,17 @@ fun OptionsUI(
 		}
 
 		AnimatedVisibility(visible = isOptionsVisible) {
-			Column {
-
+			Column(
+				verticalArrangement = Arrangement.spacedBy(8.dp)
+			) {
 				//Events
 				Card(
 					onClick = {}, modifier = Modifier
-						.padding(bottom = 8.dp)
 						.fillMaxWidth()
 				) {
 					//Lets users set colors for events
-					PinpointColorItem(name = stringResource(id = R.string.options_events_label),
+					PinpointColorItem(
+						name = stringResource(id = R.string.options_events_label),
 						img = painterResource(id = R.drawable.event),
 						imgDescription = stringResource(
 							id = R.string.explanation_event_img,
@@ -406,7 +399,6 @@ fun OptionsUI(
 				//Buildings
 				Card(
 					onClick = {}, modifier = Modifier
-						.padding(bottom = 8.dp)
 						.fillMaxWidth()
 				) {
 					//Lets users set colors for buildings
@@ -423,7 +415,6 @@ fun OptionsUI(
 				// Utilities
 				Card(
 					onClick = {}, modifier = Modifier
-						.padding(bottom = 8.dp)
 						.fillMaxWidth()
 				) {
 					//Lets users set colors for utilities

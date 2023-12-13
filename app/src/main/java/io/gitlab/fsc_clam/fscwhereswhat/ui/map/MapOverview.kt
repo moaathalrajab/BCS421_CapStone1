@@ -59,8 +59,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 
 /**
  * Creates the UI for Map Content
- * @param activeFilter is the current filter selected
- * @param setActiveFilter will change the active filter to selected filter type from viewmodel
+ * @param user is the signed in account of the user, null if not logged in
+ * @param onRecenter will recenter camera state to user lat/long
+ * @param login will handle google login
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

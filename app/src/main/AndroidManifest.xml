@@ -18,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FSCWheresWhat"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-8731866185606800~9626808073"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

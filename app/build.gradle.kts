@@ -133,4 +133,6 @@ dependencies {
 	//Accompanist
 	implementation("com.google.accompanist:accompanist-permissions:$accompanist_version")
 
+	implementation("com.google.android.gms:play-services-ads:22.6.0")
+
 }

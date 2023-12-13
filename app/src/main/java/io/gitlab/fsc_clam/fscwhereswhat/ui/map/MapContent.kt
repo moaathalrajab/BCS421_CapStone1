@@ -68,7 +68,6 @@ fun MapContent(
 	userLongitude: Double,
 	pinPoints: List<Pinpoint>,
 	activeFilter: EntityType?,
-	focus: Pinpoint?,
 	setActiveFilter: (EntityType?) -> Unit,
 	setFocus: (Pinpoint?) -> Unit,
 	openSearch: () -> Unit,
@@ -203,7 +202,6 @@ fun PreviewMapContent() {
 			)
 		),
 		activeFilter = null,
-		focus = null,
 		setActiveFilter = {},
 		setFocus = {},
 		openSearch = {},

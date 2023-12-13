@@ -18,11 +18,9 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -49,7 +47,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
@@ -67,15 +69,27 @@ fun MapOverview(
 	onRecenter: () -> Unit,
 	login: () -> Unit
 ) {
-	Box(
-		modifier = Modifier.fillMaxSize()
+	Row(
+		modifier = Modifier.fillMaxWidth(),
+		horizontalArrangement = Arrangement.SpaceBetween
 	) {
 		MapUserIcon(user, login)
 
+		AndroidView(
+			modifier = Modifier
+				.weight(.5f),
+			factory = { context ->
+				AdView(context).apply {
+					setAdSize(AdSize.BANNER)
+					adUnitId = context.getString(R.string.ad_id_banner)
+					loadAd(AdRequest.Builder().build())
+				}
+			}
+		)
 		Card(
 			modifier = Modifier
 				.padding(8.dp)
-				.align(Alignment.TopEnd),
+				.weight(.25f, false),
 			shape = CircleShape,
 			onClick = onRecenter
 		) {
@@ -93,11 +107,11 @@ fun MapOverview(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BoxScope.MapUserIcon(user: User?, login: () -> Unit) {
+fun RowScope.MapUserIcon(user: User?, login: () -> Unit) {
 	Card(
 		modifier = Modifier
 			.padding(8.dp)
-			.align(Alignment.TopStart),
+			.weight(.25f, false),
 		shape = CircleShape,
 		onClick = login
 	) {

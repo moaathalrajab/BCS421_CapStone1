@@ -18,15 +18,19 @@
 package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -67,41 +71,64 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 fun MapOverview(
 	user: User?,
 	onRecenter: () -> Unit,
-	login: () -> Unit
+	login: () -> Unit,
+	padding: PaddingValues,
+	onZoomIn: () -> Unit,
+	onZoomOut: () -> Unit
 ) {
-	Row(
-		modifier = Modifier.fillMaxWidth(),
-		horizontalArrangement = Arrangement.SpaceBetween
+	Box(
+		Modifier
+			.padding(padding)
+			.fillMaxSize()
 	) {
-		MapUserIcon(user, login)
-
-		AndroidView(
+		Row(
 			modifier = Modifier
-				.weight(.5f),
-			factory = { context ->
-				AdView(context).apply {
-					setAdSize(AdSize.BANNER)
-					adUnitId = context.getString(R.string.ad_id_banner)
-					loadAd(AdRequest.Builder().build())
-				}
-			}
-		)
-		Card(
-			modifier = Modifier
-				.padding(8.dp)
-				.weight(.25f, false),
-			shape = CircleShape,
-			onClick = onRecenter
+				.fillMaxWidth()
+				.align(Alignment.TopStart),
+			horizontalArrangement = Arrangement.SpaceBetween
 		) {
-			Icon(
-				Icons.Filled.LocationOn,
-				contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
+			MapUserIcon(user, login)
+
+			AndroidView(
 				modifier = Modifier
-					.size(50.dp)
-					.padding(8.dp)
+					.weight(.5f),
+				factory = { context ->
+					AdView(context).apply {
+						setAdSize(AdSize.BANNER)
+						adUnitId = context.getString(R.string.ad_id_banner)
+						loadAd(AdRequest.Builder().build())
+					}
+				}
 			)
+			Card(
+				modifier = Modifier
+					.padding(8.dp)
+					.weight(.25f, false),
+				shape = CircleShape,
+				onClick = onRecenter
+			) {
+				Icon(
+					Icons.Filled.LocationOn,
+					contentDescription = stringResource(id = org.osmdroid.library.R.string.my_location),
+					modifier = Modifier
+						.size(50.dp)
+						.padding(8.dp)
+				)
+			}
+
 		}
 
+		Column(
+			Modifier.align(Alignment.BottomEnd)
+		) {
+			Card(onClick = onZoomIn) {
+				Icon(Icons.Default.Add, "Zoom In")
+			}
+
+			Card(onClick = onZoomOut) {
+				Icon(painterResource(R.drawable.baseline_remove_24), "Zoom Out")
+			}
+		}
 	}
 }
 
@@ -231,7 +258,10 @@ fun PreviewMapUI() {
 		MapOverview(
 			user = null,
 			onRecenter = {},
-			login = {}
+			login = {},
+			padding = PaddingValues(16.dp),
+			onZoomIn = {},
+			onZoomOut = {}
 		)
 	}
 }

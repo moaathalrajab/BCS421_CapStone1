@@ -33,6 +33,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.OkHttpRamCentralAPI
 import io.gitlab.fsc_clam.fscwhereswhat.providers.okHttpClient
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emitAll
@@ -122,11 +123,15 @@ class ImplRamCentralRepository(
 			RamCentralAPI.OrderByDirection.ASCENDING,
 			RamCentralAPI.Status.APPROVED,
 			take,
-			token.strings.joinToString(" ")
+			if (token.strings.isNotEmpty())
+				token.strings.joinToString(" ")
+			else ""
 		)
+		delay(1000)
 
 		// Loops through the search results and ensures they are in the local database
 		for (remoteEvent in result.value) {
+			Log.d(LOG, "Processing event ${remoteEvent.id}")
 			val fullEvent = api.getEvent(remoteEvent.id) // Required for RSVP boolean
 
 			val localEvent = getEvent(remoteEvent.id)
@@ -150,6 +155,7 @@ class ImplRamCentralRepository(
 			val imageURL = URL(imageURLString)
 
 			if (localEvent != null) {
+				Log.d(LOG, "Updating local event ${remoteEvent.id}")
 				val updatedLocal = localEvent.copy(
 					name = remoteEvent.name,
 					image = imageURL,
@@ -166,6 +172,7 @@ class ImplRamCentralRepository(
 
 				updateEvent(updatedLocal)
 			} else {
+				Log.d(LOG, "Adding new event ${remoteEvent.id}")
 				addEvent(
 					Event(
 						id = remoteEvent.id,
@@ -183,6 +190,7 @@ class ImplRamCentralRepository(
 					)
 				)
 			}
+			delay(500)
 		}
 
 		emitAll(

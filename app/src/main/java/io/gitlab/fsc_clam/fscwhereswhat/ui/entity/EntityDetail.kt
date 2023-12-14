@@ -166,6 +166,7 @@ fun EntityDetailContent(
 	setReminder: (ReminderTime) -> Unit,
 	removeReminder: () -> Unit
 ) {
+	val context = LocalContext.current
 	Column(
 		modifier = Modifier
 			.fillMaxSize()
@@ -227,7 +228,12 @@ fun EntityDetailContent(
 
 				IconButton(
 					onClick = {
-						// TODO share
+						val sendIntent: Intent = Intent().apply {
+							action = Intent.ACTION_SEND
+							putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+							this.type = "text/*"
+						}
+						context.startActivity(Intent.createChooser(sendIntent, "Share"))
 					}
 				) {
 					Icon(Icons.Default.Share, null)
@@ -251,7 +257,6 @@ fun EntityDetailContent(
 
 		// RSVP button
 		if (type == EVENT && hasRSVP) {
-			val context = LocalContext.current
 			Button(
 				onClick = {
 					context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url.toString())))

@@ -352,23 +352,17 @@ fun SignOutDialog(
 		text = {
 			Text(text = stringResource(id = R.string.signout_prompt))
 		},
-		onDismissRequest = {
-			onDismissRequest()
-		},
+		onDismissRequest = onDismissRequest,
 		confirmButton = {
 			TextButton(
-				onClick = {
-					onConfirmation()
-				}
+				onClick = onConfirmation
 			) {
 				Text(text = stringResource(id = android.R.string.yes))
 			}
 		},
 		dismissButton = {
 			TextButton(
-				onClick = {
-					onDismissRequest()
-				}
+				onClick = onDismissRequest
 			) {
 				Text(text = stringResource(id = android.R.string.no))
 			}

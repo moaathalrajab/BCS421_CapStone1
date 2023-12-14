@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,7 +54,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -355,4 +355,57 @@ fun MapBottomBar(
 			MoreButton(navigateToMore)
 		}
 	}
+}
+
+/**
+ * Creates an alert dialog to ask if user wants to sign out of account
+ */
+@Composable
+fun SignOutDialog(
+	onDismissRequest: () -> Unit,
+	onConfirmation: () -> Unit,
+	title: String,
+	signOutPrompt: String
+
+) {
+	AlertDialog(
+		title = {
+			Text(text = title)
+		},
+		text = {
+			Text(text = signOutPrompt)
+		},
+		onDismissRequest = {
+			onDismissRequest()
+		},
+		confirmButton = {
+			TextButton(
+				onClick = {
+					onConfirmation()
+				}
+			) {
+				Text(text = stringResource(id = android.R.string.yes))
+			}
+		},
+		dismissButton = {
+			TextButton(
+				onClick = {
+					onDismissRequest()
+				}
+			) {
+				Text(text = stringResource(id = android.R.string.no))
+			}
+		}
+	)
+}
+
+@Preview
+@Composable
+fun PreviewSignOutDialog() {
+	SignOutDialog(
+		onConfirmation = {},
+		onDismissRequest = {},
+		title = "Title",
+		signOutPrompt = "Sign Out?",
+	)
 }

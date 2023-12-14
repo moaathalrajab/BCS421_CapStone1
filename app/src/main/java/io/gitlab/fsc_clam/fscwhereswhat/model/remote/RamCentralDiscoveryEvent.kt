@@ -34,7 +34,7 @@ data class RamCentralDiscoveryEvent(
 	val startsOn: String,
 	val endsOn: String,
 	val address: Address,
-	val rsvpSettings: RSVPSettings
+	val rsvpSettings: RSVPSettings?
 ) {
 
 	/**
@@ -42,7 +42,7 @@ data class RamCentralDiscoveryEvent(
 	 */
 	@Serializable
 	data class Address(
-		val locationId: Long,
+		val locationId: Long?,
 		val name: String,
 		val address: String?,
 		val line1: String?,
@@ -50,8 +50,8 @@ data class RamCentralDiscoveryEvent(
 		val city: String?,
 		val state: String?,
 		val zip: String?,
-		val latitude: String?,
-		val longitude: String?,
+		val latitude: Double?,
+		val longitude: Double?,
 		val onlineLocation: String?,
 		val instructions: String?,
 		val roomReservation: String,

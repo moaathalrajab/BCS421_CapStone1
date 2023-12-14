@@ -17,7 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
-import android.app.Application
+import android.content.Context
 import io.gitlab.fsc_clam.fscwhereswhat.datasource.base.OSMDataBaseDataSource
 import io.gitlab.fsc_clam.fscwhereswhat.datasource.impl.ImplOSMDataBaseDataSource.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-class ImplOSMRepository(application: Application) : OSMRepository {
+class ImplOSMRepository(application: Context) : OSMRepository {
 	private val dataSource = OSMDataBaseDataSource.get(application)
 
 	override suspend fun query(token: Token): Flow<List<OSMEntity>> {
@@ -63,7 +63,7 @@ class ImplOSMRepository(application: Application) : OSMRepository {
 		 */
 		@Synchronized
 		fun OSMRepository.Companion.get(
-			application: Application
+			application: Context
 		): OSMRepository {
 			if (repo == null) {
 				repo = ImplOSMRepository(application)

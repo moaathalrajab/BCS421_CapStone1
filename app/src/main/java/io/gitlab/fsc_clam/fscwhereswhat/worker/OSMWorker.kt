@@ -17,7 +17,6 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.worker
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
@@ -38,7 +37,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplOSMRepository.Companion.ge
  */
 class OSMWorker(appContext: Context, params: WorkerParameters) :
 	CoroutineWorker(appContext, params) {
-	private val repo = OSMRepository.get(applicationContext as Application)
+	private val repo = OSMRepository.get(applicationContext)
 
 	private val api: OpenStreetMapAPI = OkHttpOpenStreetMapAPI(okHttpClient)
 	private val entities = ArrayList<OSMEntity>()

@@ -17,7 +17,7 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.datasource.impl
 
-import android.app.Application
+import android.content.Context
 import io.gitlab.fsc_clam.fscwhereswhat.common.utils.fuzz
 import io.gitlab.fsc_clam.fscwhereswhat.database.AppDatabase
 import io.gitlab.fsc_clam.fscwhereswhat.datasource.base.OSMDataBaseDataSource
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
-class ImplOSMDataBaseDataSource(application: Application) : OSMDataBaseDataSource {
+class ImplOSMDataBaseDataSource(application: Context) : OSMDataBaseDataSource {
 	/**
 	 * Dao connections for OSM Nodes & Ways
 	 */
@@ -257,7 +257,7 @@ class ImplOSMDataBaseDataSource(application: Application) : OSMDataBaseDataSourc
 		 */
 		@Synchronized
 		fun OSMDataBaseDataSource.Companion.get(
-			application: Application
+			application: Context
 		): OSMDataBaseDataSource {
 			if (repo == null) {
 				repo = ImplOSMDataBaseDataSource(application)

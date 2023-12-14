@@ -22,6 +22,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import io.gitlab.fsc_clam.fscwhereswhat.worker.OSMWorker
+import io.gitlab.fsc_clam.fscwhereswhat.worker.RamCentralWorker
 
 class FSCWWApplication : Application() {
 	override fun onCreate() {
@@ -33,6 +34,14 @@ class FSCWWApplication : Application() {
 				"OSM",
 				ExistingWorkPolicy.KEEP,
 				OneTimeWorkRequest.Companion.from(OSMWorker::class.java)
+			)
+
+		// Start RamCentralWorker
+		WorkManager.getInstance(this)
+			.enqueueUniqueWork(
+				"RM",
+				ExistingWorkPolicy.KEEP,
+				OneTimeWorkRequest.Companion.from(RamCentralWorker::class.java)
 			)
 	}
 }

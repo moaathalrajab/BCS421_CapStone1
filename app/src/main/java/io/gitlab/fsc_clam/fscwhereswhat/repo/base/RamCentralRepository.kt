@@ -65,7 +65,14 @@ interface RamCentralRepository {
 	 *
 	 * @param take how many events to return
 	 */
-	suspend fun search(token: Token, take: Int = 10): Flow<List<Event>>
+	fun searchRemote(token: Token, take: Int = 10): Flow<List<Event>>
+
+	/**
+	 * Searches for events matching a given token
+	 *
+	 * @param take how many events to return
+	 */
+	fun search(token: Token, take: Int = 10): Flow<List<Event>>
 
 	/**
 	 * Binding point for Implementation getter

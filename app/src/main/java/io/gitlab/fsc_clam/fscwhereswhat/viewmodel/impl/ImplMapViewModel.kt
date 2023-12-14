@@ -143,8 +143,8 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		events.map { event ->
 			val osmEvent = osmRepo.get(event.locationId)
 
-			val lat: Double
-			val long: Double
+			var lat: Double
+			var long: Double
 
 			if (osmEvent == null) {
 				Log.e(LOG, "Event does not match to a building or node, mapping to FSC")
@@ -154,6 +154,9 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 				lat = osmEvent.lat
 				long = osmEvent.long
 			}
+
+			lat *= 1.00000001
+			long *= 1.00000001
 
 			Pinpoint(
 				latitude = lat,

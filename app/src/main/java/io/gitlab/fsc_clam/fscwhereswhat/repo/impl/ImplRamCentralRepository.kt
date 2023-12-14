@@ -161,7 +161,7 @@ class ImplRamCentralRepository(
 					image = imageURL,
 					description = remoteEvent.description,
 					instructions = "", // TODO Instructions
-					locationName = osm?.name ?: remoteEvent.location,
+					locationName = remoteEvent.location,
 					locationId = osm?.id ?: 0L,
 					hasRSVP = fullEvent.rsvpSettings?.shouldAllowGuests
 						?: false, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
@@ -180,7 +180,7 @@ class ImplRamCentralRepository(
 						image = imageURL,
 						description = remoteEvent.description,
 						instructions = "", // TODO Instructions
-						locationName = osm?.name ?: remoteEvent.location,
+						locationName = remoteEvent.location,
 						locationId = osm?.id ?: 0L,
 						hasRSVP = fullEvent.rsvpSettings?.shouldAllowGuests
 							?: false, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
@@ -219,8 +219,15 @@ class ImplRamCentralRepository(
 		return if (remoteEvent.latitude != null && remoteEvent.longitude != null) {
 			osmDataSource.getNear(remoteEvent.latitude, remoteEvent.longitude)
 		} else {
-			if (remoteEvent.location.contains("Greenley")) {
+			if (
+				remoteEvent.location.contains("Greenley") ||
+				remoteEvent.location.contains("SGA")
+			) {
 				osmDataSource.get(49332856)
+			} else if (remoteEvent.location.matches(pattern)) {
+				val firstWord = remoteEvent.location.substringBefore(" ")
+				osmDataSource.getLikeName(firstWord)
+					.firstOrNull()
 			} else {
 				osmDataSource.getLikeName(remoteEvent.location).firstOrNull()
 			}
@@ -229,6 +236,7 @@ class ImplRamCentralRepository(
 	}
 
 	companion object {
+		val pattern = Regex("^\\w* \\w* [A-Z]?\\d{3}\$")
 		private const val LOG = "ImplRamCentralRepository"
 		private const val eventBaseURL = "https://farmingdale.campuslabs.com/engage/event/"
 		private const val imageBaseURL = "https://farmingdale.campuslabs.com/engage/image/"

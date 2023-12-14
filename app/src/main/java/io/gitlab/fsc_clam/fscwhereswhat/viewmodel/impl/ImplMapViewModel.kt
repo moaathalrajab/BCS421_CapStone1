@@ -19,6 +19,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
 import android.app.Application
 import android.graphics.Color
+import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -141,9 +142,22 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 	private val eventPinpoint: StateFlow<List<Pinpoint>> = ramCentralRepo.getAll().map { events ->
 		events.map { event ->
 			val osmEvent = osmRepo.get(event.locationId)
+
+			val lat: Double
+			val long: Double
+
+			if (osmEvent == null) {
+				Log.e(LOG, "Event does not match to a building or node, mapping to FSC")
+				lat = FSC_LAT
+				long = FSC_LOG
+			} else {
+				lat = osmEvent.lat
+				long = osmEvent.long
+			}
+
 			Pinpoint(
-				latitude = osmEvent?.lat ?: FSC_LAT,
-				longitude = osmEvent?.long ?: FSC_LOG,
+				latitude = lat,
+				longitude = long,
 				color = eventColor.value,
 				id = event.id,
 				type = EntityType.EVENT
@@ -198,6 +212,10 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		viewModelScope.launch {
 			exception.emit(e)
 		}
+	}
+
+	companion object {
+		private const val LOG = "ImplMapViewModel"
 	}
 
 	init {

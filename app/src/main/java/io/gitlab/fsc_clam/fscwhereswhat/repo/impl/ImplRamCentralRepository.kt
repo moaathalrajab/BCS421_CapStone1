@@ -18,6 +18,7 @@
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
 import android.content.Context
+import android.util.Log
 import io.gitlab.fsc_clam.fscwhereswhat.database.AppDatabase
 import io.gitlab.fsc_clam.fscwhereswhat.datasource.base.OSMDataBaseDataSource
 import io.gitlab.fsc_clam.fscwhereswhat.datasource.impl.ImplOSMDataBaseDataSource.Companion.get
@@ -116,7 +117,7 @@ class ImplRamCentralRepository(
 
 		// Perform a search
 		val result = api.search(
-			RamCentralAPI.dateTimeFormat.format(Date()),
+			dateTimeFormat.format(Date()),
 			RamCentralAPI.OrderByField.ENDS_ON,
 			RamCentralAPI.OrderByDirection.ASCENDING,
 			RamCentralAPI.Status.APPROVED,
@@ -125,25 +126,42 @@ class ImplRamCentralRepository(
 		)
 
 		// Loops through the search results and ensures they are in the local database
-		result.value.forEach { remoteEvent ->
+		for (remoteEvent in result.value) {
 			val fullEvent = api.getEvent(remoteEvent.id) // Required for RSVP boolean
 
 			val localEvent = getEvent(remoteEvent.id)
 
 			val osm = findOSM(remoteEvent) // Query for OSM
 
+			val startsOn = dateTimeFormat.parse(remoteEvent.startsOn)?.time
+			val endsOn = dateTimeFormat.parse(remoteEvent.endsOn)?.time
+
+			if (startsOn == null || endsOn == null) {
+				Log.e(
+					LOG,
+					"${remoteEvent.id} has an invalid start / end ${remoteEvent.startsOn} / ${remoteEvent.endsOn}"
+				)
+				continue
+			}
+
+			val imageURLString =
+				imageBaseURL + (remoteEvent.imagePath ?: remoteEvent.organizationProfilePicture)
+
+			val imageURL = URL(imageURLString)
+
 			if (localEvent != null) {
 				val updatedLocal = localEvent.copy(
 					name = remoteEvent.name,
-					image = URL(remoteEvent.imagePath ?: remoteEvent.organizationProfilePicture),
+					image = imageURL,
 					description = remoteEvent.description,
 					instructions = "", // TODO Instructions
-					locationName = osm?.name ?: remoteEvent.name,
+					locationName = osm?.name ?: remoteEvent.location,
 					locationId = osm?.id ?: 0L,
-					hasRSVP = fullEvent.rsvpSettings?.shouldAllowGuests?:false, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
+					hasRSVP = fullEvent.rsvpSettings?.shouldAllowGuests
+						?: false, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
 					url = URL(eventBaseURL + remoteEvent.id),
-					startsOn = dateTimeFormat.parse(remoteEvent.startsOn).time,
-					endsOn = dateTimeFormat.parse(remoteEvent.endsOn).time
+					startsOn = startsOn,
+					endsOn = endsOn
 				)
 
 				updateEvent(updatedLocal)
@@ -152,17 +170,16 @@ class ImplRamCentralRepository(
 					Event(
 						id = remoteEvent.id,
 						name = remoteEvent.name,
-						image = URL("https://farmingdale.campuslabs.com/engage/image/" +
-								(remoteEvent.imagePath ?: remoteEvent.organizationProfilePicture)
-						),
+						image = imageURL,
 						description = remoteEvent.description,
 						instructions = "", // TODO Instructions
-						locationName = osm?.name ?: remoteEvent.name,
+						locationName = osm?.name ?: remoteEvent.location,
 						locationId = osm?.id ?: 0L,
-						hasRSVP = fullEvent.rsvpSettings?.shouldAllowGuests?:false, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
+						hasRSVP = fullEvent.rsvpSettings?.shouldAllowGuests
+							?: false, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
 						url = URL(eventBaseURL + remoteEvent.id),
-						startsOn = dateTimeFormat.parse(remoteEvent.startsOn).time,
-						endsOn = dateTimeFormat.parse(remoteEvent.endsOn).time
+						startsOn = startsOn,
+						endsOn = endsOn
 					)
 				)
 			}
@@ -189,17 +206,19 @@ class ImplRamCentralRepository(
 		return if (remoteEvent.latitude != null && remoteEvent.longitude != null) {
 			osmDataSource.getNear(remoteEvent.latitude, remoteEvent.longitude)
 		} else {
-			if (remoteEvent.name == "Student Government Association’s: Snack, Study and Chill")
-			{
-				osmDataSource.getLikeName("Delores Quintyne Hall")
+			if (remoteEvent.location.contains("Greenley")) {
+				osmDataSource.get(49332856)
+			} else {
+				osmDataSource.getLikeName(remoteEvent.location).firstOrNull()
 			}
 
-			osmDataSource.getLikeName(remoteEvent.location).firstOrNull()
 		}
 	}
 
 	companion object {
+		private const val LOG = "ImplRamCentralRepository"
 		private const val eventBaseURL = "https://farmingdale.campuslabs.com/engage/event/"
+		private const val imageBaseURL = "https://farmingdale.campuslabs.com/engage/image/"
 		private var repo: ImplRamCentralRepository? = null
 
 		@Synchronized

@@ -24,6 +24,7 @@ import androidx.work.WorkerParameters
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlin.time.Duration.Companion.days
@@ -34,7 +35,7 @@ class RamCentralWorker(appContext: Context, params: WorkerParameters) :
 
 	override suspend fun doWork(): Result {
 		Log.i(LOG, "Starting!")
-		repo.search(Token(emptyList()), 100).take(2).collect { }
+		repo.searchRemote(Token(emptyList()), 100).take(2).collect()
 
 		/**
 		 * How many days since UTC

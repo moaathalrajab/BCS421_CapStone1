@@ -113,7 +113,7 @@ class ImplRamCentralRepository(
 		}
 	}
 
-	override suspend fun search(token: Token, take: Int): Flow<List<Event>> = flow {
+	override fun searchRemote(token: Token, take: Int): Flow<List<Event>> = flow {
 		emit(emptyList()) // start empty
 
 		// Perform a search
@@ -198,7 +198,9 @@ class ImplRamCentralRepository(
 				result.value.map { it.id }
 			).map { list -> list.map { it.toModel() } } // Convert to model flow
 		)
-	}.combine(
+	}.flowOn(Dispatchers.IO)
+
+	private fun getAllMatching(token: Token) =
 		database.getAll().map { list ->
 			list.filter { event ->
 				token.strings.any {
@@ -206,9 +208,12 @@ class ImplRamCentralRepository(
 				}
 			}
 		}.map { list -> list.map { it.toModel() } } // Convert to model flow
-	) { a, b -> a + b }
-		.map { it.distinctBy { list -> list.id } } // Ensure no duplicates
-		.flowOn(Dispatchers.IO)
+
+	override fun search(token: Token, take: Int): Flow<List<Event>> =
+		searchRemote(token, take)
+			.combine(getAllMatching(token)) { a, b -> a + b }
+			.map { it.distinctBy { list -> list.id } } // Ensure no duplicates
+			.flowOn(Dispatchers.IO)
 
 	private suspend fun findOSM(remoteEvent: RamCentralDiscoveryEventSearchResult.Event): OSMEntity? {
 		return if (remoteEvent.latitude != null && remoteEvent.longitude != null) {

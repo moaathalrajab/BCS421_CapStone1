@@ -155,8 +155,6 @@ fun RowScope.MapUserIcon(user: User?, login: () -> Unit, signOut: () -> Unit) {
 				signOut()
 				showSignOutDialog = false
 			},
-			title = stringResource(id = R.string.signout_dialog),
-			signOutPrompt = stringResource(id = R.string.signout_prompt)
 		)
 
 }
@@ -346,16 +344,13 @@ fun MapBottomBar(
 fun SignOutDialog(
 	onDismissRequest: () -> Unit,
 	onConfirmation: () -> Unit,
-	title: String,
-	signOutPrompt: String
-
 ) {
 	AlertDialog(
 		title = {
-			Text(text = title)
+			Text(text = stringResource(id = R.string.signout_dialog))
 		},
 		text = {
-			Text(text = signOutPrompt)
+			Text(text = stringResource(id = R.string.signout_prompt))
 		},
 		onDismissRequest = {
 			onDismissRequest()
@@ -387,7 +382,5 @@ fun PreviewSignOutDialog() {
 	SignOutDialog(
 		onConfirmation = {},
 		onDismissRequest = {},
-		title = "Title",
-		signOutPrompt = "Sign Out?",
 	)
 }

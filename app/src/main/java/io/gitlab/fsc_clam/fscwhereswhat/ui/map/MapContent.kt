@@ -90,6 +90,16 @@ fun MapContent(
 		)
 	}
 
+	LaunchedEffect(focus) {
+		if (focus != null) {
+			cameraState.animateTo(
+				GeoPoint(focus.latitude, focus.longitude),
+				cameraState.zoom,
+				Configuration.getInstance().animationSpeedShort.toLong()
+			)
+		}
+	}
+
 	val userMarkerState = rememberMarkerState(
 		geoPoint = GeoPoint(
 			userLatitude,

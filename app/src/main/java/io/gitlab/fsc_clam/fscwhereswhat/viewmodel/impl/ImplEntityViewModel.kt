@@ -18,6 +18,7 @@
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
@@ -43,9 +44,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
@@ -58,22 +60,29 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 	private val reminderRepo = ReminderRepository.get(application)
 
 	val focus = focusRepo.focus
-		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-	private val _note = focus.filterNotNull().transform { pin ->
-		emitAll(notesRepo.getNote(pin.id))
+	private val _note = focus.transformLatest { pin ->
+		Log.d("ImplEntityViewModel", "Rebuilding note")
+		if (pin != null) {
+			val noteFlow = notesRepo.getNote(pin.id)
+
+			// If missing note, add a note
+			if (noteFlow.first() == null) {
+				notesRepo.createNote(Note("", focus.value!!.id, focus.value!!.type))
+			}
+
+			emitAll(noteFlow)
+		}
 	}.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
 	override val note: StateFlow<String?> = _note.map { it?.comment }
 		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
 	override suspend fun setNote(newNote: String) {
+		Log.d("VM", "setNote")
 		withContext(viewModelScope.coroutineContext) {
 			val note = _note.value?.copy(comment = newNote)
-
-			if (note == null)
-				notesRepo.createNote(Note(newNote, focus.value!!.id, focus.value!!.type))
-			else {
+			if (note != null) {
 				notesRepo.updateNote(note)
 			}
 		}
@@ -87,10 +96,10 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 		TODO("Not yet implemented")
 	}
 
-	private val reminder = focus.filterNotNull().transform { pin ->
-		if (pin.type != EntityType.EVENT) {
+	private val reminder = focus.transformLatest { pin ->
+		if (pin?.type != EntityType.EVENT) {
 			emit(null)
-			return@transform
+			return@transformLatest
 		}
 
 		emitAll(reminderRepo.getReminder(pin.id))
@@ -103,7 +112,7 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 		TODO("Not yet implemented")
 	}
 
-	override val type = focus.filterNotNull().map { it.type }
+	override val type = focus.map { it?.type }
 		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 	override val nodeType: StateFlow<NodeType?>
 		get() = TODO("Not yet implemented")

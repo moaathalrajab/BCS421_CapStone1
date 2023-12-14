@@ -92,5 +92,7 @@ abstract class MapViewModel(application: Application) : AndroidViewModel(applica
 
 	abstract fun handleSignInResult(result: ActivityResult)
 
+	abstract fun signOut()
+
 	abstract val exception: MutableSharedFlow<Throwable>
 }

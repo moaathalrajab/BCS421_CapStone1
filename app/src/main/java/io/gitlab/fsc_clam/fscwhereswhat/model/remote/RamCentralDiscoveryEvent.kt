@@ -34,7 +34,7 @@ data class RamCentralDiscoveryEvent(
 	val startsOn: String,
 	val endsOn: String,
 	val address: Address,
-	val rsvpSettings: RSVPSettings
+	val rsvpSettings: RSVPSettings?
 ) {
 
 	/**

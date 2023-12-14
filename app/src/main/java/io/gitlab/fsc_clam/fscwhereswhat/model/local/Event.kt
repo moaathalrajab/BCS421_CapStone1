@@ -31,6 +31,8 @@ import java.net.URL
  * @param locationId mapping betweeen Event and OSM Building
  * @param hasRSVP if event has RSVP (yes/no)
  * @param url link to RamCentral
+ * @param startsOn is the date the event begins
+ * @param endsOn is the date the event ends
  */
 data class Event(
 	val id: Long,
@@ -41,5 +43,7 @@ data class Event(
 	val locationName: String,
 	val locationId: Long,
 	val hasRSVP: Boolean,
-	val url: URL
+	val url: URL,
+	val startsOn: Long,
+	val endsOn: Long
 )

@@ -17,15 +17,17 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.repo.impl
 
-import android.app.Application
+import android.content.Context
 import io.gitlab.fsc_clam.fscwhereswhat.database.AppDatabase
 import io.gitlab.fsc_clam.fscwhereswhat.datasource.base.OSMDataBaseDataSource
+import io.gitlab.fsc_clam.fscwhereswhat.datasource.impl.ImplOSMDataBaseDataSource.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.model.database.DBEvent
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Event
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Token
 import io.gitlab.fsc_clam.fscwhereswhat.model.remote.RamCentralDiscoveryEventSearchResult
 import io.gitlab.fsc_clam.fscwhereswhat.providers.base.RamCentralAPI
+import io.gitlab.fsc_clam.fscwhereswhat.providers.base.RamCentralAPI.Companion.dateTimeFormat
 import io.gitlab.fsc_clam.fscwhereswhat.providers.impl.OkHttpRamCentralAPI
 import io.gitlab.fsc_clam.fscwhereswhat.providers.okHttpClient
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.RamCentralRepository
@@ -41,14 +43,14 @@ import java.net.URL
 import java.util.Date
 
 class ImplRamCentralRepository(
-	application: Application
+	context: Context
 ) : RamCentralRepository {
 	private val api: RamCentralAPI = OkHttpRamCentralAPI(okHttpClient)
 
-	private val database = AppDatabase.get(application).eventDao
+	private val database = AppDatabase.get(context).eventDao
 
 	// TODO implementation bind
-	private lateinit var osmDataSource: OSMDataBaseDataSource
+	private val osmDataSource = OSMDataBaseDataSource.get(context)
 
 	private fun Event.toDB(): DBEvent =
 		DBEvent(
@@ -60,7 +62,9 @@ class ImplRamCentralRepository(
 			locationName = locationName,
 			locationId = locationId,
 			hasRSVP = hasRSVP,
-			url = url.toString()
+			url = url.toString(),
+			startsOn = startsOn,
+			endsOn = endsOn,
 		)
 
 	private fun DBEvent.toModel(): Event =
@@ -73,7 +77,10 @@ class ImplRamCentralRepository(
 			locationName = locationName,
 			locationId = locationId,
 			hasRSVP = hasRSVP,
-			url = URL(url)
+			url = URL(url),
+			startsOn = startsOn,
+			endsOn = endsOn
+
 		)
 
 	override fun getAll(): Flow<List<Event>> =
@@ -133,8 +140,10 @@ class ImplRamCentralRepository(
 					instructions = "", // TODO Instructions
 					locationName = osm?.name ?: remoteEvent.name,
 					locationId = osm?.id ?: 0L,
-					hasRSVP = fullEvent.rsvpSettings.shouldAllowGuests, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
-					url = URL(eventBaseURL + remoteEvent.id)
+					hasRSVP = fullEvent.rsvpSettings?.shouldAllowGuests?:false, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
+					url = URL(eventBaseURL + remoteEvent.id),
+					startsOn = dateTimeFormat.parse(remoteEvent.startsOn).time,
+					endsOn = dateTimeFormat.parse(remoteEvent.endsOn).time
 				)
 
 				updateEvent(updatedLocal)
@@ -143,15 +152,17 @@ class ImplRamCentralRepository(
 					Event(
 						id = remoteEvent.id,
 						name = remoteEvent.name,
-						image = URL(
-							remoteEvent.imagePath ?: remoteEvent.organizationProfilePicture
+						image = URL("https://farmingdale.campuslabs.com/engage/image/" +
+								(remoteEvent.imagePath ?: remoteEvent.organizationProfilePicture)
 						),
 						description = remoteEvent.description,
 						instructions = "", // TODO Instructions
 						locationName = osm?.name ?: remoteEvent.name,
 						locationId = osm?.id ?: 0L,
-						hasRSVP = fullEvent.rsvpSettings.shouldAllowGuests, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
-						url = URL(eventBaseURL + remoteEvent.id)
+						hasRSVP = fullEvent.rsvpSettings?.shouldAllowGuests?:false, // TODO verify if this is right? Since there doesn't seem to be a field specifically for rsvp??
+						url = URL(eventBaseURL + remoteEvent.id),
+						startsOn = dateTimeFormat.parse(remoteEvent.startsOn).time,
+						endsOn = dateTimeFormat.parse(remoteEvent.endsOn).time
 					)
 				)
 			}
@@ -178,7 +189,11 @@ class ImplRamCentralRepository(
 		return if (remoteEvent.latitude != null && remoteEvent.longitude != null) {
 			osmDataSource.getNear(remoteEvent.latitude, remoteEvent.longitude)
 		} else {
-			// TODO properly parse the location string
+			if (remoteEvent.name == "Student Government Association’s: Snack, Study and Chill")
+			{
+				osmDataSource.getLikeName("Delores Quintyne Hall")
+			}
+
 			osmDataSource.getLikeName(remoteEvent.location).firstOrNull()
 		}
 	}
@@ -189,10 +204,10 @@ class ImplRamCentralRepository(
 
 		@Synchronized
 		fun RamCentralRepository.Companion.get(
-			application: Application
+			context: Context
 		): RamCentralRepository {
 			if (repo == null) {
-				repo = ImplRamCentralRepository(application)
+				repo = ImplRamCentralRepository(context)
 			}
 
 			return repo!!

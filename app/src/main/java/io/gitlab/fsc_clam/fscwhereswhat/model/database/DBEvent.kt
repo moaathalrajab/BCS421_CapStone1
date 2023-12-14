@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.model.database
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * This is a RamCentral event
@@ -41,5 +42,7 @@ data class DBEvent(
 	val locationName: String,
 	val locationId: Long,
 	val hasRSVP: Boolean,
-	val url: String
+	val url: String,
+	val startsOn: Long,
+	val endsOn: Long
 )

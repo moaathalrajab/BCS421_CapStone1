@@ -19,6 +19,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.entity
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -48,6 +49,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType.EVENT
@@ -108,9 +110,24 @@ fun EntityDetailContent(
 			horizontalArrangement = Arrangement.SpaceBetween,
 			verticalAlignment = Alignment.CenterVertically
 		) {
-			Text(name, style = MaterialTheme.typography.titleLarge)
+			Row(verticalAlignment = Alignment.CenterVertically) {
+				when (image) {
+					is Image.Asset -> {
+						AsyncImage(
+							model = image.path,
+							"Icon"
+						)
+					}
 
-			Row {
+					is Image.Drawable -> {
+						Image(painterResource(image.drawable), "Icon")
+					}
+				}
+
+				Text(name, style = MaterialTheme.typography.titleLarge)
+			}
+
+			Row(verticalAlignment = Alignment.CenterVertically) {
 				if (type == EVENT) {
 					IconButton(
 						onClick = {

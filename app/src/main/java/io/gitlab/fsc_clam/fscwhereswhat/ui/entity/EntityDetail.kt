@@ -55,10 +55,13 @@ import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType.EVENT
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.EntityDetailViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplEntityViewModel
 import kotlinx.coroutines.launch
+import java.net.URL
 
 @Composable
 fun EntityDetailView() {
@@ -80,18 +83,23 @@ fun EntityDetailView() {
 
 	if (type != null) {
 		EntityDetailContent(
-			name,
-			type!!,
-			hasRSVP,
-			url.toString(),
-			oh,
-			note,
-			image,
+			name = name,
+			notes = note,
+			url = url,
+			image = image,
+			oh = oh,
+			description = description,
+			type = type!!,
+			nodeType = nodeType,
+			instructions = instructions,
+			hasRSVP = hasRSVP,
+			hasReminder = hasReminder,
+			reminder = reminder,
 			updateNote = {
 				scope.launch {
 					viewModel.setNote(it)
 				}
-			},
+			}
 		)
 	}
 }
@@ -105,14 +113,19 @@ fun EntityDetailContent(
 	// Event
 	hasRSVP: Boolean,
 
-	url: String?,
+	url: URL?,
 
 	// OSM
 	oh: List<OpeningHours>,
 
 	notes: String?,
 	image: Image,
-	updateNote: (String) -> Unit
+	updateNote: (String) -> Unit,
+	description: String?,
+	nodeType: NodeType?,
+	instructions: String?,
+	hasReminder: Boolean,
+	reminder: ReminderTime?
 ) {
 	Column(
 		modifier = Modifier
@@ -246,10 +259,16 @@ fun PreviewEntityDetail() {
 			name = "Test",
 			type = EVENT,
 			hasRSVP = true,
-			url = "google.com",
+			url = URL("https://google.com"),
 			oh = listOf(OpeningHours.everyDay),
 			notes = null,
-			image = Image.Drawable(R.drawable.baseline_error_24)
-		) {}
+			image = Image.Drawable(R.drawable.baseline_error_24),
+			{},
+			"",
+			null,
+			"",
+			false,
+			ReminderTime.HALF_HOUR_BEFORE
+		)
 	}
 }

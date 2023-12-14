@@ -20,8 +20,6 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -163,16 +161,9 @@ fun MapContent(
 				MapPinPoint(pinpoint, setFocus)
 			}
 
-			//Creates the Map UI after map creation
-			MapOverview(
-				user = user,
-				onRecenter = ::onRecenter,
-				login = login,
-				signOut = signout
-			)
-
 			MapUserMarker(userMarkerState)
 		}
+
 
 		//Creates the Map UI after map creation
 		MapOverview(
@@ -185,7 +176,8 @@ fun MapContent(
 			},
 			onZoomOut = {
 				cameraState.zoomOut()
-			}
+			},
+			signOut = signout
 		)
 	}
 }

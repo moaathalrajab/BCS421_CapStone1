@@ -79,7 +79,7 @@ fun MapOverview(
 	user: User?,
 	onRecenter: () -> Unit,
 	login: () -> Unit,
-	signOut: () -> Unit
+	signOut: () -> Unit,
 	padding: PaddingValues,
 	onZoomIn: () -> Unit,
 	onZoomOut: () -> Unit
@@ -89,15 +89,13 @@ fun MapOverview(
 			.padding(padding)
 			.fillMaxSize()
 	) {
-		MapUserIcon(user, login, signOut)
-
 		Row(
 			modifier = Modifier
 				.fillMaxWidth()
 				.align(Alignment.TopStart),
 			horizontalArrangement = Arrangement.SpaceBetween
 		) {
-			MapUserIcon(user, login)
+			MapUserIcon(user, login, signOut)
 
 			AndroidView(
 				modifier = Modifier
@@ -284,13 +282,10 @@ fun PreviewMapUI() {
 			user = null,
 			onRecenter = {},
 			login = {},
-<<<<<<< app/src/main/java/io/gitlab/fsc_clam/fscwhereswhat/ui/map/MapOverview.kt
-			signOut = {}
-=======
+			signOut = {},
 			padding = PaddingValues(16.dp),
 			onZoomIn = {},
 			onZoomOut = {}
->>>>>>> app/src/main/java/io/gitlab/fsc_clam/fscwhereswhat/ui/map/MapOverview.kt
 		)
 	}
 }

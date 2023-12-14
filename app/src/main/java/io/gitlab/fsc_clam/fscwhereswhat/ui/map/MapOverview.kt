@@ -319,7 +319,8 @@ fun FilterButton(
 		leadingIcon = {
 			Icon(
 				painter = painterResource(id = img.drawable),
-				contentDescription = filter.name
+				contentDescription = filter.name,
+				modifier = Modifier.size(25.dp)
 			)
 		}
 	)

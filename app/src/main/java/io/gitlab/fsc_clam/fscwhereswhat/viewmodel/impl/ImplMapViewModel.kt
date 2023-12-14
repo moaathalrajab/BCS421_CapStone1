@@ -189,6 +189,10 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 		).addOnFailureListener(::sendException)
 	}
 
+	override fun signOut() {
+		firebaseAuth.signOut()
+	}
+
 	private fun sendException(e: Exception) {
 		e.printStackTrace()
 		viewModelScope.launch {

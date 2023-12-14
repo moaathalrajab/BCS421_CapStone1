@@ -22,8 +22,6 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,8 +29,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -62,6 +58,28 @@ import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.EntityDetailViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplEntityViewModel
 import kotlinx.coroutines.launch
 import java.net.URL
+
+@Preview
+@Composable
+fun PreviewEntityDetail() {
+	Surface {
+		EntityDetailContent(
+			name = "Test",
+			type = EVENT,
+			hasRSVP = true,
+			url = URL("https://google.com"),
+			oh = listOf(OpeningHours.everyDay),
+			notes = null,
+			image = Image.Drawable(R.drawable.baseline_error_24),
+			{},
+			"",
+			null,
+			"",
+			false,
+			ReminderTime.HALF_HOUR_BEFORE
+		)
+	}
+}
 
 @Composable
 fun EntityDetailView() {
@@ -203,72 +221,6 @@ fun EntityDetailContent(
 			label = {
 				Text("Notes")
 			},
-		)
-	}
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun OpeningHoursChart(
-	ohs: List<OpeningHours>
-) {
-	Card {
-		Column(
-			verticalArrangement = Arrangement.spacedBy(4.dp),
-			modifier = Modifier.padding(8.dp)
-		) {
-			Text(
-				"Opening Hours",
-				Modifier.fillMaxWidth(),
-				style = MaterialTheme.typography.titleMedium
-			)
-
-			ohs.forEach { oh ->
-				Column(Modifier.fillMaxWidth()) {
-					Text("Open ${oh.startHour}:${oh.startMinute} till ${oh.endHour}:${oh.endMinute} on...")
-
-					FlowRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-						if (oh.sunday)
-							Text("Sunday")
-						if (oh.monday)
-							Text("Monday")
-						if (oh.tuesday)
-							Text("Tuesday")
-						if (oh.wednesday)
-							Text("Wednesday")
-						if (oh.thursday)
-							Text("Thursday")
-						if (oh.friday)
-							Text("Friday")
-						if (oh.saturday)
-							Text("Saturday")
-					}
-				}
-
-				Divider()
-			}
-		}
-	}
-}
-
-@Preview
-@Composable
-fun PreviewEntityDetail() {
-	Surface {
-		EntityDetailContent(
-			name = "Test",
-			type = EVENT,
-			hasRSVP = true,
-			url = URL("https://google.com"),
-			oh = listOf(OpeningHours.everyDay),
-			notes = null,
-			image = Image.Drawable(R.drawable.baseline_error_24),
-			{},
-			"",
-			null,
-			"",
-			false,
-			ReminderTime.HALF_HOUR_BEFORE
 		)
 	}
 }

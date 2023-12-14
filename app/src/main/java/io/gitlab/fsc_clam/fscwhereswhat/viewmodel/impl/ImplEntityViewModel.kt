@@ -29,6 +29,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Reminder
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.MapViewFocusRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.NoteRepository
@@ -93,11 +94,15 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 	}
 
 	override fun deleteReminder() {
-		TODO("Not yet implemented")
+		viewModelScope.launch {
+			val reminder = reminder.value
+
+			if (reminder != null)
+				reminderRepo.deleteReminder(reminder)
+		}
 	}
 
 	override fun deleteNote() {
-		TODO("Not yet implemented")
 	}
 
 	@OptIn(ExperimentalCoroutinesApi::class)
@@ -114,11 +119,18 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
 	override fun setReminderTime(time: ReminderTime) {
-		TODO("Not yet implemented")
+		viewModelScope.launch {
+			if (reminder.value == null) {
+				reminderRepo.createReminder(Reminder(focus.value!!.id, time))
+			} else {
+				reminderRepo.updateReminder(Reminder(focus.value!!.id, time))
+			}
+		}
 	}
 
 	override val type = focus.map { it?.type }
 		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
 	override val nodeType = MutableStateFlow<NodeType?>(null)
 
 	override val instructions = MutableStateFlow<String?>(null)

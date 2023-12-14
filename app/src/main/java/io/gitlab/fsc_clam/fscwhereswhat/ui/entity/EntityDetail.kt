@@ -19,6 +19,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.entity
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
@@ -130,6 +132,8 @@ fun EntityDetailView() {
 			setReminder = viewModel::setReminderTime,
 			removeReminder = viewModel::deleteReminder
 		)
+	} else {
+		Log.d("Compose", "No type")
 	}
 }
 
@@ -178,12 +182,16 @@ fun EntityDetailContent(
 					is Image.Asset -> {
 						AsyncImage(
 							model = image.path,
-							"Icon"
+							"Icon",
+							modifier = Modifier.size(64.dp)
 						)
 					}
 
 					is Image.Drawable -> {
-						Image(painterResource(image.drawable), "Icon")
+						Image(
+							painterResource(image.drawable), "Icon",
+							modifier = Modifier.size(64.dp)
+						)
 					}
 				}
 
@@ -206,8 +214,14 @@ fun EntityDetailContent(
 						onDismiss = {
 							isDropDownVisible = false
 						},
-						onDelete = removeReminder,
-						onUpdate = setReminder
+						onDelete = {
+							removeReminder()
+							isDropDownVisible = false
+						},
+						onUpdate = {
+							setReminder(it)
+							isDropDownVisible = false
+						}
 					)
 				}
 
@@ -283,7 +297,7 @@ fun ReminderEdit(
 	DropdownMenu(showDropDown, onDismiss) {
 		DropdownMenuItem(
 			text = {
-				Text("At Start", color = Color.Red)
+				Text("At Start")
 			},
 			onClick = {
 				onUpdate(ReminderTime.START)
@@ -291,7 +305,7 @@ fun ReminderEdit(
 		)
 		DropdownMenuItem(
 			text = {
-				Text("Half an hour before", color = Color.Red)
+				Text("Half an hour before")
 			},
 			onClick = {
 				onUpdate(ReminderTime.HALF_HOUR_BEFORE)
@@ -299,7 +313,7 @@ fun ReminderEdit(
 		)
 		DropdownMenuItem(
 			text = {
-				Text("Two Hours Before", color = Color.Red)
+				Text("Two Hours Before")
 			},
 			onClick = {
 				onUpdate(ReminderTime.TWO_HOUR_BEFORE)
@@ -307,7 +321,7 @@ fun ReminderEdit(
 		)
 		DropdownMenuItem(
 			text = {
-				Text("An hour before", color = Color.Red)
+				Text("An hour before")
 			},
 			onClick = {
 				onUpdate(ReminderTime.TWO_HOUR_BEFORE)

@@ -104,7 +104,8 @@ fun MapView(
 		login = {
 			fromLogIn = true
 			signInLauncher.launch(gsoClient.signInIntent)
-		}
+		},
+		signout = mapViewModel::signOut
 	)
 }
 

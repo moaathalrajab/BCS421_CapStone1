@@ -33,26 +33,30 @@ class RamCentralWorker(appContext: Context, params: WorkerParameters) :
 	private val repo = RamCentralRepository.get(applicationContext)
 
 	override suspend fun doWork(): Result {
-		Log.i(LOG, "Starting")
-		repo.search(Token(emptyList()), 50).take(2).collect { }
+		Log.i(LOG, "Starting!")
+		repo.search(Token(emptyList()), 100).take(2).collect { }
 
-		val currDate = System.currentTimeMillis()
+		/**
+		 * How many days since UTC
+		 */
+		val currentDays = System.currentTimeMillis().days
 
 		repo.getAll().first().forEach { event ->
 			Log.d(LOG, "Processing Event(${event.id})")
 
-			if ( event.endsOn.days < currDate.days )
+			if (event.endsOn.days < currentDays) {
+				Log.d(LOG, "Event(${event.id}) is past due, deleting")
 				repo.deleteEvent(event)
-
+			}
 		}
 
-		Log.d(LOG, "Processing complete!")
+		Log.d(LOG, "Complete!")
 		return Result.success()
 	}
 
 	companion object {
 
 		private const val LOG = "RamCentralWorker"
-		
+
 	}
 }

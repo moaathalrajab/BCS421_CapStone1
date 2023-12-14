@@ -42,7 +42,7 @@ data class RamCentralDiscoveryEvent(
 	 */
 	@Serializable
 	data class Address(
-		val locationId: Long,
+		val locationId: Long?,
 		val name: String,
 		val address: String?,
 		val line1: String?,

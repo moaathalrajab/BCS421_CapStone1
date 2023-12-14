@@ -85,6 +85,5 @@
     <string name="team_clam">Team CLAM</string>
     <string name="ad_id_banner">ca-app-pub-8731866185606800/7157962374</string>
     <string name="signout_dialog">Sign Out?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <string name="signout_prompt">Do you really want to sign out?</string>
 </resources>

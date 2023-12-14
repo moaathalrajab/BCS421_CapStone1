@@ -74,6 +74,7 @@ fun MapContent(
 	openSearch: () -> Unit,
 	navigateToMore: () -> Unit,
 	login: () -> Unit,
+	signout: () -> Unit,
 ) {
 	val cameraState = rememberCameraState {
 		geoPoint = GeoPoint(userLatitude, userLongitude)
@@ -164,7 +165,8 @@ fun MapContent(
 			MapOverview(
 				user = user,
 				onRecenter = ::onRecenter,
-				login = login
+				login = login,
+				signOut = signout
 			)
 		}
 	}
@@ -208,6 +210,7 @@ fun PreviewMapContent() {
 		openSearch = {},
 		navigateToMore = {},
 		login = {},
-		snackbarState = SnackbarHostState()
+		snackbarState = SnackbarHostState(),
+		signout = {}
 	)
 }

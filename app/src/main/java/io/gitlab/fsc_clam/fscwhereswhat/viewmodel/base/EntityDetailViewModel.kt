@@ -17,7 +17,8 @@
 
 package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
@@ -29,7 +30,7 @@ import java.net.URL
 /**
  * EntityDetailViewModel handles EntityDetailView when user clicks entity
  */
-abstract class EntityDetailViewModel : ViewModel() {
+abstract class EntityDetailViewModel(application: Application) : AndroidViewModel(application) {
 	/**
 	 * Name is name of the entity
 	 */
@@ -38,7 +39,7 @@ abstract class EntityDetailViewModel : ViewModel() {
 	/**
 	 * Note is the comment from the user
 	 */
-	abstract val note: StateFlow<String>
+	abstract val note: StateFlow<String?>
 
 	/**
 	 * URL is the link to RamCentral if event or the link to the OSM provided URL
@@ -51,14 +52,9 @@ abstract class EntityDetailViewModel : ViewModel() {
 	abstract val image: StateFlow<Image>
 
 	/**
-	 * ShareURL is the app specific share link to share with others
-	 */
-	abstract val shareURL: StateFlow<URL>
-
-	/**
 	 * @see OpeningHours
 	 */
-	abstract val openingHours: StateFlow<OpeningHours?>
+	abstract val openingHours: StateFlow<List<OpeningHours>>
 
 	/**
 	 * Description is the description of the entity
@@ -68,7 +64,7 @@ abstract class EntityDetailViewModel : ViewModel() {
 	/**
 	 * Type specifies which type is the entity - Node, Entity, Building
 	 */
-	abstract val type: StateFlow<EntityType>
+	abstract val type: StateFlow<EntityType?>
 
 	/**
 	 * If Entity is node, specifies which nodeType it is
@@ -85,7 +81,7 @@ abstract class EntityDetailViewModel : ViewModel() {
 	/**
 	 * if event has option for RSVP
 	 */
-	abstract val hasRsvp: StateFlow<Boolean>
+	abstract val hasRSVP: StateFlow<Boolean>
 
 	/**
 	 * if user set reminder
@@ -105,7 +101,7 @@ abstract class EntityDetailViewModel : ViewModel() {
 	/**
 	 * creates note for entity from view
 	 */
-	abstract fun setNote(note: String)
+	abstract suspend fun setNote(newNote: String)
 
 	/**
 	 * deletes reminder

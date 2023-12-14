@@ -29,6 +29,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,11 +40,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -76,7 +83,9 @@ fun PreviewEntityDetail() {
 			null,
 			"",
 			false,
-			ReminderTime.HALF_HOUR_BEFORE
+			ReminderTime.HALF_HOUR_BEFORE,
+			setReminder = {},
+			removeReminder = {}
 		)
 	}
 }
@@ -117,11 +126,16 @@ fun EntityDetailView() {
 				scope.launch {
 					viewModel.setNote(it)
 				}
-			}
+			},
+			setReminder = viewModel::setReminderTime,
+			removeReminder = viewModel::deleteReminder
 		)
 	}
 }
 
+/**
+ * TODO figure out [nodeType] usage
+ */
 @Composable
 fun EntityDetailContent(
 	name: String,
@@ -143,13 +157,17 @@ fun EntityDetailContent(
 	nodeType: NodeType?,
 	instructions: String?,
 	hasReminder: Boolean,
-	reminder: ReminderTime?
+	reminder: ReminderTime?,
+
+	setReminder: (ReminderTime) -> Unit,
+	removeReminder: () -> Unit
 ) {
 	Column(
 		modifier = Modifier
 			.fillMaxSize()
 			.padding(horizontal = 8.dp),
 	) {
+		// TopBar
 		Row(
 			Modifier.fillMaxWidth(),
 			horizontalArrangement = Arrangement.SpaceBetween,
@@ -174,13 +192,23 @@ fun EntityDetailContent(
 
 			Row(verticalAlignment = Alignment.CenterVertically) {
 				if (type == EVENT) {
+					var isDropDownVisible by remember { mutableStateOf(false) }
 					IconButton(
 						onClick = {
-							// TODO reminders
+							isDropDownVisible = true
 						}
 					) {
 						Icon(painterResource(R.drawable.notification_bell), null)
 					}
+
+					ReminderEdit(
+						isDropDownVisible,
+						onDismiss = {
+							isDropDownVisible = false
+						},
+						onDelete = removeReminder,
+						onUpdate = setReminder
+					)
 				}
 
 				IconButton(
@@ -193,10 +221,21 @@ fun EntityDetailContent(
 			}
 		}
 
+		if (description != null) {
+			OutlinedTextField(
+				description,
+				onValueChange = {},
+				readOnly = true,
+				modifier = Modifier.fillMaxWidth()
+			)
+		}
+
+		// Opening hours
 		if (type != EVENT && oh.isNotEmpty()) {
 			OpeningHoursChart(oh)
 		}
 
+		// RSVP button
 		if (type == EVENT && hasRSVP) {
 			val context = LocalContext.current
 			Button(
@@ -206,6 +245,15 @@ fun EntityDetailContent(
 				modifier = Modifier.fillMaxWidth()
 			) {
 				Text("RSVP Now!")
+			}
+
+			if (instructions != null) {
+				OutlinedTextField(
+					instructions,
+					onValueChange = {},
+					readOnly = true,
+					modifier = Modifier.fillMaxWidth()
+				)
 			}
 		}
 
@@ -221,6 +269,55 @@ fun EntityDetailContent(
 			label = {
 				Text("Notes")
 			},
+		)
+	}
+}
+
+@Composable
+fun ReminderEdit(
+	showDropDown: Boolean,
+	onDismiss: () -> Unit,
+	onDelete: () -> Unit,
+	onUpdate: (ReminderTime) -> Unit
+) {
+	DropdownMenu(showDropDown, onDismiss) {
+		DropdownMenuItem(
+			text = {
+				Text("At Start", color = Color.Red)
+			},
+			onClick = {
+				onUpdate(ReminderTime.START)
+			}
+		)
+		DropdownMenuItem(
+			text = {
+				Text("Half an hour before", color = Color.Red)
+			},
+			onClick = {
+				onUpdate(ReminderTime.HALF_HOUR_BEFORE)
+			}
+		)
+		DropdownMenuItem(
+			text = {
+				Text("Two Hours Before", color = Color.Red)
+			},
+			onClick = {
+				onUpdate(ReminderTime.TWO_HOUR_BEFORE)
+			}
+		)
+		DropdownMenuItem(
+			text = {
+				Text("An hour before", color = Color.Red)
+			},
+			onClick = {
+				onUpdate(ReminderTime.TWO_HOUR_BEFORE)
+			}
+		)
+		DropdownMenuItem(
+			text = {
+				Text(stringResource(R.string.delete), color = Color.Red)
+			},
+			onClick = onDelete
 		)
 	}
 }

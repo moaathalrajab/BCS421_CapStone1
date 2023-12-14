@@ -110,7 +110,9 @@ fun EntityDetailContent(
 	updateNote: (String) -> Unit
 ) {
 	Column(
-		modifier = Modifier.fillMaxSize(),
+		modifier = Modifier
+			.fillMaxSize()
+			.padding(horizontal = 8.dp),
 	) {
 		Row(
 			Modifier.fillMaxWidth(),

@@ -38,7 +38,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,6 +53,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -116,7 +122,12 @@ fun RowScope.MapUserIcon(user: User?, login: () -> Unit, signOut: () -> Unit) {
 			.padding(8.dp)
 			.weight(.25f, false),
 		shape = CircleShape,
-		onClick = login
+		onClick = {
+			if (user != null)
+				showSignOutDialog = true
+			else
+				login()
+		}
 	) {
 		if (user != null) {
 			AsyncImage(
@@ -137,6 +148,35 @@ fun RowScope.MapUserIcon(user: User?, login: () -> Unit, signOut: () -> Unit) {
 			)
 		}
 	}
+	if (showSignOutDialog)
+		Dialog(onDismissRequest = { showSignOutDialog = false }) {
+			Card(
+
+			) {
+				Column(
+					horizontalAlignment = Alignment.CenterHorizontally,
+					verticalArrangement = Arrangement.spacedBy(8.dp)
+				) {
+					Text(text = stringResource(id = R.string.signout_dialog))
+
+					Row(
+						modifier = Modifier.fillMaxWidth(.5f),
+						horizontalArrangement = Arrangement.End
+					) {
+						TextButton(onClick = { showSignOutDialog = false }) {
+							Text(text = stringResource(id = R.string.no))
+						}
+						TextButton(onClick = {
+							signOut()
+							showSignOutDialog = false
+						}) {
+							Text(text = stringResource(id = R.string.yes))
+						}
+					}
+				}
+			}
+		}
+
 }
 
 @Composable
@@ -234,7 +274,8 @@ fun PreviewMapUI() {
 		MapOverview(
 			user = null,
 			onRecenter = {},
-			login = {}
+			login = {},
+			signOut = {}
 		)
 	}
 }

@@ -175,11 +175,6 @@ class ImplMapViewModel(application: Application) : MapViewModel(application) {
 			if (filter == null)
 				list
 			else list.filter { it.type == filter }
-		}.combine(focus) { list, focus ->
-			// Don't display other pin points if we have a focus
-			if (focus == null)
-				list
-			else list.filter { it.id == focus.id }
 		}.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
 	override fun setActiveFilter(filter: EntityType?) {

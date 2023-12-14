@@ -68,13 +68,14 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 fun MapOverview(
 	user: User?,
 	onRecenter: () -> Unit,
-	login: () -> Unit
+	login: () -> Unit,
+	signOut: () -> Unit
 ) {
 	Row(
 		modifier = Modifier.fillMaxWidth(),
 		horizontalArrangement = Arrangement.SpaceBetween
 	) {
-		MapUserIcon(user, login)
+		MapUserIcon(user, login, signOut)
 
 		AndroidView(
 			modifier = Modifier
@@ -108,7 +109,8 @@ fun MapOverview(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RowScope.MapUserIcon(user: User?, login: () -> Unit) {
+fun RowScope.MapUserIcon(user: User?, login: () -> Unit, signOut: () -> Unit) {
+	var showSignOutDialog by remember { mutableStateOf(false) }
 	Card(
 		modifier = Modifier
 			.padding(8.dp)

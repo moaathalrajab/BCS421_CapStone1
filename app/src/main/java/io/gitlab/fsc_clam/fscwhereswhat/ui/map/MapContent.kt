@@ -20,6 +20,7 @@ package io.gitlab.fsc_clam.fscwhereswhat.ui.map
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -48,15 +49,17 @@ import org.osmdroid.util.GeoPoint
 /**
  * Creates the content of Map View, including the MapUI and the OSM Map
  * @param user is the google account if logged in
+ * @param query is the input of the search bar
+ * @param userLatitude is the current latitude of the user
+ * @param userLongitude is the current longitude of the user
  * @param pinPoints is the list of PinPoints visible in the Map
  * @param activeFilter is the current filter selected for EntityType. If null, all filters are active
- * @param buildingColor is the color of building pinpoints
- * @param eventColor is the color of event pinpoints
- * @param nodeColor is the color of node pinpoints
  * @param setActiveFilter is the function from the viewmodel that sets current active filter when user presses filter button
  * @param setFocus is when the user clicks on the pinpoint
+ * @param openSearch navigates to SearchView
+ * @param navigateToMore navigates to MoreView
+ * @param login handles google login
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapContent(
 	snackbarState: SnackbarHostState,
@@ -72,6 +75,7 @@ fun MapContent(
 	openSearch: () -> Unit,
 	navigateToMore: () -> Unit,
 	login: () -> Unit,
+	signout: () -> Unit,
 ) {
 	val cameraState = rememberCameraState {
 		geoPoint = GeoPoint(userLatitude, userLongitude)
@@ -159,6 +163,14 @@ fun MapContent(
 				MapPinPoint(pinpoint, setFocus)
 			}
 
+			//Creates the Map UI after map creation
+			MapOverview(
+				user = user,
+				onRecenter = ::onRecenter,
+				login = login,
+				signOut = signout
+			)
+
 			MapUserMarker(userMarkerState)
 		}
 
@@ -217,6 +229,7 @@ fun PreviewMapContent() {
 		openSearch = {},
 		navigateToMore = {},
 		login = {},
-		snackbarState = SnackbarHostState()
+		snackbarState = SnackbarHostState(),
+		signout = {}
 	)
 }

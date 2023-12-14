@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +43,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,8 +69,9 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.User
 
 /**
  * Creates the UI for Map Content
- * @param activeFilter is the current filter selected
- * @param setActiveFilter will change the active filter to selected filter type from viewmodel
+ * @param user is the signed in account of the user, null if not logged in
+ * @param onRecenter will recenter camera state to user lat/long
+ * @param login will handle google login
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,6 +79,7 @@ fun MapOverview(
 	user: User?,
 	onRecenter: () -> Unit,
 	login: () -> Unit,
+	signOut: () -> Unit
 	padding: PaddingValues,
 	onZoomIn: () -> Unit,
 	onZoomOut: () -> Unit
@@ -81,6 +89,8 @@ fun MapOverview(
 			.padding(padding)
 			.fillMaxSize()
 	) {
+		MapUserIcon(user, login, signOut)
+
 		Row(
 			modifier = Modifier
 				.fillMaxWidth()
@@ -134,13 +144,19 @@ fun MapOverview(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RowScope.MapUserIcon(user: User?, login: () -> Unit) {
+fun RowScope.MapUserIcon(user: User?, login: () -> Unit, signOut: () -> Unit) {
+	var showSignOutDialog by remember { mutableStateOf(false) }
 	Card(
 		modifier = Modifier
 			.padding(8.dp)
 			.weight(.25f, false),
 		shape = CircleShape,
-		onClick = login
+		onClick = {
+			if (user != null)
+				showSignOutDialog = true
+			else
+				login()
+		}
 	) {
 		if (user != null) {
 			AsyncImage(
@@ -161,6 +177,15 @@ fun RowScope.MapUserIcon(user: User?, login: () -> Unit) {
 			)
 		}
 	}
+	if (showSignOutDialog)
+		SignOutDialog(
+			onDismissRequest = { showSignOutDialog = false },
+			onConfirmation = {
+				signOut()
+				showSignOutDialog = false
+			},
+		)
+
 }
 
 @Composable
@@ -259,9 +284,13 @@ fun PreviewMapUI() {
 			user = null,
 			onRecenter = {},
 			login = {},
+<<<<<<< app/src/main/java/io/gitlab/fsc_clam/fscwhereswhat/ui/map/MapOverview.kt
+			signOut = {}
+=======
 			padding = PaddingValues(16.dp),
 			onZoomIn = {},
 			onZoomOut = {}
+>>>>>>> app/src/main/java/io/gitlab/fsc_clam/fscwhereswhat/ui/map/MapOverview.kt
 		)
 	}
 }
@@ -341,4 +370,46 @@ fun MapBottomBar(
 			MoreButton(navigateToMore)
 		}
 	}
+}
+
+/**
+ * Creates an alert dialog to ask if user wants to sign out of account
+ */
+@Composable
+fun SignOutDialog(
+	onDismissRequest: () -> Unit,
+	onConfirmation: () -> Unit,
+) {
+	AlertDialog(
+		title = {
+			Text(text = stringResource(id = R.string.signout_dialog))
+		},
+		text = {
+			Text(text = stringResource(id = R.string.signout_prompt))
+		},
+		onDismissRequest = onDismissRequest,
+		confirmButton = {
+			TextButton(
+				onClick = onConfirmation
+			) {
+				Text(text = stringResource(id = android.R.string.yes))
+			}
+		},
+		dismissButton = {
+			TextButton(
+				onClick = onDismissRequest
+			) {
+				Text(text = stringResource(id = android.R.string.no))
+			}
+		}
+	)
+}
+
+@Preview
+@Composable
+fun PreviewSignOutDialog() {
+	SignOutDialog(
+		onConfirmation = {},
+		onDismissRequest = {},
+	)
 }

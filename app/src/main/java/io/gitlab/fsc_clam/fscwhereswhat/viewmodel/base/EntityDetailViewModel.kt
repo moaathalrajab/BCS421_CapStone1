@@ -106,7 +106,7 @@ abstract class EntityDetailViewModel(application: Application) : AndroidViewMode
 	/**
 	 * creates note for entity from view
 	 */
-	abstract fun setNote(newNote: String)
+	abstract suspend fun setNote(newNote: String)
 
 	/**
 	 * deletes reminder

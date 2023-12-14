@@ -47,6 +47,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URL
 
 class ImplEntityViewModel(application: Application) : EntityDetailViewModel(application) {
@@ -66,8 +67,8 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 	override val note: StateFlow<String?> = _note.map { it?.comment }
 		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-	override fun setNote(newNote: String) {
-		viewModelScope.launch {
+	override suspend fun setNote(newNote: String) {
+		withContext(viewModelScope.coroutineContext) {
 			val note = _note.value?.copy(comment = newNote)
 
 			if (note == null)

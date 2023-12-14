@@ -42,6 +42,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +58,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.EntityDetailViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplEntityViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun EntityDetailView() {
@@ -69,6 +71,7 @@ fun EntityDetailView() {
 	val hasRSVP by viewModel.hasRSVP.collectAsState()
 	val url by viewModel.url.collectAsState()
 	val image by viewModel.image.collectAsState()
+	val scope = rememberCoroutineScope()
 
 	if (type != null) {
 		EntityDetailContent(
@@ -79,7 +82,11 @@ fun EntityDetailView() {
 			oh,
 			notes,
 			image,
-			updateNote = viewModel::setNote,
+			updateNote = {
+				scope.launch {
+					viewModel.setNote(it)
+				}
+			},
 		)
 	}
 }

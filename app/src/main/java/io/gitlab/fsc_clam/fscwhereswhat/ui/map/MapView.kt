@@ -52,7 +52,11 @@ fun MapView(
 	val pinpoints by mapViewModel.pinpoints.collectAsState()
 	val userLatitude by mapViewModel.userLatitude.collectAsState()
 	val userLongitude by mapViewModel.userLongitude.collectAsState()
+
 	val activeFilter by mapViewModel.activeFilter.collectAsState()
+	val focus by mapViewModel.focus.collectAsState()
+
+
 	val exception by mapViewModel.exception.collectAsState(null)
 	val snackbarState = remember { SnackbarHostState() }
 
@@ -97,6 +101,7 @@ fun MapView(
 		userLongitude = userLongitude,
 		pinPoints = pinpoints,
 		activeFilter = activeFilter,
+		focus = focus,
 		setActiveFilter = mapViewModel::setActiveFilter,
 		setFocus = mapViewModel::setFocus,
 		openSearch = openSearch,

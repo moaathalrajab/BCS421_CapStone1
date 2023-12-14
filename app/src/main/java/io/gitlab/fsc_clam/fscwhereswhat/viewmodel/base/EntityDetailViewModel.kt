@@ -52,11 +52,6 @@ abstract class EntityDetailViewModel(application: Application) : AndroidViewMode
 	abstract val image: StateFlow<Image>
 
 	/**
-	 * ShareURL is the app specific share link to share with others
-	 */
-	abstract val shareURL: StateFlow<URL>
-
-	/**
 	 * @see OpeningHours
 	 */
 	abstract val openingHours: StateFlow<List<OpeningHours>>

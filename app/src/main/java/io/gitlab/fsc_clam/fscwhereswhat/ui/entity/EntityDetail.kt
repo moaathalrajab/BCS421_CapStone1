@@ -63,14 +63,19 @@ import kotlinx.coroutines.launch
 @Composable
 fun EntityDetailView() {
 	val viewModel: EntityDetailViewModel = viewModel<ImplEntityViewModel>()
-	val notes by viewModel.note.collectAsState()
-	val reminder by viewModel.reminderTime.collectAsState()
-	val type by viewModel.type.collectAsState()
 	val name by viewModel.name.collectAsState()
-	val oh by viewModel.openingHours.collectAsState()
-	val hasRSVP by viewModel.hasRSVP.collectAsState()
+	val note by viewModel.note.collectAsState()
 	val url by viewModel.url.collectAsState()
 	val image by viewModel.image.collectAsState()
+	val oh by viewModel.openingHours.collectAsState()
+	val description by viewModel.description.collectAsState()
+	val type by viewModel.type.collectAsState()
+	val nodeType by viewModel.nodeType.collectAsState()
+	val instructions by viewModel.instructions.collectAsState()
+	val hasRSVP by viewModel.hasRSVP.collectAsState()
+	val hasReminder by viewModel.hasReminder.collectAsState()
+	val reminder by viewModel.reminderTime.collectAsState()
+
 	val scope = rememberCoroutineScope()
 
 	if (type != null) {
@@ -80,7 +85,7 @@ fun EntityDetailView() {
 			hasRSVP,
 			url.toString(),
 			oh,
-			notes,
+			note,
 			image,
 			updateNote = {
 				scope.launch {

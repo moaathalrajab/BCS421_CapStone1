@@ -21,6 +21,8 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import io.gitlab.fsc_clam.fscwhereswhat.R
+import io.gitlab.fsc_clam.fscwhereswhat.common.OSM_VIEW_NODE
+import io.gitlab.fsc_clam.fscwhereswhat.common.OSM_VIEW_WAY
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
@@ -39,6 +41,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplOSMRepository.Companion.ge
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplReminderRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.EntityDetailViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -59,8 +62,9 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 	private val notesRepo = NoteRepository.get(application)
 	private val reminderRepo = ReminderRepository.get(application)
 
-	val focus = focusRepo.focus
+	private val focus = focusRepo.focus
 
+	@OptIn(ExperimentalCoroutinesApi::class)
 	private val _note = focus.transformLatest { pin ->
 		Log.d("ImplEntityViewModel", "Rebuilding note")
 		if (pin != null) {
@@ -96,6 +100,7 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 		TODO("Not yet implemented")
 	}
 
+	@OptIn(ExperimentalCoroutinesApi::class)
 	private val reminder = focus.transformLatest { pin ->
 		if (pin?.type != EntityType.EVENT) {
 			emit(null)
@@ -114,18 +119,15 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 
 	override val type = focus.map { it?.type }
 		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
-	override val nodeType: StateFlow<NodeType?>
-		get() = TODO("Not yet implemented")
+	override val nodeType = MutableStateFlow<NodeType?>(null)
 
-	override val instructions: StateFlow<String?>
-		get() = TODO("Not yet implemented")
+	override val instructions = MutableStateFlow<String?>(null)
 
 	override val name = MutableStateFlow("")
 
 	override val openingHours = MutableStateFlow<List<OpeningHours>>(emptyList())
 
-	override val description: StateFlow<String?>
-		get() = TODO("Not yet implemented")
+	override val description = MutableStateFlow<String?>(null)
 
 	override val hasRSVP = MutableStateFlow(false)
 
@@ -137,8 +139,6 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 	override val image = MutableStateFlow<Image>(
 		Image.Drawable(R.drawable.baseline_error_24)
 	)
-	override val shareURL: StateFlow<URL>
-		get() = TODO("Not yet implemented")
 
 	init {
 		viewModelScope.launch {
@@ -146,18 +146,31 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 				when (focus.type) {
 					EntityType.EVENT -> {
 						val event = ramRepo.getEvent(focus.id)!!
+
 						name.emit(event.name)
-						hasRSVP.emit(event.hasRSVP)
+						// note is separate
 						url.emit(event.url)
-						image.emit(
-							Image.Asset(event.image)
-						)
+						image.emit(Image.Asset(event.image))
+						openingHours.emit(emptyList())
+						// TODO description
+						nodeType.emit(null)
+						// TODO instructions
+						hasRSVP.emit(event.hasRSVP)
+						// hasReminder is separate
+						/// reminder is separate
 					}
 
 					else -> {
 						val entity = osmRepo.get(focus.id)!!
 						name.emit(entity.name)
-						openingHours.emit(entity.hours)
+						// note is separate
+						when (entity) {
+							is OSMEntity.Building ->
+								url.emit(URL(OSM_VIEW_WAY + entity.id))
+
+							is OSMEntity.Node ->
+								url.emit(URL(OSM_VIEW_NODE + entity.id))
+						}
 						image.emit(
 							Image.Drawable(
 								when (entity) {
@@ -166,6 +179,13 @@ class ImplEntityViewModel(application: Application) : EntityDetailViewModel(appl
 								}
 							)
 						)
+						openingHours.emit(entity.hours)
+						// TODO description
+						nodeType.emit((entity as? OSMEntity.Node)?.nodeType)
+						// TODO nodeType
+						// skip RSVP
+						// skip has reminder
+						// skip reminder
 					}
 				}
 			}

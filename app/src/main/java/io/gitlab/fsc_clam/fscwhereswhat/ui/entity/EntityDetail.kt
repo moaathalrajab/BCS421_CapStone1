@@ -230,7 +230,7 @@ fun EntityDetailContent(
 					onClick = {
 						val sendIntent: Intent = Intent().apply {
 							action = Intent.ACTION_SEND
-							putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+							putExtra(Intent.EXTRA_TEXT, url)
 							this.type = "text/*"
 						}
 						context.startActivity(Intent.createChooser(sendIntent, "Share"))

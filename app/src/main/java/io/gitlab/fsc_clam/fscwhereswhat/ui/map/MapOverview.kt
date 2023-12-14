@@ -149,33 +149,15 @@ fun RowScope.MapUserIcon(user: User?, login: () -> Unit, signOut: () -> Unit) {
 		}
 	}
 	if (showSignOutDialog)
-		Dialog(onDismissRequest = { showSignOutDialog = false }) {
-			Card(
-
-			) {
-				Column(
-					horizontalAlignment = Alignment.CenterHorizontally,
-					verticalArrangement = Arrangement.spacedBy(8.dp)
-				) {
-					Text(text = stringResource(id = R.string.signout_dialog))
-
-					Row(
-						modifier = Modifier.fillMaxWidth(.5f),
-						horizontalArrangement = Arrangement.End
-					) {
-						TextButton(onClick = { showSignOutDialog = false }) {
-							Text(text = stringResource(id = R.string.no))
-						}
-						TextButton(onClick = {
-							signOut()
-							showSignOutDialog = false
-						}) {
-							Text(text = stringResource(id = R.string.yes))
-						}
-					}
-				}
-			}
-		}
+		SignOutDialog(
+			onDismissRequest = { showSignOutDialog = false },
+			onConfirmation = {
+				signOut()
+				showSignOutDialog = false
+			},
+			title = stringResource(id = R.string.signout_dialog),
+			signOutPrompt = stringResource(id = R.string.signout_prompt)
+		)
 
 }
 

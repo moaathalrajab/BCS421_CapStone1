@@ -86,27 +86,60 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 		}
 
 		val nodeType: NodeType
+		val name: String
 
 		when {
-			element.tags.amenity == "drinking_water" ->
+			element.tags.amenity == "drinking_water" -> {
 				nodeType = NodeType.WATER
+				name = "Water fountain"
+			}
 
-			element.tags.amenity == "vending_machine" ->
+			element.tags.amenity == "vending_machine" -> {
 				nodeType = NodeType.VENDING_MACHINE
+				name = "Vending Machine"
+			}
 
-			element.tags.amenity == "food_court" ||
-					element.tags.amenity == "cafe" ||
-					element.tags.amenity == "restaurant" ->
+			element.tags.amenity == "food_court" -> {
 				nodeType = NodeType.FOOD
+				name = if(element.tags.name != null)
+					element.tags.name
+				else
+					"Food Court"
+			}
 
-			element.tags.shop != null ->
+			element.tags.amenity == "cafe" -> {
+				nodeType = NodeType.FOOD
+				name = if(element.tags.name != null)
+					element.tags.name
+				else
+					"Cafe"
+			}
+
+			element.tags.amenity == "restaurant" -> {
+				nodeType = NodeType.FOOD
+				name = if(element.tags.name != null)
+					element.tags.name
+				else
+					"Restaurant"
+			}
+
+			element.tags.shop != null -> {
 				nodeType = NodeType.RETAIL
+				name = if(element.tags.name != null)
+					element.tags.name
+				else
+					"Shop"
+			}
 
-			element.tags.emergency == "phone" ->
+			element.tags.emergency == "phone" ->{
 				nodeType = NodeType.SOS
+				name = "Emergency Phone"
+			}
 
-			element.tags.amenity == "bicycle_parking" ->
+			element.tags.amenity == "bicycle_parking" ->{
 				nodeType = NodeType.BICYCLE
+				name = "Bicycle Parking"
+			}
 
 			else -> {
 				Log.d(LOG, "OSMElement(${element.id}) does not match any known NodeTypes")
@@ -119,7 +152,7 @@ class OSMWorker(appContext: Context, params: WorkerParameters) :
 				id = element.id,
 				lat = element.lat!!,
 				long = element.lon!!,
-				name = element.tags.name ?: "Element ${element.id}",
+				name = name,
 				description = "", // TODO OSM descriptions??
 				hours = listOf(OpeningHours.everyDay),
 				nodeType = nodeType

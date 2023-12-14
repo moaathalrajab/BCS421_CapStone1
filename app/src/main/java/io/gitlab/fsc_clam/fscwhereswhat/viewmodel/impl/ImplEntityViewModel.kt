@@ -19,9 +19,14 @@ package io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
+import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.NodeType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.Note
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.OSMEntity
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.ReminderTime
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.MapViewFocusRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.NoteRepository
 import io.gitlab.fsc_clam.fscwhereswhat.repo.base.OSMRepository
@@ -32,7 +37,7 @@ import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplNoteRepository.Companion.g
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplOSMRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplRamCentralRepository.Companion.get
 import io.gitlab.fsc_clam.fscwhereswhat.repo.impl.ImplReminderRepository.Companion.get
-import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.EntityViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.EntityDetailViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -42,8 +47,9 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
+import java.net.URL
 
-class ImplEntityViewModel(application: Application) : EntityViewModel(application) {
+class ImplEntityViewModel(application: Application) : EntityDetailViewModel(application) {
 	private val focusRepo = MapViewFocusRepository.get()
 	private val osmRepo = OSMRepository.get(application)
 	private val ramRepo = RamCentralRepository.get(application)
@@ -53,13 +59,16 @@ class ImplEntityViewModel(application: Application) : EntityViewModel(applicatio
 	val focus = focusRepo.focus
 		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-	private val note = focus.filterNotNull().transform { pin ->
+	private val _note = focus.filterNotNull().transform { pin ->
 		emitAll(notesRepo.getNote(pin.id))
 	}.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-	override fun updaterNote(newNote: String) {
+	override val note: StateFlow<String?> = _note.map { it?.comment }
+		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+	override fun setNote(newNote: String) {
 		viewModelScope.launch {
-			val note = note.value?.copy(comment = newNote)
+			val note = _note.value?.copy(comment = newNote)
 
 			if (note == null)
 				notesRepo.createNote(Note(newNote, focus.value!!.id, focus.value!!.type))
@@ -69,11 +78,15 @@ class ImplEntityViewModel(application: Application) : EntityViewModel(applicatio
 		}
 	}
 
-	override val notes: StateFlow<String?> = note.map { it?.comment }
-		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+	override fun deleteReminder() {
+		TODO("Not yet implemented")
+	}
 
-	override
-	val reminder = focus.filterNotNull().transform { pin ->
+	override fun deleteNote() {
+		TODO("Not yet implemented")
+	}
+
+	private val reminder = focus.filterNotNull().transform { pin ->
 		if (pin.type != EntityType.EVENT) {
 			emit(null)
 			return@transform
@@ -82,13 +95,40 @@ class ImplEntityViewModel(application: Application) : EntityViewModel(applicatio
 		emitAll(reminderRepo.getReminder(pin.id))
 	}.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
+	override val reminderTime = reminder.map { it?.remind }
+		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+	override fun setReminderTime(time: ReminderTime) {
+		TODO("Not yet implemented")
+	}
+
 	override val type = focus.filterNotNull().map { it.type }
 		.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+	override val nodeType: StateFlow<NodeType?>
+		get() = TODO("Not yet implemented")
+
+	override val instructions: StateFlow<String?>
+		get() = TODO("Not yet implemented")
+
 	override val name = MutableStateFlow("")
-	override val oh = MutableStateFlow<List<OpeningHours>>(emptyList())
+
+	override val openingHours = MutableStateFlow<List<OpeningHours>>(emptyList())
+
+	override val description: StateFlow<String?>
+		get() = TODO("Not yet implemented")
+
 	override val hasRSVP = MutableStateFlow(false)
-	override val url = MutableStateFlow<String?>(null)
-	override val imageURL = MutableStateFlow<String?>(null)
+
+	override val hasReminder: StateFlow<Boolean> = reminder.map { it != null }
+		.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+	override val url = MutableStateFlow<URL?>(null)
+
+	override val image = MutableStateFlow<Image>(
+		Image.Drawable(R.drawable.baseline_error_24)
+	)
+	override val shareURL: StateFlow<URL>
+		get() = TODO("Not yet implemented")
 
 	init {
 		viewModelScope.launch {
@@ -98,15 +138,24 @@ class ImplEntityViewModel(application: Application) : EntityViewModel(applicatio
 						val event = ramRepo.getEvent(focus.id)!!
 						name.emit(event.name)
 						hasRSVP.emit(event.hasRSVP)
-						url.emit(event.url.toString())
-						imageURL.emit(event.image.toString())
+						url.emit(event.url)
+						image.emit(
+							Image.Asset(event.image)
+						)
 					}
 
 					else -> {
 						val entity = osmRepo.get(focus.id)!!
 						name.emit(entity.name)
-						oh.emit(entity.hours)
-						url.emit(entity.description)
+						openingHours.emit(entity.hours)
+						image.emit(
+							Image.Drawable(
+								when (entity) {
+									is OSMEntity.Building -> R.drawable.building_icon
+									is OSMEntity.Node -> R.drawable.node
+								}
+							)
+						)
 					}
 				}
 			}

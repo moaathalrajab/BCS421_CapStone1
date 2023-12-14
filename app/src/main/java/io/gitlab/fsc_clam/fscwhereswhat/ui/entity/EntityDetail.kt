@@ -51,31 +51,33 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.gitlab.fsc_clam.fscwhereswhat.R
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.EntityType.EVENT
+import io.gitlab.fsc_clam.fscwhereswhat.model.local.Image
 import io.gitlab.fsc_clam.fscwhereswhat.model.local.OpeningHours
-import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.EntityViewModel
+import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.base.EntityDetailViewModel
 import io.gitlab.fsc_clam.fscwhereswhat.viewmodel.impl.ImplEntityViewModel
 
 @Composable
 fun EntityDetailView() {
-	val viewModel: EntityViewModel = viewModel<ImplEntityViewModel>()
-	val notes by viewModel.notes.collectAsState()
-	val reminder by viewModel.reminder.collectAsState()
+	val viewModel: EntityDetailViewModel = viewModel<ImplEntityViewModel>()
+	val notes by viewModel.note.collectAsState()
+	val reminder by viewModel.reminderTime.collectAsState()
 	val type by viewModel.type.collectAsState()
 	val name by viewModel.name.collectAsState()
-	val oh by viewModel.oh.collectAsState()
+	val oh by viewModel.openingHours.collectAsState()
 	val hasRSVP by viewModel.hasRSVP.collectAsState()
 	val url by viewModel.url.collectAsState()
-	val imageURL by viewModel.imageURL.collectAsState()
+	val image by viewModel.image.collectAsState()
 
 	if (type != null) {
 		EntityDetailContent(
 			name,
 			type!!,
 			hasRSVP,
-			url,
+			url.toString(),
 			oh,
 			notes,
-			updateNote = viewModel::updaterNote
+			image,
+			updateNote = viewModel::setNote,
 		)
 	}
 }
@@ -95,6 +97,7 @@ fun EntityDetailContent(
 	oh: List<OpeningHours>,
 
 	notes: String?,
+	image: Image,
 	updateNote: (String) -> Unit
 ) {
 	Column(
@@ -210,12 +213,12 @@ fun PreviewEntityDetail() {
 	Surface {
 		EntityDetailContent(
 			name = "Test",
-			notes = null,
-			updateNote = {},
 			type = EVENT,
-			oh = listOf(OpeningHours.everyDay),
 			hasRSVP = true,
-			url = "google.com"
-		)
+			url = "google.com",
+			oh = listOf(OpeningHours.everyDay),
+			notes = null,
+			image = Image.Drawable(R.drawable.baseline_error_24)
+		) {}
 	}
 }
